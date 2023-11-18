@@ -1,0 +1,40 @@
+{
+  "name": "star-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "star-server",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node-dev src/index.ts",
+    "database:migration:check": "drizzle-kit check:pg",
+    "database:update:metadata": "drizzle-kit up:pg",
+    "database:migration:generate": "drizzle-kit generate:pg",
+    "database:migration:apply": "ts-node src/database/applyMigration.ts",
+    "database:migration": "drizzle-kit check:pg && drizzle-kit up:pg && drizzle-kit generate:pg && ts-node src/database/applyMigration.ts",
+    "database:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.29.0",
+    "express": "^4.18.2",
+    "google-auth-library": "^9.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.16",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.9.0",
+    "@types/pg": "^8.10.9",
+    "drizzle-kit": "^0.20.2",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.2.2"
+  }
+}
