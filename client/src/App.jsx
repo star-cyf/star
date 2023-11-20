@@ -11,6 +11,8 @@ import Profile from "./pages/Profile";
 import Users from "./pages/Users";
 import NotFound from "./pages/NotFound";
 import Protected from "./components/Protected";
+import AddQuestion from "./pages/AddQuestion";
+import Question from "./pages/Questions";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +32,22 @@ const router = createBrowserRouter(
         element={
           <Protected>
             <Users />
+          </Protected>
+        }
+      />
+      <Route
+        path="questions"
+        element={
+          <Protected>
+            <Question />
+          </Protected>
+        }
+      />
+      <Route
+        path="questions/add"
+        element={
+          <Protected>
+            <AddQuestion />
           </Protected>
         }
       />
