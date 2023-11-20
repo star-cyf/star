@@ -20,12 +20,6 @@ const AddQuestion = () => {
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  // google the "DEBOUNCE"
-  // set a delay between X milliseconds to check the input
-  // you can choose different ways to do it:
-  // when the user stop typing after X milliseconds check
-  // etc etc.
-
   const validate = (question) => {
     if (!question || question.length < 10 || question.length > 500) {
       setValidationError(
@@ -60,12 +54,12 @@ const AddQuestion = () => {
             body: JSON.stringify({ question }),
           }
         );
-        console.log("SubmitHandler response", response);
+        // console.log("SubmitHandler response", response);
         if (!response.ok) {
           throw response;
         }
         const data = await response.json();
-        console.log("SubmitHandler data", data);
+        // console.log("SubmitHandler data", data);
         if (data.success) {
           setSuccessMessage("Your question was successfully added!");
         }
