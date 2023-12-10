@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Box,
@@ -41,7 +41,7 @@ const QuestionForm = ({
     undefined | boolean
   >(undefined);
 
-  const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const changeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(event.target.value);
     setQuestionValidation(
       event.target.value.trim().length > 10 &&
@@ -70,7 +70,7 @@ const QuestionForm = ({
 
   const { isPending, isError, error, isSuccess } = questionMutation;
 
-  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (questionValidation === undefined) {
       // setQuestion(false); // what to do here?

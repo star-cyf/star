@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Box,
@@ -47,7 +46,7 @@ const AnswerForm = ({
     result: answerId ? true : undefined,
   });
 
-  const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const changeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setAnswer((prevAnswer) => {
       return { ...prevAnswer, [event.target.id]: event.target.value };
     });
@@ -94,7 +93,7 @@ const AnswerForm = ({
 
   const { isPending, isError, error, isSuccess } = answerMutation;
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     Object.keys(answerValidation).forEach((key) => {
       if (

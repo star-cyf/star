@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Box,
@@ -35,7 +35,7 @@ const CommentForm = ({
     boolean | undefined
   >(undefined);
 
-  const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const changeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setComment(event.target.value);
     setCommentValidation(
       event.target.value.trim().length > 10 &&
@@ -68,7 +68,7 @@ const CommentForm = ({
 
   const { isPending, isError, error, isSuccess } = commentMutation;
 
-  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (commentValidation === undefined) {
       setCommentValidation(false);
