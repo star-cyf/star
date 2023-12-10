@@ -1,6 +1,7 @@
 import React from "react";
 
 declare module "@mui/material/styles" {
+  // eslint-disable-next-line no-unused-vars
   interface TypographyVariants {
     pageTitle: React.CSSProperties;
     questionTitle: React.CSSProperties;
@@ -34,7 +35,8 @@ declare module "@mui/material/styles" {
     aboutExampleBody: React.CSSProperties;
   }
 
-  // allow configuration using `createTheme`
+  // allow configuration using "createTheme"
+  // eslint-disable-next-line no-unused-vars
   interface TypographyVariantsOptions {
     pageTitle?: React.CSSProperties;
     questionTitle?: React.CSSProperties;
@@ -71,6 +73,7 @@ declare module "@mui/material/styles" {
 
 // Update the Typography's variant prop options
 declare module "@mui/material/Typography" {
+  // eslint-disable-next-line no-unused-vars
   interface TypographyPropsVariantOverrides {
     pageTitle: true;
     questionTitle: true;
