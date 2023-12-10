@@ -1,4 +1,10 @@
-const getQuestionsBySearch = async ({ pageParam, queryKey }) => {
+const getQuestionsBySearch = async ({
+  pageParam,
+  queryKey,
+}: {
+  pageParam: number;
+  queryKey: string[];
+}) => {
   const sort = queryKey[1];
   const searchTerm = queryKey[2];
   const limit = 5;

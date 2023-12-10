@@ -1,8 +1,8 @@
-const formatDate = (postgresqlTimestamp) => {
+const formatDate = (postgresqlTimestamp: string) => {
   const now = new Date();
   const date = new Date(postgresqlTimestamp);
 
-  const millisecondsDifference = now - date;
+  const millisecondsDifference = now.getTime() - date.getTime();
 
   const daysDifference = Math.floor(
     millisecondsDifference / (24 * 60 * 60 * 1000)
@@ -27,7 +27,7 @@ const formatDate = (postgresqlTimestamp) => {
     partOne = `${years} ${years === 1 ? "year" : "years"} ago`;
   }
 
-  const formatTime = (date) => {
+  const formatTime = (date: Date) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const amOrPm = hours >= 12 ? "pm" : "am";

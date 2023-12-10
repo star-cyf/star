@@ -1,4 +1,10 @@
-const getQuestionsByPage = async ({ pageParam, queryKey }) => {
+const getQuestionsByPage = async ({
+  pageParam,
+  queryKey,
+}: {
+  pageParam: number;
+  queryKey: string[];
+}) => {
   const limit = 5;
   const sort = queryKey[1];
 

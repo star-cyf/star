@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   // ----------------------------------------------------------------
 
-  const getAuthenticatedUser = useCallback(async (customJWT) => {
+  const getAuthenticatedUser = useCallback(async (customJWT: string) => {
     try {
       // console.log("getAuthenticatedUser customJWT", customJWT);
 

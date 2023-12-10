@@ -1,8 +1,6 @@
-const deleteAnswer = async (questionId, answerId) => {
+const deleteQuestion = async (questionId: number) => {
   const response = await fetch(
-    `${
-      import.meta.env.VITE_SERVER_URL
-    }/api/questions/${questionId}/answers/${answerId}`,
+    `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}`,
     {
       method: "DELETE",
       headers: {
@@ -12,15 +10,15 @@ const deleteAnswer = async (questionId, answerId) => {
       // credentials: "include",
     }
   );
-  // console.log("deleteAnswer response", response);
+  // console.log("deleteQuestion response", response);
   if (!response.ok) {
     throw new Error(
-      `${response.status} ${response.statusText} : deleteAnswer failed`
+      `${response.status} ${response.statusText} : deleteQuestion failed`
     );
   }
   const data = await response.json();
-  // console.log("deleteAnswer data", data);
+  // console.log("deleteQuestion data", data);
   return data;
 };
 
-export default deleteAnswer;
+export default deleteQuestion;

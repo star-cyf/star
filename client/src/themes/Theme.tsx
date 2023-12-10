@@ -1,17 +1,6 @@
 import { createTheme } from "@mui/material/styles";
-import "@fontsource/roboto";
-import "@fontsource-variable/inter";
-import "@fontsource-variable/open-sans";
-import "@fontsource-variable/raleway";
-import "@fontsource/lato";
 import { yellow, purple } from "@mui/material/colors";
-
-// Installed Fonts:
-// "Roboto"
-// "Inter Variable"
-// "Open Sans Variable"
-// "Raleway Variable"
-// "Lato"
+import "@fontsource-variable/inter";
 
 const theme = createTheme({
   palette: {
@@ -33,7 +22,6 @@ const theme = createTheme({
     body2: {
       fontSize: "0.75rem",
     },
-
     pagetitle: {
       fontSize: "1.2rem",
       fontWeight: "500",

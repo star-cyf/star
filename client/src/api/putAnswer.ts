@@ -1,6 +1,12 @@
-const putQuestion = async (questionId, question) => {
+const putAnswer = async (
+  questionId: number,
+  answerId: number,
+  answer: { situation: string; task: string; action: string; result: string }
+) => {
   const response = await fetch(
-    `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}`,
+    `${
+      import.meta.env.VITE_SERVER_URL
+    }/api/questions/${questionId}/answers/${answerId}`,
     {
       method: "PUT",
       headers: {
@@ -8,18 +14,18 @@ const putQuestion = async (questionId, question) => {
         Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
       },
       // credentials: "include",
-      body: JSON.stringify({ question }),
+      body: JSON.stringify(answer),
     }
   );
-  // console.log("putQuestion response:", response);
+  // console.log("putAnswer response:", response);
   if (!response.ok) {
     throw new Error(
       `${response.status} ${response.statusText} : editedQuestion failed`
     );
   }
   const data = await response.json();
-  // console.log("putQuestion data:", data);
+  // console.log("putAnswer data:", data);
   return data;
 };
 
-export default putQuestion;
+export default putAnswer;

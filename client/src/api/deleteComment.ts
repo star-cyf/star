@@ -1,4 +1,8 @@
-const deleteComment = async (questionId, answerId, commentId) => {
+const deleteComment = async (
+  questionId: number,
+  answerId: number,
+  commentId: number
+) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL

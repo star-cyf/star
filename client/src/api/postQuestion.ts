@@ -1,4 +1,4 @@
-const postQuestion = async (question) => {
+const postQuestion = async (question: string) => {
   const response = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/api/questions`,
     {

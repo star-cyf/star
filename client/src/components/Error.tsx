@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-const Error = ({ message }) => {
+const Error = ({ message }: { message: string }) => {
   return (
     <Box>
       <Typography>Error</Typography>

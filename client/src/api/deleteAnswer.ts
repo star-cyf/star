@@ -1,27 +1,26 @@
-const putAnswer = async (questionId, answerId, answer) => {
+const deleteAnswer = async (questionId: number, answerId: number) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL
     }/api/questions/${questionId}/answers/${answerId}`,
     {
-      method: "PUT",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
       },
       // credentials: "include",
-      body: JSON.stringify(answer),
     }
   );
-  // console.log("putAnswer response:", response);
+  // console.log("deleteAnswer response", response);
   if (!response.ok) {
     throw new Error(
-      `${response.status} ${response.statusText} : editedQuestion failed`
+      `${response.status} ${response.statusText} : deleteAnswer failed`
     );
   }
   const data = await response.json();
-  // console.log("putAnswer data:", data);
+  // console.log("deleteAnswer data", data);
   return data;
 };
 
-export default putAnswer;
+export default deleteAnswer;

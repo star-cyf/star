@@ -1,4 +1,7 @@
-const postAnswer = async (questionId, answer) => {
+const postAnswer = async (
+  questionId: number,
+  answer: { situation: string; task: string; action: string; result: string }
+) => {
   const response = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}/answers`,
     {

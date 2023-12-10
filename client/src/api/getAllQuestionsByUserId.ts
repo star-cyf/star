@@ -1,9 +1,8 @@
-const getQuestionById = async (questionId, sort) => {
+const getAllQuestionsByUserId = async (userId: number, sort: string) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL
-    }/api/questions/${questionId}?sort=${sort}`,
-    // }/api/questions/${questionId}`,
+    }/api/questions/user/${userId}?sort=${sort}`,
     {
       headers: {
         "Content-Type": "application/json",
@@ -12,13 +11,14 @@ const getQuestionById = async (questionId, sort) => {
       // { credentials: "include" }
     }
   );
-  // console.log("fetchQuestionData response:", response);
+
+  // console.log("fetchUserQuestions response:", response);
   if (!response.ok) {
-    throw new Error("fetchQuestion failed");
+    throw new Error("fetchUserQuestions failed");
   }
   const data = await response.json();
-  // console.log("fetchQuestionData data:", data);
+  // console.log("fetchUserQuestions data:", data);
   return data;
 };
 
-export default getQuestionById;
+export default getAllQuestionsByUserId;
