@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Box, Typography } from "@mui/material";
 import Loading from "../components/Loading";
-import Error from "../components/Loading";
+import Error from "../components/Error";
 import User from "../components/User";
 import getAllUsers from "../api/getAllUsers";
 import {
@@ -11,6 +11,7 @@ import {
   consistentBoxShadow,
   consistentBackdropFilter,
 } from "../themes/ConsistentStyles";
+import { UserData } from "../types/data";
 
 const UsersPage = () => {
   const {
@@ -30,7 +31,7 @@ const UsersPage = () => {
       {usersData && (
         <>
           <Box>
-            <Typography variant={"pagetitle"}>Users Page</Typography>
+            <Typography variant={"pageTitle"}>Users Page</Typography>
           </Box>
           <Box
             mt={1}
@@ -42,7 +43,7 @@ const UsersPage = () => {
             sx={{
               backdropFilter: consistentBackdropFilter,
             }}>
-            <Typography variant={"tabletitle"} color={"primary"}>
+            <Typography variant={"tableTitle"} color={"primary"}>
               users Table from the Database
             </Typography>
             <Box
@@ -63,7 +64,7 @@ const UsersPage = () => {
                     <Typography
                       p={1}
                       borderRight={
-                        array.length - 3 !== index ? consistentBorder : null
+                        array.length - 3 !== index ? consistentBorder : 0
                       }
                       borderBottom={consistentBorder}>
                       {columnHeading}
@@ -71,7 +72,7 @@ const UsersPage = () => {
                   </Box>
                 );
               })}
-              {usersData.map((userData) => (
+              {usersData.map((userData: UserData) => (
                 <User key={userData.id} userData={userData} />
               ))}
             </Box>

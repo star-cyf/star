@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Box,
@@ -20,19 +20,22 @@ import {
   consistentFormFieldBackgroundColor,
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
+import { AddQuestionFormProps, UpdateQuestionFormProps } from "../types/props";
 
 const QuestionForm = ({
-  sort,
-  setShowAddQuestionForm,
   questionId,
   originalQuestion,
+  sort,
+  setShowAddQuestionForm,
   setShowUpdateQuestionForm,
-}) => {
+}: AddQuestionFormProps | UpdateQuestionFormProps) => {
   const [question, setQuestion] = useState(questionId ? originalQuestion : "");
 
-  const [questionValidation, setQuestionValidation] = useState(undefined);
+  const [questionValidation, setQuestionValidation] = useState<
+    undefined | boolean
+  >(undefined);
 
-  const changeHandler = (event) => {
+  const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(event.target.value);
     setQuestionValidation(
       event.target.value.trim().length > 10 &&
@@ -46,14 +49,14 @@ const QuestionForm = ({
     mutationFn: () =>
       questionId ? putQuestion(questionId, question) : postQuestion(question),
     onSuccess: () => {
-      queryClient.invalidateQueries(["questions", sort]);
+      queryClient.invalidateQueries({ queryKey: ["questions", sort] });
       setQuestion("");
       setQuestionValidation(undefined);
       setTimeout(() => {
         if (questionId) {
           setShowUpdateQuestionForm(false);
         } else {
-          setShowAddQuestionForm((prev) => !prev);
+          setShowAddQuestionForm((prev: boolean) => !prev);
         }
       }, 1000);
     },
@@ -61,10 +64,11 @@ const QuestionForm = ({
 
   const { isPending, isError, error, isSuccess } = questionMutation;
 
-  const submitHandler = async (event) => {
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (questionValidation === undefined) {
-      setQuestion(false);
+      // setQuestion(false); // what to do here?
+      return;
     }
     if (!questionValidation) {
       return;
@@ -96,7 +100,7 @@ const QuestionForm = ({
         <FormControl>
           <Box display={"flex"} alignItems={"center"} gap={0.5} mb={1}>
             <HelpOutlinedIcon fontSize="medium" color="primary" />
-            <Typography variant={"questionformtitle"} color={"primary"}>
+            <Typography variant={"questionFormTitle"} color={"primary"}>
               {questionId ? "Edit your Question" : "Add your Question"}
             </Typography>
           </Box>
@@ -130,7 +134,7 @@ const QuestionForm = ({
               onClick={() =>
                 questionId
                   ? setShowUpdateQuestionForm(false)
-                  : setShowAddQuestionForm((prev) => !prev)
+                  : setShowAddQuestionForm((prev: boolean) => !prev)
               }>
               Cancel
             </Button>

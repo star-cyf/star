@@ -9,6 +9,7 @@ import Question from "../components/Question";
 import QuestionForm from "../components/QuestionForm";
 import getQuestionsByPage from "../api/getQuestionsByPage";
 import getQuestionsBySearch from "../api/getQuestionsBySearch";
+import { QuestionData } from "../types/data";
 
 const QuestionsPage = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -65,7 +66,7 @@ const QuestionsPage = () => {
           alignItems={"center"}
           gap={1}>
           <Box display={"flex"} flexWrap={"wrap"} alignItems={"center"} gap={2}>
-            <Typography variant={"pagetitle"} width={"180px"}>
+            <Typography variant={"pageTitle"} width={"180px"}>
               All Questions (
               {questionsByPageData?.pages.reduce(
                 (acc, page) => acc + page.length,
@@ -101,10 +102,11 @@ const QuestionsPage = () => {
         )}
         {questionsByPageData && (
           <Box display={"grid"} gap={2} mt={1}>
-            {questionsByPageData?.pages.map((page) =>
-              page?.map((questionData) => (
-                <Question key={questionData.id} questionData={questionData} />
-              ))
+            {questionsByPageData?.pages.map(
+              (page) =>
+                page?.map((questionData: QuestionData) => (
+                  <Question key={questionData.id} questionData={questionData} />
+                ))
             )}
           </Box>
         )}

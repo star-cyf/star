@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { consistentBorder } from "../themes/ConsistentStyles";
+import { UserData } from "../types/data";
 
-const User = ({ userData }) => {
+const User = ({ userData }: { userData: UserData }) => {
   return (
     <>
       {Object.entries(userData).map(([key, value], index, array) => {
@@ -22,9 +23,7 @@ const User = ({ userData }) => {
           <Box key={key}>
             <Typography
               p={1}
-              borderRight={
-                array.length - 3 !== index ? consistentBorder : null
-              }>
+              borderRight={array.length - 3 !== index ? consistentBorder : 0}>
               {value}
             </Typography>
           </Box>

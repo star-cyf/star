@@ -4,15 +4,17 @@ import { useQuery } from "@tanstack/react-query";
 import { Box, Typography, Button } from "@mui/material";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import Loading from "../components/Loading";
-import Error from "../components/Loading";
+import Error from "../components/Error";
 import Sort from "../components/Sort";
 import Question from "../components/Question";
 import Answer from "../components/Answer";
 import AnswerForm from "../components/AnswerForm";
 import getQuestionById from "../api/getQuestionById";
+import { AnswerData } from "../types/data";
 
 const QuestionPage = () => {
-  const { id: questionId } = useParams();
+  const { id } = useParams();
+  const questionId = Number(id);
 
   const [sort, setSort] = useState("popular");
 
@@ -32,15 +34,11 @@ const QuestionPage = () => {
     <Box py={2}>
       {questionData && (
         <Box>
-          <Typography variant={"pagetitle"}>
+          <Typography variant={"pageTitle"}>
             Individual Question (id: {questionData?.id})
           </Typography>
           <Box display={"grid"} gap={2} mt={2}>
-            <Question
-              questionData={questionData}
-              showAddAnswerForm={showAddAnswerForm}
-              setShowAddAnswerForm={setShowAddAnswerForm}
-            />
+            <Question questionData={questionData} />
             {showAddAnswerForm && (
               <AnswerForm
                 questionId={questionData.id}
@@ -65,7 +63,7 @@ const QuestionPage = () => {
                     flexWrap={"wrap"}
                     alignItems={{ xs: "", sm: "center" }}
                     gap={{ xs: 1, sm: 2 }}>
-                    <Typography variant={"pagetitle"}>
+                    <Typography variant={"pageTitle"}>
                       Answers ({questionData?.answers.length})
                     </Typography>
                     <Sort sort={sort} setSort={setSort} />
@@ -83,7 +81,7 @@ const QuestionPage = () => {
               </Box>
             </Box>
             <Box display={"grid"} gap={2}>
-              {questionData.answers.map((answerData) => {
+              {questionData.answers.map((answerData: AnswerData) => {
                 return <Answer key={answerData.id} answerData={answerData} />;
               })}
             </Box>

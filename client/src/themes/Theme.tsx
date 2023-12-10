@@ -22,80 +22,80 @@ const theme = createTheme({
     body2: {
       fontSize: "0.75rem",
     },
-    pagetitle: {
+    pageTitle: {
       fontSize: "1.2rem",
       fontWeight: "500",
     },
-    questiontitle: {
+    questionTitle: {
       fontSize: "1.2rem",
       fontWeight: "500",
     },
-    questionbody: {
+    questionBody: {
       fontSize: "1.25rem",
       fontWeight: "600",
     },
-    questionformtitle: {
+    questionFormTitle: {
       fontSize: "1.25rem",
       fontWeight: "500",
     },
-    answertitle: {
+    answerTitle: {
       fontSize: "1.2rem",
       fontWeight: "500",
     },
-    answersubtitles: {
+    answerSubtitles: {
       fontSize: "1.2rem",
       fontWeight: "500",
     },
-    answerbody: {
+    answerBody: {
       fontSize: "1.2rem",
       fontWeight: "500",
     },
-    answerformtitle: {
+    answerFormTitle: {
       fontSize: "1.4rem",
       fontWeight: "500",
     },
-    commentitle: {
+    commentTitle: {
       fontSize: "1rem",
     },
-    commentbody: {
+    commentBody: {
       fontSize: "1rem",
     },
-    commentformtitle: {
+    commentFormTitle: {
       fontSize: "1.2rem",
       fontWeight: "500",
     },
-    heromaincardtitle: {
+    heroMainCardTitle: {
       fontSize: "2.5rem",
     },
-    heromaincardbody: {
+    heroMainCardBody: {
       fontSize: "1.2rem",
     },
-    tabletitle: {
+    tableTitle: {
       fontSize: "1.1rem",
       fontWeight: "500",
     },
-    herosubcardtitle: {
+    heroSubCardTitle: {
       fontSize: "3rem",
       fontWeight: "600",
     },
-    herosubcardsubtitle: {
+    heroSubCardSubtitle: {
       fontSize: "2rem",
       fontWeight: "500",
     },
-    herosubcardslogan: {
+    heroSubCardSlogan: {
       fontSize: "1.6rem",
       fontWeight: "400",
       fontStyle: "italic",
     },
-    abouttitle: {
+    aboutTitle: {
       fontSize: "2.6rem",
       fontWeight: "600",
     },
-    aboutsubtitle: {
+    aboutSubtitle: {
       fontSize: "2.2rem",
       fontWeight: "600",
     },
-    abouttitlesubtext: {
+    aboutTitleSubtext: {
       fontSize: "1.6rem",
       fontWeight: "500",
     },
@@ -103,40 +103,40 @@ const theme = createTheme({
       fontSize: "2rem",
       fontWeight: "500",
     },
-    aboutwhatbody: {
+    aboutWhatBody: {
       fontSize: "1.5rem",
       fontWeight: "400",
     },
-    aboutwhensubtext: {
+    aboutWhenSubtext: {
       fontSize: "1.4rem",
       fontWeight: "400",
     },
-    aboutwhenlink: {
+    aboutWhenLink: {
       fontSize: "1.4rem",
       fontWeight: "600",
     },
-    abouthowsubtext: {
+    aboutHowSubtext: {
       fontSize: "1.4rem",
       fontWeight: "400",
     },
-    abouthowbulletpoint: {
+    aboutHowBulletPoint: {
       fontSize: "1.4rem",
       fontWeight: "400",
     },
-    aboutexampletitle: {
+    aboutExampleTitle: {
       fontSize: "2rem",
       fontWeight: "600",
     },
-    aboutexamplequestion: {
+    aboutExampleQuestion: {
       fontSize: "1.6rem",
       fontWeight: "400",
       fontStyle: "italic",
     },
-    aboutexamplestarsubtitle: {
+    aboutExampleStarSubtitle: {
       fontSize: "1.4rem",
       fontWeight: "500",
     },
-    aboutexamplebody: {
+    aboutExampleBody: {
       fontSize: "1.15rem",
       fontWeight: "400",
     },

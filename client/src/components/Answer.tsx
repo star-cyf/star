@@ -7,7 +7,8 @@ import SmsOutlinedIcon from "@mui/icons-material/SmsOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { AuthContext } from "../context/AuthContext";
-import AddCommentForm from "./CommentForm";
+import AnswerForm from "./AnswerForm";
+import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 import deleteAnswer from "../api/deleteAnswer";
 import formatDate from "../utils/formatDate";
@@ -18,10 +19,10 @@ import {
   consistentBoxShadow,
   consistentBackdropFilter,
 } from "../themes/ConsistentStyles";
-import AnswerForm from "./AnswerForm";
+import { AnswerData } from "../types/data";
 
-const Answer = ({ answerData }) => {
-  const { authenticatedUser } = useContext(AuthContext);
+const Answer = ({ answerData }: { answerData: AnswerData }) => {
+  const { authenticatedUser } = useContext(AuthContext)!; // non null assertion operator
 
   const [showUpdateAnswerForm, setShowUpdateAnswerForm] = useState(false);
 
@@ -43,7 +44,7 @@ const Answer = ({ answerData }) => {
       console.error(error);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["questions", questionId]);
+      queryClient.invalidateQueries({ queryKey: ["questions", questionId] });
     },
   });
 
@@ -78,7 +79,7 @@ const Answer = ({ answerData }) => {
               <Box display={"flex"} flexWrap={"wrap"} alignItems={"center"}>
                 <PsychologyAltRoundedIcon fontSize={"medium"} color="primary" />
                 <Typography
-                  variant={"answertitle"}
+                  variant={"answerTitle"}
                   color="primary"
                   paddingLeft={0.5}>
                   Answer{" "}
@@ -104,18 +105,18 @@ const Answer = ({ answerData }) => {
               display={"flex"}
               alignItems={"center"}
               gap={0.5}>
-              {answerData.userId === authenticatedUser.id && (
-                <IconButton onClick={handleEdit} color="primary">
-                  <EditOutlinedIcon />
-                </IconButton>
-              )}
-              {answerData.userId === authenticatedUser.id && (
-                <IconButton
-                  onClick={() => handleDelete(answerData.id)}
-                  color="primary">
-                  <DeleteOutlineIcon />
-                </IconButton>
-              )}
+              {authenticatedUser &&
+                answerData.userId === authenticatedUser.id && (
+                  <IconButton onClick={handleEdit} color="primary">
+                    <EditOutlinedIcon />
+                  </IconButton>
+                )}
+              {authenticatedUser &&
+                answerData.userId === authenticatedUser.id && (
+                  <IconButton onClick={handleDelete} color="primary">
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                )}
             </Box>
           </Box>
           <Box display={"grid"} gap={1} mt={1}>
@@ -145,11 +146,11 @@ const Answer = ({ answerData }) => {
                       fontSize={"small"}
                       color={"primary"}
                     />
-                    <Typography variant={"answersubtitles"} color={"primary"}>
+                    <Typography variant={"answerSubtitles"} color={"primary"}>
                       Situation
                     </Typography>
                   </Box>
-                  <Typography mt={1.5} variant={"answerbody"}>
+                  <Typography mt={1.5} variant={"answerBody"}>
                     {answerData.situation}
                   </Typography>
                 </Box>
@@ -167,11 +168,11 @@ const Answer = ({ answerData }) => {
                       fontSize={"small"}
                       color={"primary"}
                     />
-                    <Typography variant={"answersubtitles"} color={"primary"}>
+                    <Typography variant={"answerSubtitles"} color={"primary"}>
                       Task
                     </Typography>
                   </Box>
-                  <Typography mt={1.5} variant={"answerbody"}>
+                  <Typography mt={1.5} variant={"answerBody"}>
                     {answerData.task}
                   </Typography>
                 </Box>
@@ -189,11 +190,11 @@ const Answer = ({ answerData }) => {
                       fontSize={"small"}
                       color={"primary"}
                     />
-                    <Typography variant={"answersubtitles"} color={"primary"}>
+                    <Typography variant={"answerSubtitles"} color={"primary"}>
                       Action
                     </Typography>
                   </Box>
-                  <Typography mt={1.5} variant={"answerbody"}>
+                  <Typography mt={1.5} variant={"answerBody"}>
                     {answerData.action}
                   </Typography>
                 </Box>
@@ -211,11 +212,11 @@ const Answer = ({ answerData }) => {
                       fontSize={"small"}
                       color={"primary"}
                     />
-                    <Typography variant={"answersubtitles"} color={"primary"}>
+                    <Typography variant={"answerSubtitles"} color={"primary"}>
                       Result
                     </Typography>
                   </Box>
-                  <Typography mt={1.5} variant={"answerbody"}>
+                  <Typography mt={1.5} variant={"answerBody"}>
                     {answerData.result}
                   </Typography>
                 </Box>
@@ -265,7 +266,7 @@ const Answer = ({ answerData }) => {
             </Button>
           </Box>
           {showAddCommentForm && (
-            <AddCommentForm
+            <CommentForm
               questionId={answerData.questionId}
               answerId={answerData.id}
               setShowAddCommentForm={setShowAddCommentForm}

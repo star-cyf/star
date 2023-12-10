@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Box,
@@ -20,19 +20,22 @@ import {
   consistentFormFieldBackgroundColor,
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
+import { AddCommentFormProps, UpdateCommentFormProps } from "../types/props";
 
 const CommentForm = ({
   questionId,
   answerId,
-  setShowAddCommentForm,
   commentId,
+  setShowAddCommentForm,
   originalComment,
   setShowUpdateCommentForm,
-}) => {
+}: AddCommentFormProps | UpdateCommentFormProps) => {
   const [comment, setComment] = useState(commentId ? originalComment : "");
-  const [commentValidation, setCommentValidation] = useState(undefined);
+  const [commentValidation, setCommentValidation] = useState<
+    boolean | undefined
+  >(undefined);
 
-  const changeHandler = (event) => {
+  const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(event.target.value);
     setCommentValidation(
       event.target.value.trim().length > 10 &&
@@ -48,14 +51,16 @@ const CommentForm = ({
         ? putComment(questionId, answerId, commentId, comment)
         : postComment(questionId, answerId, comment),
     onSuccess: () => {
-      queryClient.invalidateQueries(["questions", questionId]);
+      queryClient.invalidateQueries({
+        queryKey: ["questions", questionId],
+      });
       setComment("");
       setCommentValidation(undefined);
       setTimeout(() => {
         if (commentId) {
           setShowUpdateCommentForm(false);
         } else {
-          setShowAddCommentForm((prev) => !prev);
+          setShowAddCommentForm((prev: boolean) => !prev);
         }
       }, 1000);
     },
@@ -63,7 +68,7 @@ const CommentForm = ({
 
   const { isPending, isError, error, isSuccess } = commentMutation;
 
-  const submitHandler = async (event) => {
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (commentValidation === undefined) {
       setCommentValidation(false);
@@ -97,7 +102,7 @@ const CommentForm = ({
         <FormControl>
           <Box display={"flex"} alignItems={"center"} gap={0.5} mb={1}>
             <SmsIcon fontSize="medium" color="primary" />
-            <Typography variant={"commentformtitle"} color={"primary"}>
+            <Typography variant={"commentFormTitle"} color={"primary"}>
               {commentId ? "Edit your Comment" : "Add your Comment"}
             </Typography>
           </Box>
@@ -131,7 +136,7 @@ const CommentForm = ({
               onClick={() =>
                 commentId
                   ? setShowUpdateCommentForm(false)
-                  : setShowAddCommentForm((prev) => !prev)
+                  : setShowAddCommentForm((prev: boolean) => !prev)
               }>
               Cancel
             </Button>

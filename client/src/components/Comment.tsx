@@ -15,9 +15,16 @@ import {
   consistentBoxShadow,
   consistentBackdropFilter,
 } from "../themes/ConsistentStyles";
+import { CommentData } from "../types/data";
 
-const Comment = ({ commentData, questionId }) => {
-  const { authenticatedUser } = useContext(AuthContext);
+const Comment = ({
+  commentData,
+  questionId,
+}: {
+  commentData: CommentData;
+  questionId: number;
+}) => {
+  const { authenticatedUser } = useContext(AuthContext)!; // non null assertion operator
 
   const [showUpdateCommentForm, setShowUpdateCommentForm] = useState(false);
 
@@ -41,7 +48,7 @@ const Comment = ({ commentData, questionId }) => {
       console.error(error);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["questions", questionId]);
+      queryClient.invalidateQueries({ queryKey: ["questions", questionId] });
     },
   });
 
@@ -73,7 +80,7 @@ const Comment = ({ commentData, questionId }) => {
             <Box display={"flex"} flexWrap={"wrap"} alignItems={"center"}>
               <MessageRoundedIcon fontSize={"small"} color="primary" />
               <Typography
-                variant={"commenttitle"}
+                variant={"commentTitle"}
                 color="primary"
                 paddingLeft={0.5}>
                 Comment{" "}
@@ -103,18 +110,20 @@ const Comment = ({ commentData, questionId }) => {
             display={"flex"}
             alignItems={"center"}
             gap={0.5}>
-            {commentData.userId === authenticatedUser.id && (
-              <IconButton onClick={handleEdit} color="primary">
-                <EditOutlinedIcon />
-              </IconButton>
-            )}
-            {commentData.userId === authenticatedUser.id && (
-              <IconButton
-                onClick={() => handleDelete(commentData.id)}
-                color="primary">
-                <DeleteOutlineIcon />
-              </IconButton>
-            )}
+            {commentData.userId &&
+              authenticatedUser &&
+              commentData.userId === authenticatedUser.id && (
+                <IconButton onClick={handleEdit} color="primary">
+                  <EditOutlinedIcon />
+                </IconButton>
+              )}
+            {commentData.userId &&
+              authenticatedUser &&
+              commentData.userId === authenticatedUser.id && (
+                <IconButton onClick={handleDelete} color="primary">
+                  <DeleteOutlineIcon />
+                </IconButton>
+              )}
           </Box>
         </Box>
         {showUpdateCommentForm ? (
@@ -127,7 +136,7 @@ const Comment = ({ commentData, questionId }) => {
           />
         ) : (
           <Box>
-            <Typography mt={0.5} variant={"commentbody"}>
+            <Typography mt={0.5} variant={"commentBody"}>
               {commentData.comment}
             </Typography>
           </Box>

@@ -7,6 +7,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { AuthContext } from "../context/AuthContext";
+import QuestionForm from "./QuestionForm";
 import deleteQuestion from "../api/deleteQuestion";
 import formatDate from "../utils/formatDate";
 import {
@@ -17,10 +18,10 @@ import {
   consistentBackdropFilter,
   consistentLinkColor,
 } from "../themes/ConsistentStyles";
-import QuestionForm from "./QuestionForm";
+import { QuestionData } from "../types/data";
 
-const Question = ({ questionData }) => {
-  const { authenticatedUser } = useContext(AuthContext);
+const Question = ({ questionData }: { questionData: QuestionData }) => {
+  const { authenticatedUser } = useContext(AuthContext)!; // non null assertion operator
 
   const [showUpdateQuestionForm, setShowUpdateQuestionForm] = useState(false);
 
@@ -30,7 +31,7 @@ const Question = ({ questionData }) => {
 
   const location = useLocation();
 
-  let currentPage;
+  let currentPage: string = "";
   if (location.pathname.includes("/questions/")) {
     currentPage = "individualQuestionPage";
   } else if (location.pathname.includes("/questions")) {
@@ -52,7 +53,7 @@ const Question = ({ questionData }) => {
       console.error(error);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["questions", questionId]);
+      queryClient.invalidateQueries({ queryKey: ["questions", questionId] });
       if (currentPage === "individualQuestionPage") {
         navigate("/questions");
       }
@@ -91,7 +92,7 @@ const Question = ({ questionData }) => {
               <Box display={"flex"} flexWrap={"wrap"} alignItems={"center"}>
                 <HelpOutlineOutlinedIcon fontSize={"medium"} color="primary" />
                 <Typography
-                  variant={"questiontitle"}
+                  variant={"questionTitle"}
                   color="primary"
                   paddingLeft={0.5}>
                   Question{" "}
@@ -117,18 +118,20 @@ const Question = ({ questionData }) => {
               display={"flex"}
               alignItems={"center"}
               gap={0.5}>
-              {questionData.userId === authenticatedUser.id && (
-                <IconButton onClick={handleEdit} color="primary">
-                  <EditOutlinedIcon />
-                </IconButton>
-              )}
-              {questionData.userId === authenticatedUser.id && (
-                <IconButton
-                  onClick={() => handleDelete(questionData.id)}
-                  color="primary">
-                  <DeleteOutlineIcon />
-                </IconButton>
-              )}
+              {questionData.userId &&
+                authenticatedUser &&
+                questionData.userId === authenticatedUser.id && (
+                  <IconButton onClick={handleEdit} color="primary">
+                    <EditOutlinedIcon />
+                  </IconButton>
+                )}
+              {questionData.userId &&
+                authenticatedUser &&
+                questionData.userId === authenticatedUser.id && (
+                  <IconButton onClick={handleDelete} color="primary">
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                )}
             </Box>
           </Box>
           <Box my={1}>
@@ -139,13 +142,13 @@ const Question = ({ questionData }) => {
                   component={RouterLink}
                   to={`/questions/${questionData.id}`}
                   color={consistentLinkColor}
-                  variant="questionbody">
+                  variant="questionBody">
                   {questionData.question}
                 </Link>
               )}
             {!showUpdateQuestionForm &&
               currentPage === "individualQuestionPage" && (
-                <Typography variant={"questionbody"}>
+                <Typography variant={"questionBody"}>
                   {questionData.question}
                 </Typography>
               )}
@@ -164,32 +167,33 @@ const Question = ({ questionData }) => {
             flexWrap={"wrap"}
             gap={1}>
             <Box display={"flex"} flexWrap={"wrap"} gap={0.75}>
-              {questionData?.answers.length > 0 && (
+              {questionData.answers && questionData?.answers.length > 0 && (
                 <Typography variant={"body2"}>
                   ({questionData?.answers?.length}) Answers
                 </Typography>
               )}
-              {questionData?.answers?.reduce((acc, answer) => {
-                if (answer && answer.comments && answer.comments.length > 0) {
-                  return answer.comments.length + acc;
-                }
-                return acc;
-              }, 0) > 0 && (
-                <Typography variant={"body2"}>
-                  (
-                  {questionData?.answers?.reduce((acc, answer) => {
-                    if (
-                      answer &&
-                      answer.comments &&
-                      answer.comments.length > 0
-                    ) {
-                      return answer.comments.length + acc;
-                    }
-                    return acc;
-                  }, 0)}
-                  ) Comments
-                </Typography>
-              )}
+              {questionData.answers &&
+                questionData?.answers.reduce((acc, answer) => {
+                  if (answer && answer.comments && answer.comments.length > 0) {
+                    return answer.comments.length + acc;
+                  }
+                  return acc;
+                }, 0) > 0 && (
+                  <Typography variant={"body2"}>
+                    (
+                    {questionData?.answers?.reduce((acc, answer) => {
+                      if (
+                        answer &&
+                        answer.comments &&
+                        answer.comments.length > 0
+                      ) {
+                        return answer.comments.length + acc;
+                      }
+                      return acc;
+                    }, 0)}
+                    ) Comments
+                  </Typography>
+                )}
             </Box>
             <Box
               display={"flex"}

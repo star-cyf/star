@@ -11,7 +11,7 @@ const Header = () => {
     <Box
       px={2}
       pb={1}
-      backgroundColor={consistentPrimaryBackgroundColor}
+      bgcolor={consistentPrimaryBackgroundColor}
       borderBottom={consistentHeaderFooterBorder}>
       <Box maxWidth={1200} mx={"auto"}>
         <Box

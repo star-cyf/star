@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -21,17 +22,18 @@ import {
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
 import putAnswer from "../api/putAnswer";
+import { AddAnswerFormProps, UpdateAnswerFormProps } from "../types/props";
 
 const AnswerForm = ({
   questionId,
-  setShowAddAnswerForm,
   answerId,
   originalSituation,
   originalTask,
   originalAction,
   originalResult,
+  setShowAddAnswerForm,
   setShowUpdateAnswerForm,
-}) => {
+}: AddAnswerFormProps | UpdateAnswerFormProps) => {
   const [answer, setAnswer] = useState({
     situation: answerId ? originalSituation : "",
     task: answerId ? originalTask : "",
@@ -45,7 +47,7 @@ const AnswerForm = ({
     result: answerId ? true : undefined,
   });
 
-  const changeHandler = (event) => {
+  const changeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAnswer((prevAnswer) => {
       return { ...prevAnswer, [event.target.id]: event.target.value };
     });
@@ -67,7 +69,7 @@ const AnswerForm = ({
         ? putAnswer(questionId, answerId, answer)
         : postAnswer(questionId, answer),
     onSuccess: () => {
-      queryClient.invalidateQueries(["questions", questionId]);
+      queryClient.invalidateQueries({ queryKey: ["questions", questionId] });
       setAnswer({
         situation: "",
         task: "",
@@ -84,7 +86,7 @@ const AnswerForm = ({
         if (answerId) {
           setShowUpdateAnswerForm(false);
         } else {
-          setShowAddAnswerForm((prev) => !prev);
+          setShowAddAnswerForm((prev: boolean) => !prev);
         }
       }, 1000);
     },
@@ -92,10 +94,12 @@ const AnswerForm = ({
 
   const { isPending, isError, error, isSuccess } = answerMutation;
 
-  const submitHandler = (event) => {
+  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     Object.keys(answerValidation).forEach((key) => {
-      if (answerValidation[key] === undefined) {
+      if (
+        answerValidation[key as keyof typeof answerValidation] === undefined
+      ) {
         setAnswerValidation((prevAnswerValidation) => {
           return { ...prevAnswerValidation, [key]: false };
         });
@@ -139,7 +143,7 @@ const AnswerForm = ({
         <FormControl>
           <Box display={"flex"} alignItems={"center"} gap={0.5}>
             <RateReviewRoundedIcon fontSize="medium" color="primary" />
-            <Typography variant={"answerformtitle"} color={"primary"}>
+            <Typography variant={"answerFormTitle"} color={"primary"}>
               {answerId ? "Edit your Answer" : "Add your Answer"}
             </Typography>
           </Box>
@@ -269,7 +273,7 @@ const AnswerForm = ({
               onClick={() =>
                 answerId
                   ? setShowUpdateAnswerForm(false)
-                  : setShowAddAnswerForm((prev) => !prev)
+                  : setShowAddAnswerForm((prev: boolean) => !prev)
               }>
               Cancel
             </Button>

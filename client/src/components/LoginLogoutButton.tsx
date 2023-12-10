@@ -5,7 +5,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const LoginLogoutButton = () => {
-  const { authenticatedUser, login, logout } = useContext(AuthContext);
+  const { authenticatedUser, login, logout } = useContext(AuthContext)!; // non null assertion operator
 
   return (
     <Box marginLeft={{ xs: "inherit", sm: "auto" }}>

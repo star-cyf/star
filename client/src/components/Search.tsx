@@ -1,17 +1,18 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, ChangeEvent } from "react";
 import { FormControl, TextField } from "@mui/material";
 import {
   consistentBgColor,
   consistentBorder,
 } from "../themes/ConsistentStyles";
+import { SearchProps } from "../types/props";
 
-const Search = ({ setDebouncedSearchTerm }) => {
+const Search = ({ setDebouncedSearchTerm }: SearchProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [isSearchPending, setIsSearchPending] = useState(false);
 
   const handleSearch = useCallback(
-    (event) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
       setSearchTerm(value);
       setIsSearchPending(true);
@@ -46,7 +47,6 @@ const Search = ({ setDebouncedSearchTerm }) => {
           borderRadius: 1,
           border: consistentBorder,
         }}
-        // inputRef={(input) => input && input.focus()}
       />
     </FormControl>
   );

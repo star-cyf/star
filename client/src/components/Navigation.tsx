@@ -5,7 +5,7 @@ import LoginLogoutButton from "./LoginLogoutButton";
 import { AuthContext } from "../context/AuthContext";
 
 const Navigation = () => {
-  const { authenticatedUser } = useContext(AuthContext);
+  const { authenticatedUser } = useContext(AuthContext)!; // non null assertion operator
 
   return (
     <Box display={"flex"} flexWrap={"wrap"} gap={1}>

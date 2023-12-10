@@ -14,7 +14,7 @@ const Footer = () => {
       pt={2}
       pb={3}
       borderTop={consistentHeaderFooterBorder}
-      backgroundColor={consistentPrimaryBackgroundColor}>
+      bgcolor={consistentPrimaryBackgroundColor}>
       <Box
         maxWidth={1200}
         mx={"auto"}

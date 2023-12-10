@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 const NotFoundPage = () => {
   return (
     <Box py={2}>
-      <Typography variant={"pagetitle"}>Page Not Found</Typography>
+      <Typography variant={"pageTitle"}>Page Not Found</Typography>
     </Box>
   );
 };
