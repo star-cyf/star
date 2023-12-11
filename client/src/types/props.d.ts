@@ -1,84 +1,61 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type QuestionFormProps = {
+// Question Form
+export interface AddQuestionFormProps {
   sort: string;
+  setShowAddQuestionForm: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface UpdateQuestionFormProps {
   questionId: number;
   originalQuestion: string;
-  setShowAddQuestionForm: Dispatch<SetStateAction<boolean>>;
   setShowUpdateQuestionForm: Dispatch<SetStateAction<boolean>>;
-};
+}
 
-export type AddQuestionFormProps = Pick<
-  QuestionFormProps,
-  "setShowAddQuestionForm" | "sort"
->;
-// export type AddQuestionFormProps = Partial<QuestionFormProps>;
+export type QuestionFormProps = AddQuestionFormProps | UpdateQuestionFormProps;
 
-export type UpdateQuestionFormProps = Pick<
-  QuestionFormProps,
-  "questionId" | "originalQuestion" | "setShowUpdateQuestionForm"
->;
-// export type UpdateQuestionFormProps = Partial<QuestionFormProps>;
+// Answer Form
+export interface AddAnswerFormProps {
+  questionId: number;
+  setShowAddAnswerForm: Dispatch<SetStateAction<boolean>>;
+}
 
-export type AnswerFormProps = {
+export interface UpdateAnswerFormProps {
   questionId: number;
   answerId: number;
   originalSituation: string;
   originalTask: string;
   originalAction: string;
   originalResult: string;
-  setShowAddAnswerForm: Dispatch<SetStateAction<boolean>>;
   setShowUpdateAnswerForm: Dispatch<SetStateAction<boolean>>;
-};
+}
 
-export type AddAnswerFormProps = Pick<
-  AnswerFormProps,
-  "questionId" | "setShowAddAnswerForm"
->;
-// export type AddAnswerFormProps = Partial<AnswerFormProps>;
+export type AnswerFormProps = AddAnswerFormProps | UpdateAnswerFormProps;
 
-export type UpdateAnswerFormProps = Pick<
-  AnswerFormProps,
-  | "questionId"
-  | "answerId"
-  | "originalSituation"
-  | "originalTask"
-  | "originalAction"
-  | "originalResult"
-  | "setShowUpdateAnswerForm"
->;
-// export type UpdateAnswerFormProps = Partial<AnswerFormProps>;
+// Comment Form
+export interface AddCommentFormProps {
+  questionId: number;
+  answerId: number;
+  setShowAddCommentForm: Dispatch<SetStateAction<boolean>>;
+}
 
-export type CommentFormProps = {
+export interface UpdateCommentFormProps {
   questionId: number;
   answerId: number;
   commentId: number;
   originalComment: string;
-  setShowAddCommentForm: Dispatch<SetStateAction<boolean>>;
   setShowUpdateCommentForm: Dispatch<SetStateAction<boolean>>;
-};
+}
 
-export type AddCommentFormProps = Pick<
-  CommentFormProps,
-  "questionId" | "answerId" | "setShowAddCommentForm"
->;
-// export type AddCommentFormProps = Partial<CommentFormProps>;
+export type CommentFormProps = AddCommentFormProps | UpdateCommentFormProps;
 
-export type UpdateCommentFormProps = Pick<
-  CommentFormProps,
-  | "questionId"
-  | "answerId"
-  | "commentId"
-  | "originalComment"
-  | "setShowUpdateCommentForm"
->;
-// export type UpdateCommentFormProps = Partial<CommentFormProps>;
-
-export type SearchProps = {
+// Search
+export interface SearchProps {
   setDebouncedSearchTerm: Dispatch<SetStateAction<string>>;
-};
+}
 
-export type SortProps = {
+// Sort
+export interface SortProps {
   sort: string;
   setSort: Dispatch<SetStateAction<string>>;
-};
+}

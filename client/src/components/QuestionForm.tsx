@@ -20,7 +20,7 @@ import {
   consistentFormFieldBackgroundColor,
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
-import { AddQuestionFormProps, UpdateQuestionFormProps } from "../types/props";
+import { QuestionFormProps } from "../types/props";
 
 const QuestionForm = ({
   questionId,
@@ -28,7 +28,7 @@ const QuestionForm = ({
   sort,
   setShowAddQuestionForm,
   setShowUpdateQuestionForm,
-}: AddQuestionFormProps | UpdateQuestionFormProps) => {
+}: QuestionFormProps) => {
   const [question, setQuestion] = useState(questionId ? originalQuestion : "");
 
   const [questionValidation, setQuestionValidation] = useState<

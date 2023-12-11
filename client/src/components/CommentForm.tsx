@@ -20,7 +20,7 @@ import {
   consistentFormFieldBackgroundColor,
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
-import { AddCommentFormProps, UpdateCommentFormProps } from "../types/props";
+import { CommentFormProps } from "../types/props";
 
 const CommentForm = ({
   questionId,
@@ -29,7 +29,7 @@ const CommentForm = ({
   setShowAddCommentForm,
   originalComment,
   setShowUpdateCommentForm,
-}: AddCommentFormProps | UpdateCommentFormProps) => {
+}: CommentFormProps) => {
   const [comment, setComment] = useState(commentId ? originalComment : "");
   const [commentValidation, setCommentValidation] = useState<
     boolean | undefined
