@@ -1,26 +1,26 @@
 import { Dispatch, SetStateAction } from "react";
 
 // Question Form
-export interface AddQuestionFormProps {
+export type AddQuestionFormProps = {
   sort: string;
   setShowAddQuestionForm: Dispatch<SetStateAction<boolean>>;
-}
+};
 
-export interface UpdateQuestionFormProps {
+export type UpdateQuestionFormProps = {
   questionId: number;
   originalQuestion: string;
   setShowUpdateQuestionForm: Dispatch<SetStateAction<boolean>>;
-}
+};
 
-export type QuestionFormProps = AddQuestionFormProps & UpdateQuestionFormProps;
+export type QuestionFormProps = AddQuestionFormProps | UpdateQuestionFormProps;
 
 // Answer Form
-export interface AddAnswerFormProps {
+export type AddAnswerFormProps = {
   questionId: number;
   setShowAddAnswerForm: Dispatch<SetStateAction<boolean>>;
-}
+};
 
-export interface UpdateAnswerFormProps {
+export type UpdateAnswerFormProps = {
   questionId: number;
   answerId: number;
   originalSituation: string;
@@ -28,34 +28,34 @@ export interface UpdateAnswerFormProps {
   originalAction: string;
   originalResult: string;
   setShowUpdateAnswerForm: Dispatch<SetStateAction<boolean>>;
-}
+};
 
-export type AnswerFormProps = AddAnswerFormProps & UpdateAnswerFormProps;
+export type AnswerFormProps = AddAnswerFormProps | UpdateAnswerFormProps;
 
 // Comment Form
-export interface AddCommentFormProps {
+export type AddCommentFormProps = {
   questionId: number;
   answerId: number;
   setShowAddCommentForm: Dispatch<SetStateAction<boolean>>;
-}
+};
 
-export interface UpdateCommentFormProps {
+export type UpdateCommentFormProps = {
   questionId: number;
   answerId: number;
   commentId: number;
   originalComment: string;
   setShowUpdateCommentForm: Dispatch<SetStateAction<boolean>>;
-}
+};
 
-export type CommentFormProps = AddCommentFormProps & UpdateCommentFormProps;
+export type CommentFormProps = AddCommentFormProps | UpdateCommentFormProps;
 
 // Search
-export interface SearchProps {
+export type SearchProps = {
   setDebouncedSearchTerm: Dispatch<SetStateAction<string>>;
-}
+};
 
 // Sort
-export interface SortProps {
+export type SortProps = {
   sort: string;
   setSort: Dispatch<SetStateAction<string>>;
-}
+};
