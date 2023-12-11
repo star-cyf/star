@@ -23,16 +23,10 @@ import {
 import { AddQuestionFormProps, UpdateQuestionFormProps } from "../types/props";
 
 const QuestionForm = ({
-  // FIX THIS LATER:
-  // @ts-ignore
   questionId,
-  // @ts-ignore
   originalQuestion,
-  // @ts-ignore
   sort,
-  // @ts-ignore
   setShowAddQuestionForm,
-  // @ts-ignore
   setShowUpdateQuestionForm,
 }: AddQuestionFormProps | UpdateQuestionFormProps) => {
   const [question, setQuestion] = useState(questionId ? originalQuestion : "");

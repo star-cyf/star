@@ -12,11 +12,13 @@ export type AddQuestionFormProps = Pick<
   QuestionFormProps,
   "setShowAddQuestionForm" | "sort"
 >;
+// export type AddQuestionFormProps = Partial<QuestionFormProps>;
 
 export type UpdateQuestionFormProps = Pick<
   QuestionFormProps,
   "questionId" | "originalQuestion" | "setShowUpdateQuestionForm"
 >;
+// export type UpdateQuestionFormProps = Partial<QuestionFormProps>;
 
 export type AnswerFormProps = {
   questionId: number;
@@ -33,7 +35,19 @@ export type AddAnswerFormProps = Pick<
   AnswerFormProps,
   "questionId" | "setShowAddAnswerForm"
 >;
-export type UpdateAnswerFormProps = Pick<AnswerFormProps>;
+// export type AddAnswerFormProps = Partial<AnswerFormProps>;
+
+export type UpdateAnswerFormProps = Pick<
+  AnswerFormProps,
+  | "questionId"
+  | "answerId"
+  | "originalSituation"
+  | "originalTask"
+  | "originalAction"
+  | "originalResult"
+  | "setShowUpdateAnswerForm"
+>;
+// export type UpdateAnswerFormProps = Partial<AnswerFormProps>;
 
 export type CommentFormProps = {
   questionId: number;
@@ -44,8 +58,21 @@ export type CommentFormProps = {
   setShowUpdateCommentForm: Dispatch<SetStateAction<boolean>>;
 };
 
-export type AddCommentFormProps = Pick<CommentFormProps>;
-export type UpdateCommentFormProps = Pick<CommentFormProps>;
+export type AddCommentFormProps = Pick<
+  CommentFormProps,
+  "questionId" | "answerId" | "setShowAddCommentForm"
+>;
+// export type AddCommentFormProps = Partial<CommentFormProps>;
+
+export type UpdateCommentFormProps = Pick<
+  CommentFormProps,
+  | "questionId"
+  | "answerId"
+  | "commentId"
+  | "originalComment"
+  | "setShowUpdateCommentForm"
+>;
+// export type UpdateCommentFormProps = Partial<CommentFormProps>;
 
 export type SearchProps = {
   setDebouncedSearchTerm: Dispatch<SetStateAction<string>>;
