@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const Protected = ({ children }: { children: ReactNode }) => {
-  const { authenticatedUser } = useContext(AuthContext)!; // ! non null assertion
+  const { authenticatedUser } = useContext(AuthContext)!; // non null assertion operator
 
   if (authenticatedUser) {
     return children;
