@@ -1,7 +1,14 @@
+import { QuestionData, AnswerData } from "../types/data";
+
 const putAnswer = async (
-  questionId: number,
-  answerId: number,
-  answer: { situation: string; task: string; action: string; result: string }
+  questionId: QuestionData["id"],
+  answerId: AnswerData["id"],
+  answer: {
+    situation: AnswerData["situation"];
+    task: AnswerData["task"];
+    action: AnswerData["action"];
+    result: AnswerData["result"];
+  }
 ) => {
   const response = await fetch(
     `${

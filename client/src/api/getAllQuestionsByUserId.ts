@@ -1,4 +1,9 @@
-const getAllQuestionsByUserId = async (userId: number, sort: string) => {
+import { UserData } from "../types/data";
+
+const getAllQuestionsByUserId = async (
+  userId: UserData["id"],
+  sort: string
+) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL

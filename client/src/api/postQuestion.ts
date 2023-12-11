@@ -1,4 +1,6 @@
-const postQuestion = async (question: string) => {
+import { QuestionData } from "../types/data";
+
+const postQuestion = async (question: QuestionData["question"]) => {
   const response = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/api/questions`,
     {

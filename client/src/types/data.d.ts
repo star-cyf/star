@@ -43,6 +43,7 @@ export interface AnswerData {
 export interface CommentData {
   id: number;
   userId: number;
+  questionId: number;
   answerId: number;
   comment: string;
   likes: number;

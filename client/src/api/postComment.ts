@@ -1,7 +1,9 @@
+import { QuestionData, AnswerData, CommentData } from "../types/data";
+
 const postComment = async (
-  questionId: number,
-  answerId: number,
-  comment: string
+  questionId: QuestionData["id"],
+  answerId: AnswerData["id"],
+  comment: CommentData["comment"]
 ) => {
   const response = await fetch(
     `${

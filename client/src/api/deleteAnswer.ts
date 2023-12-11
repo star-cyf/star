@@ -1,4 +1,9 @@
-const deleteAnswer = async (questionId: number, answerId: number) => {
+import { QuestionData, AnswerData } from "../types/data";
+
+const deleteAnswer = async (
+  questionId: QuestionData["id"],
+  answerId: AnswerData["id"]
+) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL

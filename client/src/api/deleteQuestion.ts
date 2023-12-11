@@ -1,4 +1,6 @@
-const deleteQuestion = async (questionId: number) => {
+import { QuestionData } from "../types/data";
+
+const deleteQuestion = async (questionId: QuestionData["id"]) => {
   const response = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}`,
     {

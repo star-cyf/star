@@ -1,4 +1,9 @@
-const getQuestionById = async (questionId: number, sort: string) => {
+import { QuestionData } from "../types/data";
+
+const getQuestionById = async (
+  questionId: QuestionData["id"],
+  sort: string
+) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL

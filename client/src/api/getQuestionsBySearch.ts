@@ -1,9 +1,11 @@
+import { QueryKey } from "@tanstack/react-query";
+
 const getQuestionsBySearch = async ({
   pageParam,
   queryKey,
 }: {
   pageParam: number;
-  queryKey: string[];
+  queryKey: QueryKey;
 }) => {
   const sort = queryKey[1];
   const searchTerm = queryKey[2];

@@ -1,7 +1,9 @@
+import { QuestionData, AnswerData, CommentData } from "../types/data";
+
 const deleteComment = async (
-  questionId: number,
-  answerId: number,
-  commentId: number
+  questionId: QuestionData["id"],
+  answerId: AnswerData["id"],
+  commentId: CommentData["id"]
 ) => {
   const response = await fetch(
     `${

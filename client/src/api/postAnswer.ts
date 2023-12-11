@@ -1,6 +1,13 @@
+import { QuestionData, AnswerData } from "../types/data";
+
 const postAnswer = async (
-  questionId: number,
-  answer: { situation: string; task: string; action: string; result: string }
+  questionId: QuestionData["id"],
+  answer: {
+    situation: AnswerData["situation"];
+    task: AnswerData["task"];
+    action: AnswerData["action"];
+    result: AnswerData["result"];
+  }
 ) => {
   const response = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}/answers`,
