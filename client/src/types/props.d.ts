@@ -12,7 +12,7 @@ export interface UpdateQuestionFormProps {
   setShowUpdateQuestionForm: Dispatch<SetStateAction<boolean>>;
 }
 
-export type QuestionFormProps = AddQuestionFormProps | UpdateQuestionFormProps;
+export type QuestionFormProps = AddQuestionFormProps & UpdateQuestionFormProps;
 
 // Answer Form
 export interface AddAnswerFormProps {
@@ -30,7 +30,7 @@ export interface UpdateAnswerFormProps {
   setShowUpdateAnswerForm: Dispatch<SetStateAction<boolean>>;
 }
 
-export type AnswerFormProps = AddAnswerFormProps | UpdateAnswerFormProps;
+export type AnswerFormProps = AddAnswerFormProps & UpdateAnswerFormProps;
 
 // Comment Form
 export interface AddCommentFormProps {
@@ -47,7 +47,7 @@ export interface UpdateCommentFormProps {
   setShowUpdateCommentForm: Dispatch<SetStateAction<boolean>>;
 }
 
-export type CommentFormProps = AddCommentFormProps | UpdateCommentFormProps;
+export type CommentFormProps = AddCommentFormProps & UpdateCommentFormProps;
 
 // Search
 export interface SearchProps {
