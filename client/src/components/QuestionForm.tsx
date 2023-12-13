@@ -23,10 +23,10 @@ import {
 import { QuestionFormProps } from "../types/props";
 
 const QuestionForm = ({
+  setShowAddQuestionForm,
+  sort,
   questionId,
   originalQuestion,
-  sort,
-  setShowAddQuestionForm,
   setShowUpdateQuestionForm,
 }: QuestionFormProps) => {
   const [question, setQuestion] = useState(questionId ? originalQuestion : "");

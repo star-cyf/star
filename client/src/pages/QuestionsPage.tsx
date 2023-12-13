@@ -96,8 +96,8 @@ const QuestionsPage = () => {
         </Box>
         {showAddQuestionForm && (
           <QuestionForm
-            setShowAddQuestionForm={setShowAddQuestionForm}
             sort={sort}
+            setShowAddQuestionForm={setShowAddQuestionForm}
           />
         )}
         {questionsByPageData && (
