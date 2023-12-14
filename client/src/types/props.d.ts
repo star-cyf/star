@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 
 // Question Form
-export interface AddQuestionFormProps extends QuestionFormBaseProps {
+export interface AddQuestionFormProps {
   sort: string;
   setShowAddQuestionForm: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface UpdateQuestionFormProps extends QuestionFormBaseProps {
+export interface UpdateQuestionFormProps {
   questionId: number;
   originalQuestion: string;
   setShowUpdateQuestionForm: Dispatch<SetStateAction<boolean>>;
