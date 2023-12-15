@@ -20,16 +20,19 @@ import {
   consistentFormFieldBackgroundColor,
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
-import { CommentFormProps } from "../types/props";
+import {
+  CommentFormId,
+  AddCommentForm,
+  UpdateCommentForm,
+  CommentFormProps,
+} from "../types/props";
 
-const CommentForm = ({
-  questionId,
-  answerId,
-  commentId,
-  setShowAddCommentForm,
-  originalComment,
-  setShowUpdateCommentForm,
-}: CommentFormProps) => {
+const CommentForm = (props: CommentFormProps) => {
+  const { questionId, answerId } = props as CommentFormId;
+  const { setShowAddCommentForm } = props as AddCommentForm;
+  const { commentId, originalComment, setShowUpdateCommentForm } =
+    props as UpdateCommentForm;
+
   const [comment, setComment] = useState(commentId ? originalComment : "");
   const [commentValidation, setCommentValidation] = useState<
     boolean | undefined

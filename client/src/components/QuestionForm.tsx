@@ -20,15 +20,17 @@ import {
   consistentFormFieldBackgroundColor,
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
-import { QuestionFormProps } from "../types/props";
+import {
+  QuestionFormProps,
+  AddQuestionFormProps,
+  UpdateQuestionFormProps,
+} from "../types/props";
 
-const QuestionForm = ({
-  questionId,
-  originalQuestion,
-  sort,
-  setShowAddQuestionForm,
-  setShowUpdateQuestionForm,
-}: QuestionFormProps) => {
+const QuestionForm = (props: QuestionFormProps) => {
+  const { sort, setShowAddQuestionForm } = props as AddQuestionFormProps;
+  const { questionId, originalQuestion, setShowUpdateQuestionForm } =
+    props as UpdateQuestionFormProps;
+
   const [question, setQuestion] = useState(questionId ? originalQuestion : "");
 
   const [questionValidation, setQuestionValidation] = useState<

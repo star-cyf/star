@@ -21,18 +21,25 @@ import {
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
 import putAnswer from "../api/putAnswer";
-import { AnswerFormProps } from "../types/props";
+import {
+  AnswerFormId,
+  AddAnswerForm,
+  UpdateAnswerForm,
+  AnswerFormProps,
+} from "../types/props";
 
-const AnswerForm = ({
-  questionId,
-  answerId,
-  originalSituation,
-  originalTask,
-  originalAction,
-  originalResult,
-  setShowAddAnswerForm,
-  setShowUpdateAnswerForm,
-}: AnswerFormProps) => {
+const AnswerForm = (props: AnswerFormProps) => {
+  const { questionId } = props as AnswerFormId;
+  const { setShowAddAnswerForm } = props as AddAnswerForm;
+  const {
+    answerId,
+    originalSituation,
+    originalTask,
+    originalAction,
+    originalResult,
+    setShowUpdateAnswerForm,
+  } = props as UpdateAnswerForm;
+
   const [answer, setAnswer] = useState({
     situation: answerId ? originalSituation : "",
     task: answerId ? originalTask : "",
