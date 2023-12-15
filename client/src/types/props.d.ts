@@ -15,8 +15,7 @@ export type QuestionFormProps = AddQuestionFormProps | UpdateQuestionFormProps;
 
 /////////////////////////////////////////////////////////////////////////////////
 // Answer Form
-
-export interface AnswerFormId {
+export interface AnswerFormBase {
   questionId: number;
 }
 export interface AddAnswerForm {
@@ -31,14 +30,14 @@ export type UpdateAnswerForm = {
   originalResult: string;
   setShowUpdateAnswerForm: Dispatch<SetStateAction<boolean>>;
 };
-export type AddAnswerFormProps = AnswerFormId & AddAnswerForm;
-export type UpdateAnswerFormProps = AnswerFormId & UpdateAnswerForm;
+export type AddAnswerFormProps = AnswerFormBase & AddAnswerForm;
+export type UpdateAnswerFormProps = AnswerFormBase & UpdateAnswerForm;
 export type AnswerFormProps = AddAnswerFormProps | UpdateAnswerFormProps;
 
 /////////////////////////////////////////////////////////////////////////////////
 // Comment Form
 
-export type CommentFormId = {
+export type CommentFormBase = {
   questionId: number;
   answerId: number;
 };
@@ -50,8 +49,8 @@ export interface UpdateCommentForm {
   originalComment: string;
   setShowUpdateCommentForm: Dispatch<SetStateAction<boolean>>;
 }
-export type AddCommentFormProps = CommentFormId & AddCommentForm;
-export type UpdateCommentFormProps = CommentFormId & UpdateCommentForm;
+export type AddCommentFormProps = CommentFormBase & AddCommentForm;
+export type UpdateCommentFormProps = CommentFormBase & UpdateCommentForm;
 export type CommentFormProps = AddCommentFormProps | UpdateCommentFormProps;
 
 /////////////////////////////////////////////////////////////////////////////////
