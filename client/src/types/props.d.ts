@@ -1,18 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
-import CommentForm from "../components/CommentForm";
 
+/////////////////////////////////////////////////////////////////////////////////
 // Question Form
 export interface AddQuestionFormProps {
   sort: string;
   setShowAddQuestionForm: Dispatch<SetStateAction<boolean>>;
 }
-
 export interface UpdateQuestionFormProps {
   questionId: number;
   originalQuestion: string;
   setShowUpdateQuestionForm: Dispatch<SetStateAction<boolean>>;
 }
-
 export type QuestionFormProps = AddQuestionFormProps | UpdateQuestionFormProps;
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +22,6 @@ export interface AnswerFormId {
 export interface AddAnswerForm {
   setShowAddAnswerForm: Dispatch<SetStateAction<boolean>>;
 }
-
 export type UpdateAnswerForm = {
   questionId: number;
   answerId: number;
@@ -34,7 +31,6 @@ export type UpdateAnswerForm = {
   originalResult: string;
   setShowUpdateAnswerForm: Dispatch<SetStateAction<boolean>>;
 };
-
 export type AddAnswerFormProps = AnswerFormId & AddAnswerForm;
 export type UpdateAnswerFormProps = AnswerFormId & UpdateAnswerForm;
 export type AnswerFormProps = AddAnswerFormProps | UpdateAnswerFormProps;
@@ -52,11 +48,10 @@ export interface AddCommentForm {
 export interface UpdateCommentForm {
   commentId: number;
   originalComment: string;
-  setShowUpdateCommentForm: Dispatch<React.SetStateAction<boolean>>;
+  setShowUpdateCommentForm: Dispatch<SetStateAction<boolean>>;
 }
 export type AddCommentFormProps = CommentFormId & AddCommentForm;
 export type UpdateCommentFormProps = CommentFormId & UpdateCommentForm;
-
 export type CommentFormProps = AddCommentFormProps | UpdateCommentFormProps;
 
 /////////////////////////////////////////////////////////////////////////////////
