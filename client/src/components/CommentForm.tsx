@@ -21,14 +21,14 @@ import {
   consistentFormFieldBorder,
 } from "../themes/ConsistentStyles";
 import {
-  CommentFormId,
+  CommentFormBase,
   AddCommentForm,
   UpdateCommentForm,
   CommentFormProps,
 } from "../types/props";
 
 const CommentForm = (props: CommentFormProps) => {
-  const { questionId, answerId } = props as CommentFormId;
+  const { questionId, answerId } = props as CommentFormBase;
   const { setShowAddCommentForm } = props as AddCommentForm;
   const { commentId, originalComment, setShowUpdateCommentForm } =
     props as UpdateCommentForm;

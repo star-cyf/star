@@ -22,14 +22,14 @@ import {
 } from "../themes/ConsistentStyles";
 import putAnswer from "../api/putAnswer";
 import {
-  AnswerFormId,
+  AnswerFormBase,
   AddAnswerForm,
   UpdateAnswerForm,
   AnswerFormProps,
 } from "../types/props";
 
 const AnswerForm = (props: AnswerFormProps) => {
-  const { questionId } = props as AnswerFormId;
+  const { questionId } = props as AnswerFormBase;
   const { setShowAddAnswerForm } = props as AddAnswerForm;
   const {
     answerId,
