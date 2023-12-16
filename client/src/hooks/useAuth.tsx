@@ -3,7 +3,6 @@ declare const google: any; // define google as a global variable
 
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import isTokenExpired from "../utils/isTokenExpired";
 import { AuthenticatedUser } from "../types/auth";
 
 const useAuth = () => {
@@ -182,20 +181,40 @@ const useAuth = () => {
   // ----------------------------------------------------------------
 
   useEffect(() => {
+    // Get "authenticatedUser" from LocalStorage
     const authenticatedUserLocalStorage = JSON.parse(
       localStorage.getItem("authenticatedUser") as string
     );
 
-    if (authenticatedUserLocalStorage) {
-      if (isTokenExpired(authenticatedUserLocalStorage)) {
-        logout();
-      } else {
-        setAuthenticatedUser(authenticatedUserLocalStorage);
-      }
-    } else {
+    // If there is no "authenticatedUser"
+    if (!authenticatedUserLocalStorage) {
+      // Remove the "customJWT" from Local Storage
       localStorage.removeItem("customJWT");
+      return;
     }
-  }, [logout]);
+
+    const now = Date.now();
+    const customJWTExpirationTime =
+      authenticatedUserLocalStorage.expirationTime * 1000;
+    const isCustomJWTExpired = customJWTExpirationTime <= now;
+
+    // If there is an "authenticatedUser" but the CustomJWT has expired
+    if (authenticatedUserLocalStorage && isCustomJWTExpired) {
+      // Remove the "authenticatedUser" from Local Storage
+      localStorage.removeItem("authenticatedUser");
+      // Remove the "customJWT" from Local Storage
+      localStorage.removeItem("customJWT");
+      return;
+    }
+
+    // there is an "authenticatedUser" and the CustomJWT is still valid
+    if (authenticatedUserLocalStorage && !isCustomJWTExpired) {
+      // If there is an "authenticatedUser"
+      // Update the authenticatedUser React State with that user
+      setAuthenticatedUser(authenticatedUserLocalStorage);
+      return;
+    }
+  }, []);
 
   // ----------------------------------------------------------------
 
