@@ -81,5 +81,3 @@ export type SortProps = {
   sort: string;
   setSort: Dispatch<SetStateAction<string>>;
 };
-
-// ----------------------------------------------------------------
