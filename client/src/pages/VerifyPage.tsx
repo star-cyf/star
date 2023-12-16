@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext, useState, useCallback, useEffect } from "react";
 import {
   useSearchParams,
   Link as RouterLink,
@@ -28,45 +28,48 @@ const VerifyPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchUserVerification = async (code: string) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/github?code=${code}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-          },
-          // credentials: "include",
+  const fetchUserVerification = useCallback(
+    async (code: string) => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/api/auth/github?code=${code}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+            },
+            // credentials: "include",
+          }
+        );
+        console.log("fetchUserVerification response", response);
+
+        if (!response.ok) {
+          throw new Error("fetchUserVerification response failed");
         }
-      );
-      console.log("fetchUserVerification response", response);
 
-      if (!response.ok) {
-        throw new Error("fetchUserVerification response failed");
+        const data = await response.json();
+        console.log("fetchUserVerification data", data);
+
+        if (!data) {
+          throw new Error("fetchUserVerification data : No Data");
+        }
+
+        localStorage.setItem("authenticatedUser", JSON.stringify(data));
+        setAuthenticatedUser(data);
+      } catch (error) {
+        console.error("fetchUserVerification error", error);
+        if (error instanceof Error) {
+          setError(error.message);
+        }
+      } finally {
+        setIsLoading(false);
+        navigate(".", { replace: true });
       }
-
-      const data = await response.json();
-      console.log("fetchUserVerification data", data);
-
-      if (!data) {
-        throw new Error("fetchUserVerification data : No Data");
-      }
-
-      localStorage.setItem("authenticatedUser", JSON.stringify(data));
-      setAuthenticatedUser(data);
-    } catch (error) {
-      console.error("fetchUserVerification error", error);
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-    } finally {
-      setIsLoading(false);
-      navigate(".", { replace: true });
-    }
-  };
+    },
+    [setAuthenticatedUser, navigate]
+  );
 
   useEffect(() => {
     console.log("VerifyPage useEffect ran");
@@ -84,7 +87,7 @@ const VerifyPage = () => {
       fetchUserVerification(code);
       return;
     }
-  }, []);
+  }, [searchParams, fetchUserVerification]);
 
   return (
     <Box my={2}>
@@ -150,7 +153,9 @@ const VerifyPage = () => {
                   <SendRoundedIcon />
                 )
               }
-              disabled={authenticatedUser && authenticatedUser.roleId > 1}
+              disabled={
+                authenticatedUser && authenticatedUser.roleId > 1 ? true : false
+              }
               component={RouterLink}
               to={`https://github.com/login/oauth/authorize?client_id=${
                 import.meta.env.VITE_GITHUB_CLIENT_ID
