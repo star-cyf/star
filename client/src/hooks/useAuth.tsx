@@ -220,6 +220,7 @@ const useAuth = () => {
 
   return {
     authenticatedUser,
+    setAuthenticatedUser,
     login,
     logout,
   };

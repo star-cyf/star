@@ -1,14 +1,20 @@
 import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { NavLink } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { AuthContext } from "../context/AuthContext";
 
-const LoginLogoutButton = () => {
+const AuthButtons = () => {
   const { authenticatedUser, login, logout } = useContext(AuthContext)!; // non null assertion operator
 
   return (
-    <Box marginLeft={{ xs: "inherit", sm: "auto" }}>
+    <Box marginLeft={{ xs: "inherit", sm: "auto" }} display={"flex"} gap={1}>
+      {authenticatedUser && authenticatedUser.roleId === 1 && (
+        <Button component={NavLink} to={"/verify"} variant="contained">
+          Verify
+        </Button>
+      )}
       {authenticatedUser ? (
         <Button
           size={"small"}
@@ -30,4 +36,4 @@ const LoginLogoutButton = () => {
   );
 };
 
-export default LoginLogoutButton;
+export default AuthButtons;
