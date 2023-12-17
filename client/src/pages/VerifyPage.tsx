@@ -1,10 +1,5 @@
-import { useContext, useState, useCallback, useEffect } from "react";
-import {
-  useSearchParams,
-  Link as RouterLink,
-  NavLink,
-  useNavigate,
-} from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
+import { useSearchParams, Link as RouterLink, NavLink } from "react-router-dom";
 import { Box, Typography, Button, Link } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import RotateRightRoundedIcon from "@mui/icons-material/RotateRightRounded";
@@ -19,17 +14,19 @@ import {
 } from "../themes/ConsistentStyles";
 
 const VerifyPage = () => {
+  // console.log("VerifyPage rendered");
   const { authenticatedUser, setAuthenticatedUser } = useContext(AuthContext)!; // non null assertion operator
 
   const [searchParams] = useSearchParams();
-
-  const navigate = useNavigate();
+  const code = searchParams.get("code");
+  // console.log("VerifyPage code:", code);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchUserVerification = useCallback(
-    async (code: string) => {
+  useEffect(() => {
+    // console.log("VerifyPage useEffect ran");
+    const getUserVerification = async (code: string) => {
       try {
         setIsLoading(true);
         setError(null);
@@ -43,51 +40,47 @@ const VerifyPage = () => {
             // credentials: "include",
           }
         );
-        console.log("fetchUserVerification response", response);
+        // console.log("getUserVerification response", response);
 
         if (!response.ok) {
-          throw new Error("fetchUserVerification response failed");
+          throw new Error("getUserVerification response: failed");
         }
 
         const data = await response.json();
-        console.log("fetchUserVerification data", data);
+        // console.log("getUserVerification data", data);
 
         if (!data) {
-          throw new Error("fetchUserVerification data : No Data");
+          throw new Error("getUserVerification data: No Data");
         }
 
         localStorage.setItem("authenticatedUser", JSON.stringify(data));
         setAuthenticatedUser(data);
       } catch (error) {
-        console.error("fetchUserVerification error", error);
+        console.error("getUserVerification error", error);
         if (error instanceof Error) {
           setError(error.message);
         }
       } finally {
         setIsLoading(false);
-        navigate(".", { replace: true });
       }
-    },
-    [setAuthenticatedUser, navigate]
-  );
+    };
 
-  useEffect(() => {
-    console.log("VerifyPage useEffect ran");
+    if (code && authenticatedUser?.roleId! > 1) {
+      // console.log("VerifyPage useEffect IF BLOCK [1]");
+      return;
+    }
 
-    const code = searchParams.get("code");
-    console.log("VerifyPage useEffect code:", code);
+    if (code && authenticatedUser?.roleId! === 1) {
+      // console.log("VerifyPage useEffect IF BLOCK [2] code:", code);
+      getUserVerification(code);
+      return;
+    }
 
     if (!code) {
-      console.log("VerifyPage useEffect IF BLOCK [1]");
+      // console.log("VerifyPage useEffect IF BLOCK [3]");
       return;
     }
-
-    if (code) {
-      console.log("VerifyPage useEffect IF BLOCK [2] code:", code);
-      fetchUserVerification(code);
-      return;
-    }
-  }, [searchParams, fetchUserVerification]);
+  }, [code, authenticatedUser?.roleId, setAuthenticatedUser]);
 
   return (
     <Box my={2}>
@@ -180,7 +173,7 @@ const VerifyPage = () => {
                   component={"span"}
                   fontWeight={600}
                   color={"primary"}>
-                  {authenticatedUser.roleId === 1 ? "Unverified" : "Verified"}
+                  {authenticatedUser.roleId > 1 ? "Verified" : "Unverified"}
                 </Typography>
               </Typography>
             </Box>
