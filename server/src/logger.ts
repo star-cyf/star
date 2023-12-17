@@ -8,8 +8,12 @@ export const logger = createLogger({
     format.printf((info) => {
       const { timestamp, level, message, value } = info;
       let formattedValue;
-      if (!value || typeof value === "undefined") {
-        formattedValue = "";
+      if (
+        typeof value === "boolean" ||
+        typeof value === "undefined" ||
+        !value
+      ) {
+        formattedValue = String(value);
       } else if (typeof value === "string" || typeof value === "number") {
         formattedValue = value;
       } else if (Object.keys(value).length) {

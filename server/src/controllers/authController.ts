@@ -1,7 +1,7 @@
 import { OAuth2Client } from "google-auth-library";
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 import { Request, Response } from "express";
-import { CustomJWTPayload } from "../types/types";
+import { CustomJWTPayload, GitHubMembership } from "../types/types";
 import {
   createUser,
   getUserByGoogleId,
@@ -609,46 +609,41 @@ export const gitHubHandler = async (req: Request, res: Response) => {
       value: accessToken
     });
 
-    // we used "scope=read:user read:org" on the original client request
-    const userResponse = await fetch("https://api.github.com/user", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json"
-      }
-    });
-    logger.info({
-      message: "gitHubHandler userOrganizationsResponse status",
-      value: {
-        status: userResponse.status,
-        statusText: userResponse.statusText
-      }
-    });
+    // const userResponse = await fetch("https://api.github.com/user", {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //     "Content-Type": "application/json",
+    //     Accept: "application/vnd.github+json",
+    //     "X-GitHub-Api-Version": "2022-11-28"
+    //   }
+    // });
+    // logger.info({
+    //   message: "gitHubHandler userOrganizationsResponse status",
+    //   value: {
+    //     status: userResponse.status,
+    //     statusText: userResponse.statusText
+    //   }
+    // });
 
-    const userData: { login: string; organizations_url: string } =
-      (await userResponse.json()) as {
-        login: string;
-        organizations_url: string;
-      };
-    logger.info({
-      message: "gitHubHandler userData",
-      value: userData
-    });
+    // const userData = (await userResponse.json()) as GitHubUser;
+    // logger.info({
+    //   message: "gitHubHandler userData",
+    //   value: userData
+    // });
 
-    const userOrganizationsURL = userData.organizations_url;
-    logger.info({
-      message: "gitHubHandler userOrganizationsURL",
-      value: userOrganizationsURL
-    });
-
-    // we used "scope=read:user read:org" on the original client request
-    const userOrganizationsResponse = await fetch(userOrganizationsURL, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json"
+    const userOrganizationsResponse = await fetch(
+      "https://api.github.com/user/memberships/orgs",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28"
+        }
       }
-    });
+    );
     logger.info({
       message: "gitHubHandler userOrganizationsResponse status",
       value: {
@@ -657,16 +652,24 @@ export const gitHubHandler = async (req: Request, res: Response) => {
       }
     });
 
-    const userOrganizationsData = await userOrganizationsResponse.json();
+    const userOrganizationData =
+      (await userOrganizationsResponse.json()) as GitHubMembership[];
     logger.info({
-      message: "gitHubHandler userOrganizationsData",
-      value: userOrganizationsData
+      message: "gitHubHandler userOrganizationData",
+      value: userOrganizationData
     });
 
-    // check if the "codeyourfuture" organization exists in the above response
-
-    // cast a boolean based on this (CURRENTLY HARDCODED)
-    const userIsOrganizationMember = true;
+    const isCodeYourFutureActiveMember = userOrganizationData.some(
+      (member: GitHubMembership) =>
+        member.organization &&
+        member.organization.login.toLowerCase() === "codeyourfuture" &&
+        member.organization.id === 22743767 &&
+        member.state.toLowerCase() === "active"
+    );
+    logger.info({
+      message: "gitHubHandler isCodeYourFutureActiveMember",
+      value: isCodeYourFutureActiveMember
+    });
 
     // get user google id to perform database operations
     const customJWTPayload = req.customJWTPayload as CustomJWTPayload;
@@ -678,7 +681,7 @@ export const gitHubHandler = async (req: Request, res: Response) => {
 
     let user;
 
-    if (!userIsOrganizationMember) {
+    if (!isCodeYourFutureActiveMember) {
       // if user is NOT a member of the organization:
       user = await getUserByGoogleId(userGoogleId);
       logger.info({
@@ -688,18 +691,19 @@ export const gitHubHandler = async (req: Request, res: Response) => {
       // return the original user object (with roleId 1) (Unverified)
       const data = user[0];
       return res.status(200).json(data);
-    } else {
-      // if user is a member of the organization:
-      // update the user's role in the database to roleId 2 (Trainee)
-      user = await updateUserRoleId(userGoogleId, 2);
-      logger.info({
-        message: "gitHubHandler user",
-        value: user
-      });
-      // return the updated user object (with roleId 2)
-      const data = user[0];
-      return res.status(200).json(data);
     }
+
+    // if user is a member of the organization:
+    // update the user's role in the database to roleId 2 (Trainee)
+    user = await updateUserRoleId(userGoogleId, 2);
+    logger.info({
+      message: "gitHubHandler user",
+      value: user
+    });
+
+    // return the updated user object (with roleId 2)
+    const data = user[0];
+    res.status(200).json(data);
   } catch (error) {
     logger.error(error);
     return res.status(500).json({ error: error });

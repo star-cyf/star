@@ -9,7 +9,7 @@ import RootLayout from "./layouts/RootLayout";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import VerifyPage from "./pages/VerifyPage";
-import Protected from "./components/Protected";
+import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./pages/ProfilePage";
 import UsersPage from "./pages/UsersPage";
 import QuestionsPage from "./pages/QuestionsPage";
@@ -33,33 +33,33 @@ const router = createBrowserRouter(
       <Route
         path="profile"
         element={
-          <Protected>
+          <ProtectedRoute allowedRoles={[2, 3, 4]}>
             <ProfilePage />
-          </Protected>
+          </ProtectedRoute>
         }
       />
       <Route
         path="users"
         element={
-          <Protected>
+          <ProtectedRoute allowedRoles={[4]}>
             <UsersPage />
-          </Protected>
+          </ProtectedRoute>
         }
       />
       <Route
         path="questions"
         element={
-          <Protected>
+          <ProtectedRoute allowedRoles={[2, 3, 4]}>
             <QuestionsPage />
-          </Protected>
+          </ProtectedRoute>
         }
       />
       <Route
         path="questions/:id"
         element={
-          <Protected>
+          <ProtectedRoute allowedRoles={[2, 3, 4]}>
             <QuestionPage />
-          </Protected>
+          </ProtectedRoute>
         }
       />
       <Route path="*" element={<NotFoundPage />} />

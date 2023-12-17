@@ -1,12 +1,12 @@
-import { ReactNode } from "react";
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { ProtectedRouteProps } from "../types/props";
 
-const Protected = ({ children }: { children: ReactNode }) => {
+const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
   const { authenticatedUser } = useContext(AuthContext)!; // non null assertion operator
 
-  if (authenticatedUser && authenticatedUser.roleId !== 1) {
+  if (authenticatedUser && allowedRoles.includes(authenticatedUser.roleId)) {
     return children;
   }
 
@@ -17,4 +17,4 @@ const Protected = ({ children }: { children: ReactNode }) => {
   return <Navigate to="/" />;
 };
 
-export default Protected;
+export default ProtectedRoute;

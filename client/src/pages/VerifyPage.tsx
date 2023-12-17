@@ -152,7 +152,7 @@ const VerifyPage = () => {
               component={RouterLink}
               to={`https://github.com/login/oauth/authorize?client_id=${
                 import.meta.env.VITE_GITHUB_CLIENT_ID
-              }&scope=read:user read:org`}
+              }&scope=read:org`}
               variant="contained">
               Verify Me
             </Button>
@@ -166,7 +166,12 @@ const VerifyPage = () => {
         {authenticatedUser && (
           <>
             <Box>
-              <Typography>Name: {authenticatedUser.firstName}</Typography>
+              <Typography>
+                Name:{" "}
+                <Typography component={"span"} fontWeight={600}>
+                  {authenticatedUser.firstName} {authenticatedUser?.lastName}{" "}
+                </Typography>
+              </Typography>
               <Typography>
                 Verification Status:{" "}
                 <Typography
@@ -174,6 +179,12 @@ const VerifyPage = () => {
                   fontWeight={600}
                   color={"primary"}>
                   {authenticatedUser.roleId > 1 ? "Verified" : "Unverified"}
+                </Typography>
+              </Typography>
+              <Typography>
+                Role ID:{" "}
+                <Typography component={"span"} fontWeight={600}>
+                  {authenticatedUser.roleId}
                 </Typography>
               </Typography>
             </Box>
