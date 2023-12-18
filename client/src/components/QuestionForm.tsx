@@ -107,7 +107,7 @@ const QuestionForm = (props: QuestionFormProps) => {
             </Typography>
           </Box>
           <TextareaAutosize
-            id="situation"
+            id="question"
             aria-label="Add your Question"
             minRows={2}
             placeholder="Please carefully type out your Question"
