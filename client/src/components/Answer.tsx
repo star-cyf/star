@@ -107,13 +107,19 @@ const Answer = ({ answerData }: { answerData: AnswerData }) => {
               gap={0.5}>
               {authenticatedUser &&
                 answerData.userId === authenticatedUser.id && (
-                  <IconButton onClick={handleEdit} color="primary">
+                  <IconButton
+                    onClick={handleEdit}
+                    color="primary"
+                    data-testid="answer-EditOutlinedIcon">
                     <EditOutlinedIcon />
                   </IconButton>
                 )}
               {authenticatedUser &&
                 answerData.userId === authenticatedUser.id && (
-                  <IconButton onClick={handleDelete} color="primary">
+                  <IconButton
+                    onClick={handleDelete}
+                    color="primary"
+                    data-testid="answer-DeleteOutlineIcon">
                     <DeleteOutlineIcon />
                   </IconButton>
                 )}

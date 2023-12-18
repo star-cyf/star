@@ -113,14 +113,20 @@ const Comment = ({
             {commentData.userId &&
               authenticatedUser &&
               commentData.userId === authenticatedUser.id && (
-                <IconButton onClick={handleEdit} color="primary">
+                <IconButton
+                  onClick={handleEdit}
+                  color="primary"
+                  data-testid="comment-EditOutlinedIcon">
                   <EditOutlinedIcon />
                 </IconButton>
               )}
             {commentData.userId &&
               authenticatedUser &&
               commentData.userId === authenticatedUser.id && (
-                <IconButton onClick={handleDelete} color="primary">
+                <IconButton
+                  onClick={handleDelete}
+                  color="primary"
+                  data-testid="comment-DeleteOutlineIcon">
                   <DeleteOutlineIcon />
                 </IconButton>
               )}

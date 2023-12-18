@@ -121,14 +121,20 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
               {questionData.userId &&
                 authenticatedUser &&
                 questionData.userId === authenticatedUser.id && (
-                  <IconButton onClick={handleEdit} color="primary">
+                  <IconButton
+                    onClick={handleEdit}
+                    color="primary"
+                    data-testid="question-EditOutlinedIcon">
                     <EditOutlinedIcon />
                   </IconButton>
                 )}
               {questionData.userId &&
                 authenticatedUser &&
                 questionData.userId === authenticatedUser.id && (
-                  <IconButton onClick={handleDelete} color="primary">
+                  <IconButton
+                    onClick={handleDelete}
+                    color="primary"
+                    data-testid="question-DeleteOutlineIcon">
                     <DeleteOutlineIcon />
                   </IconButton>
                 )}
