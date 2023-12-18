@@ -1,15 +1,34 @@
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthProvider } from "../context/AuthContext";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../themes/Theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Box } from "@mui/material";
 import Header from "../components/Header";
-// import AuthState from "../components/AuthState";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/Footer";
 import { consistentPageBackgroundImage } from "../themes/ConsistentStyles";
 
 const RootLayout = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    sessionStorage.setItem("location", JSON.stringify(location));
+  }, [location]);
+
+  useEffect(() => {
+    const lastLocation = JSON.parse(
+      sessionStorage.getItem("location") as string
+    );
+
+    if (lastLocation && lastLocation !== location) {
+      navigate(lastLocation);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <AuthProvider>
@@ -20,7 +39,6 @@ const RootLayout = () => {
             display={"grid"}
             gridTemplateRows={"auto 1fr auto"}>
             <Header />
-            {/* <AuthState /> */}
             <Box
               px={2}
               sx={{
