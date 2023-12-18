@@ -6,12 +6,12 @@ const getAllUsers = async () => {
     },
     // credentials: "include",
   });
-  // console.log("fetchAllUsers response:", response);
+  // console.log("getAllUsers response:", response);
   if (!response.ok) {
-    throw new Error("fetchAllUsers failed");
+    throw new Error("getAllUsers failed");
   }
   const data = await response.json();
-  // console.log("fetchAllUsers data:", data);
+  // console.log("getAllUsers data:", data);
   return data;
 };
 

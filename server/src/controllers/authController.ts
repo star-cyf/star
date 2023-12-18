@@ -1,8 +1,12 @@
 import { OAuth2Client } from "google-auth-library";
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
 import { Request, Response } from "express";
-import { CustomJWTPayload } from "../types/types";
-import { createUser, getUserByGoogleId } from "../helpers/users";
+import { CustomJWTPayload, GitHubMembership } from "../types/types";
+import {
+  createUser,
+  getUserByGoogleId,
+  updateUserRoleId
+} from "../helpers/users";
 import { logger } from "../logger";
 
 export const idTokenHandler = async (req: Request, res: Response) => {
@@ -551,5 +555,157 @@ export const userHandler = async (req: Request, res: Response) => {
   } catch (error) {
     logger.error(error);
     res.status(500).json({ error: "Server Error" });
+  }
+};
+
+// ------------------------------------------------------------------
+
+export const gitHubHandler = async (req: Request, res: Response) => {
+  try {
+    const code = req.query.code;
+    logger.info({
+      message: "gitHubHandler code",
+      value: code
+    });
+
+    const accessTokenResponse = await fetch(
+      "https://github.com/login/oauth/access_token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          client_id: process.env.GITHUB_CLIENT_ID,
+          client_secret: process.env.GITHUB_CLIENT_SECRET,
+          code: code
+        })
+      }
+    );
+    logger.info({
+      message: "gitHubHandler accessTokenResponse",
+      value: accessTokenResponse
+    });
+
+    if (!accessTokenResponse.ok) {
+      throw new Error("fetching GitHub Access Token Failed");
+    }
+
+    const accessTokenResponseText = await accessTokenResponse.text();
+    logger.info({
+      message: "gitHubHandler accessTokenResponseText",
+      value: accessTokenResponseText
+    });
+
+    const accessTokenData = new URLSearchParams(accessTokenResponseText);
+    logger.info({
+      message: "gitHubHandler data",
+      value: accessTokenData
+    });
+
+    const accessToken = accessTokenData.get("access_token");
+    logger.info({
+      message: "gitHubHandler accessToken",
+      value: accessToken
+    });
+
+    // const userResponse = await fetch("https://api.github.com/user", {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //     "Content-Type": "application/json",
+    //     Accept: "application/vnd.github+json",
+    //     "X-GitHub-Api-Version": "2022-11-28"
+    //   }
+    // });
+    // logger.info({
+    //   message: "gitHubHandler userOrganizationsResponse status",
+    //   value: {
+    //     status: userResponse.status,
+    //     statusText: userResponse.statusText
+    //   }
+    // });
+
+    // const userData = (await userResponse.json()) as GitHubUser;
+    // logger.info({
+    //   message: "gitHubHandler userData",
+    //   value: userData
+    // });
+
+    const userOrganizationsResponse = await fetch(
+      "https://api.github.com/user/memberships/orgs",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28"
+        }
+      }
+    );
+    logger.info({
+      message: "gitHubHandler userOrganizationsResponse status",
+      value: {
+        status: userOrganizationsResponse.status,
+        statusText: userOrganizationsResponse.statusText
+      }
+    });
+
+    const userOrganizationData =
+      (await userOrganizationsResponse.json()) as GitHubMembership[];
+    logger.info({
+      message: "gitHubHandler userOrganizationData",
+      value: userOrganizationData
+    });
+
+    const isCodeYourFutureActiveMember = userOrganizationData.some(
+      (member: GitHubMembership) =>
+        member.organization &&
+        member.organization.login.toLowerCase() === "codeyourfuture" &&
+        member.organization.id === 22743767 &&
+        member.state.toLowerCase() === "active"
+    );
+    logger.info({
+      message: "gitHubHandler isCodeYourFutureActiveMember",
+      value: isCodeYourFutureActiveMember
+    });
+
+    // get user google id to perform database operations
+    const customJWTPayload = req.customJWTPayload as CustomJWTPayload;
+    const userGoogleId = customJWTPayload.googleId;
+    logger.info({
+      message: "gitHubHandler userGoogleId",
+      value: userGoogleId
+    });
+
+    let user;
+
+    if (!isCodeYourFutureActiveMember) {
+      // if user is NOT a member of the organization:
+      user = await getUserByGoogleId(userGoogleId);
+      logger.info({
+        message: "gitHubHandler user",
+        value: user
+      });
+      // return the original user object (with roleId 1) (Unverified)
+      const data = user[0];
+      return res.status(200).json(data);
+    }
+
+    // if user is a member of the organization:
+    // update the user's role in the database to roleId 2 (Trainee)
+    user = await updateUserRoleId(userGoogleId, 2);
+    logger.info({
+      message: "gitHubHandler user",
+      value: user
+    });
+
+    // return the updated user object (with roleId 2)
+    const data = user[0];
+    res.status(200).json(data);
+  } catch (error) {
+    logger.error(error);
+    return res.status(500).json({ error: error });
   }
 };

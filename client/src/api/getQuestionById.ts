@@ -17,12 +17,12 @@ const getQuestionById = async (
       // { credentials: "include" }
     }
   );
-  // console.log("fetchQuestionData response:", response);
+  // console.log("getQuestionById response:", response);
   if (!response.ok) {
-    throw new Error("fetchQuestion failed");
+    throw new Error("getQuestionById failed");
   }
   const data = await response.json();
-  // console.log("fetchQuestionData data:", data);
+  // console.log("getQuestionById data:", data);
   return data;
 };
 

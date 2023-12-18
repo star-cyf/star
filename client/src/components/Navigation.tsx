@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Box, Button } from "@mui/material";
-import LoginLogoutButton from "./LoginLogoutButton";
+import AuthButtons from "./AuthButtons";
 import { AuthContext } from "../context/AuthContext";
 
 const Navigation = () => {
@@ -19,32 +19,37 @@ const Navigation = () => {
         variant="contained">
         About
       </Button>
-      {authenticatedUser && (
-        <>
-          <Button
-            size={"small"}
-            component={NavLink}
-            to={"/profile"}
-            variant="contained">
-            Profile
-          </Button>
-          <Button
-            size={"small"}
-            component={NavLink}
-            to={"/questions"}
-            variant="contained">
-            Questions
-          </Button>
-          <Button
-            size={"small"}
-            component={NavLink}
-            to={"/users"}
-            variant="contained">
-            Users
-          </Button>
-        </>
+      {authenticatedUser &&
+        (authenticatedUser.roleId === 2 ||
+          authenticatedUser.roleId === 3 ||
+          authenticatedUser.roleId === 4) && (
+          <>
+            <Button
+              size={"small"}
+              component={NavLink}
+              to={"/profile"}
+              variant="contained">
+              Profile
+            </Button>
+            <Button
+              size={"small"}
+              component={NavLink}
+              to={"/questions"}
+              variant="contained">
+              Questions
+            </Button>
+          </>
+        )}
+      {authenticatedUser && authenticatedUser.roleId === 4 && (
+        <Button
+          size={"small"}
+          component={NavLink}
+          to={"/users"}
+          variant="contained">
+          Users
+        </Button>
       )}
-      <LoginLogoutButton />
+      <AuthButtons />
     </Box>
   );
 };

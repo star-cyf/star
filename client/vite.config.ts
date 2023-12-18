@@ -15,9 +15,15 @@ export default defineConfig({
     //     secure: false,
     //   },
     // },
+    // Specify which IP addresses the server should listen on
+    host: true,
+    // Automatically open the app in the browser on server start
+    open: true,
   },
   preview: {
     port: 3000,
+    host: true,
+    open: true,
   },
   build: {
     outDir: "build",
