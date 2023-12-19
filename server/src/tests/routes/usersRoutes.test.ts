@@ -25,7 +25,7 @@ describe("User Routes", () => {
       expect(response.statusCode).toBe(401);
       expect(response.type).toBe("application/json");
       expect(response.body).toEqual({
-        error: "Authorization Header Missing or Invalid"
+        error: "Unauthorized - No Cookie with JWT Provided"
       });
     });
 
@@ -66,7 +66,7 @@ describe("User Routes", () => {
 
       const response = await request
         .get("/api/users")
-        .set("Authorization", `Bearer ${customJWT}`);
+        .set("Cookie", [`customJWT=${customJWT}`]);
 
       expect(response.statusCode).toBe(200);
       expect(response.type).toBe("application/json");
@@ -109,7 +109,7 @@ describe("User Routes", () => {
       expect(response.statusCode).toBe(401);
       expect(response.type).toBe("application/json");
       expect(response.body).toEqual({
-        error: "Authorization Header Missing or Invalid"
+        error: "Unauthorized - No Cookie with JWT Provided"
       });
     });
 
@@ -139,7 +139,7 @@ describe("User Routes", () => {
 
       const response = await request
         .get(`/api/users/${createdUserId}`)
-        .set("Authorization", `Bearer ${customJWT}`);
+        .set("Cookie", [`customJWT=${customJWT}`]);
 
       expect(response.statusCode).toBe(200);
       expect(response.type).toBe("application/json");
