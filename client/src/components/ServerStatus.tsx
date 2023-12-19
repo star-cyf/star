@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 
 const ServerStatus = () => {
   const [isServerAlive, setIsServerAlive] = useState(false);
@@ -33,7 +33,7 @@ const ServerStatus = () => {
 
   return (
     <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
-      <Typography fontSize={12}>Server is</Typography>
+      <Typography fontSize={12}>Server:</Typography>
       <Typography
         component={"span"}
         color={isServerAlive ? "green" : "red"}
