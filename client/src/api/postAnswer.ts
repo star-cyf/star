@@ -13,11 +13,11 @@ const postAnswer = async (
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}/answers`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // credentials: "include",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
       body: JSON.stringify(answer),
     }
   );

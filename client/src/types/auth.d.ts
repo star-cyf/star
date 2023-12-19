@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export type AuthenticatedUser = {
   id: number;
   googleId: string;
@@ -13,7 +15,10 @@ export type AuthenticatedUser = {
 };
 
 export interface AuthContextType {
+  authenticatedUser: AuthenticatedUser | null;
+  setAuthenticatedUser: Dispatch<SetStateAction>;
   login: () => Promise<void>;
   logout: () => void;
-  authenticatedUser: AuthenticatedUser | null;
+  statusLogs: string[];
+  setStatusLogs: Dispatch<SetStateAction>;
 }

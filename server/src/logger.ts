@@ -8,12 +8,20 @@ export const logger = createLogger({
     format.printf((info) => {
       const { timestamp, level, message, value } = info;
       let formattedValue;
-      if (!value || typeof value === "undefined") {
-        formattedValue = "";
-      } else if (typeof value === "string" || typeof value === "number") {
-        formattedValue = value;
-      } else if (Object.keys(value).length) {
+      if (
+        typeof value === "undefined" ||
+        typeof value === "boolean" ||
+        typeof value === "string" ||
+        typeof value === "number"
+      ) {
+        formattedValue = String(value);
+      } else if (
+        Array.isArray(value) ||
+        (typeof value === "object" && Object.keys(value).length > 0)
+      ) {
         formattedValue = JSON.stringify(value);
+      } else if (!value) {
+        formattedValue = " ❌ no value";
       }
 
       const timestampColor = "\x1b[34m";

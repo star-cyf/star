@@ -15,11 +15,11 @@ const getQuestionsByPage = async ({
       import.meta.env.VITE_SERVER_URL
     }/api/questions/?limit=${limit}&page=${pageParam}&sort=${sort}`,
     {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // { credentials: "include" }
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
     }
   );
   // console.log("getQuestionsByPage response:", response);

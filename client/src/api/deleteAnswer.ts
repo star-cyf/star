@@ -10,11 +10,11 @@ const deleteAnswer = async (
     }/api/questions/${questionId}/answers/${answerId}`,
     {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // credentials: "include",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
     }
   );
   // console.log("deleteAnswer response", response);

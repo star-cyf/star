@@ -5,15 +5,32 @@ import { AuthContextType } from "../types/auth";
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { authenticatedUser, login, logout } = useAuth();
+  const {
+    authenticatedUser,
+    setAuthenticatedUser,
+    login,
+    logout,
+    statusLogs,
+    setStatusLogs,
+  } = useAuth();
 
   const providerValue = useMemo(
     () => ({
       authenticatedUser,
+      setAuthenticatedUser,
       login,
       logout,
+      statusLogs,
+      setStatusLogs,
     }),
-    [authenticatedUser, login, logout]
+    [
+      authenticatedUser,
+      setAuthenticatedUser,
+      login,
+      logout,
+      statusLogs,
+      setStatusLogs,
+    ]
   );
 
   return (

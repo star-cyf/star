@@ -8,11 +8,11 @@ const putQuestion = async (
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}`,
     {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // credentials: "include",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
       body: JSON.stringify({ question }),
     }
   );
