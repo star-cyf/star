@@ -2,13 +2,10 @@ import { useEffect, useState, useCallback } from "react";
 import { Box, Typography } from "@mui/material";
 
 const ServerStatus = () => {
-  console.log("Server Status rendered");
-
   const [isServerAlive, setIsServerAlive] = useState(false);
 
   const getServerStatus = useCallback(async () => {
     try {
-      console.log("getServerStatus ran");
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api`);
       if (response.status === 200 && !isServerAlive) {
         setIsServerAlive(true);
@@ -19,13 +16,11 @@ const ServerStatus = () => {
   }, [isServerAlive]);
 
   useEffect(() => {
-    console.log("Server Status useEffect ran");
     getServerStatus();
 
     let intervalId: number;
 
     if (!isServerAlive) {
-      console.log("Server Status useEffect IF BLOCK");
       intervalId = setInterval(() => {
         getServerStatus();
       }, 1500);
