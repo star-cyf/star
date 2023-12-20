@@ -63,7 +63,8 @@ const Answer = ({ answerData }: { answerData: AnswerData }) => {
           boxShadow={consistentBoxShadow}
           sx={{
             backdropFilter: consistentBackdropFilter,
-          }}>
+          }}
+          data-testid={`answerId-${answerData?.id}`}>
           <Box
             display={"flex"}
             flexWrap={"wrap"}
@@ -110,7 +111,7 @@ const Answer = ({ answerData }: { answerData: AnswerData }) => {
                   <IconButton
                     onClick={handleEdit}
                     color="primary"
-                    data-testid="answer-EditOutlinedIcon">
+                    data-testid={`EditOutlinedIcon-answerId-${answerData?.id}`}>
                     <EditOutlinedIcon />
                   </IconButton>
                 )}
@@ -119,7 +120,7 @@ const Answer = ({ answerData }: { answerData: AnswerData }) => {
                   <IconButton
                     onClick={handleDelete}
                     color="primary"
-                    data-testid="answer-DeleteOutlineIcon">
+                    data-testid={`DeleteOutlineIcon-answerId-${answerData?.id}`}>
                     <DeleteOutlineIcon />
                   </IconButton>
                 )}

@@ -64,7 +64,8 @@ const Comment = ({
         boxShadow={consistentBoxShadow}
         sx={{
           backdropFilter: consistentBackdropFilter,
-        }}>
+        }}
+        data-testid={`commentId-${commentData?.id}`}>
         <Box
           display={"flex"}
           flexWrap={"wrap"}
@@ -113,20 +114,14 @@ const Comment = ({
             {commentData.userId &&
               authenticatedUser &&
               commentData.userId === authenticatedUser.id && (
-                <IconButton
-                  onClick={handleEdit}
-                  color="primary"
-                  data-testid="comment-EditOutlinedIcon">
+                <IconButton onClick={handleEdit} color="primary">
                   <EditOutlinedIcon />
                 </IconButton>
               )}
             {commentData.userId &&
               authenticatedUser &&
               commentData.userId === authenticatedUser.id && (
-                <IconButton
-                  onClick={handleDelete}
-                  color="primary"
-                  data-testid="comment-DeleteOutlineIcon">
+                <IconButton onClick={handleDelete} color="primary">
                   <DeleteOutlineIcon />
                 </IconButton>
               )}

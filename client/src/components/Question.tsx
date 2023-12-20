@@ -76,7 +76,8 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
           sx={{
             backdropFilter: consistentBackdropFilter,
           }}
-          className="individual-question">
+          className="individual-question"
+          data-testid={`questionId-${questionData?.id}`}>
           <Box
             display={"flex"}
             flexWrap={"wrap"}
@@ -121,20 +122,14 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
               {questionData.userId &&
                 authenticatedUser &&
                 questionData.userId === authenticatedUser.id && (
-                  <IconButton
-                    onClick={handleEdit}
-                    color="primary"
-                    data-testid="question-EditOutlinedIcon">
+                  <IconButton onClick={handleEdit} color="primary">
                     <EditOutlinedIcon />
                   </IconButton>
                 )}
               {questionData.userId &&
                 authenticatedUser &&
                 questionData.userId === authenticatedUser.id && (
-                  <IconButton
-                    onClick={handleDelete}
-                    color="primary"
-                    data-testid="question-DeleteOutlineIcon">
+                  <IconButton onClick={handleDelete} color="primary">
                     <DeleteOutlineIcon />
                   </IconButton>
                 )}
