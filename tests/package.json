@@ -1,0 +1,22 @@
+{
+  "name": "star-tests",
+  "version": "1.0.0",
+  "description": "star-tests",
+  "main": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "npx playwright test",
+    "start:interactive": "npx playwright test --ui",
+    "start:debug": "npx playwright test --debug"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.4",
+    "dotenv": "^16.3.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "typescript": "^5.3.3"
+  }
+}

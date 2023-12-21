@@ -1,36 +1,38 @@
 import { test, expect } from "@playwright/test";
 import { dummy, editedDummy } from "./utils/dummy";
-// 1. Create 1 question, then craete 1 answer, then crate 1 comment
-// 2. Edit 1 comment, then edit 1 answer, then edit 1 question
-// 3. Delete 1 comment, then delete 1 answer, then delete 1 question
 
 test.use({
   // viewport: { width: 1280, height: 1020 },
-  // headless: true,
+  // headless: false,
   // launchOptions: {
-  //   slowMo: 1000,
+  //   slowMo: 500,
   // },
 });
+
 test.describe
-  .serial("Create, Edit, Delete 1 Question, 1 Answer, 1 Comment", () => {
+  .serial("Create, Edit, Delete :  a Question, an Answer, and a Comment", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("http://localhost:3000");
     await page.locator('a[href="/questions"]').click();
   });
+
   let questionId: string;
   let answerId: string | null;
   let commentId: string | null;
 
-  //--------Create----------
+  // -------- Create ----------
+  // [1a] Create a new Question
+  // [1b] Create a new Answer on that Question
+  // [1c] Create a new Comment on that Answer
 
-  test("Could see a question if allowed to create", async ({ page }) => {
-    // click the button of ADD A QUESTION
+  test("Can create a new Question", async ({ page }) => {
+    // click the button Add a Question
     await page.locator("text=Add a question").click();
 
     // fill the dummy.question in the textarea of #question
     await page.locator("#question").fill(dummy.question);
 
-    // click the button of ADD QUESTION
+    // click the button Add Question
     await page.locator("text=Add question").click();
 
     // store the question div element with dummy.question to questionElement
@@ -41,7 +43,7 @@ test.describe
     await questionElement.waitFor({ state: "visible", timeout: 10000 });
     await expect(questionElement).toBeVisible();
 
-    // grap the questionId from the href
+    // get the questionId from the href
     const getQuestionUrl = await questionElement.getAttribute("href"); // '/questions/151'
     questionId = `questionId-${getQuestionUrl?.split("/").at(-1)}`; // questionId-151
     questionElement = page.locator(`[data-testid="${questionId}"]`);
@@ -54,12 +56,12 @@ test.describe
 
     // await expect(questionElement).toHaveText(`${dummy.question}`);
 
-    // DONT REMOVE
+    // DON'T REMOVE
     // const questionsLinks = await page.locator('a[href^="/questions/"]');
     // expect(await questionsLinks.allTextContents()).toEqual(questions.reverse());
   });
 
-  test("Could see a answer if allowed to create", async ({ page }) => {
+  test("Can create a new Answer", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
     await questionElement.locator(`a[href^="/questions/"]`).click();
     await page.locator("text=Add an Answer").click();
@@ -87,7 +89,7 @@ test.describe
     }
   });
 
-  test("Could see a comment if allowed to create", async ({ page }) => {
+  test("Can create a new Comment", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
@@ -109,8 +111,12 @@ test.describe
     await expect(commentIdElement).toContainText(`${dummy.comment}`);
   });
 
-  //--------Edit----------
-  test("Could see a edited comment if allowed to edit", async ({ page }) => {
+  // -------- Edit ----------
+  // [2a] Edit the newly Created Comment
+  // [2b] Edit the newly Created Answer
+  // [2c] Edit the newly Created Question
+
+  test("Can Edit the Created Comment", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
@@ -130,7 +136,7 @@ test.describe
     await expect(commentElement).toContainText(`${editedDummy.comment}`);
   });
 
-  test("Could see a edited answer if allowed to edit", async ({ page }) => {
+  test("Can Edit the Created Answer", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
@@ -160,7 +166,7 @@ test.describe
     }
   });
 
-  test("Could see a edited question if allowed to edit", async ({ page }) => {
+  test("Can Edit the Created Question", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
     await questionElement
       .locator('svg[data-testid="EditOutlinedIcon"]')
@@ -176,17 +182,19 @@ test.describe
     // valid the questionElement 'includes' editedDummy.question
     await expect(questionElement).toContainText(`${editedDummy.question}`);
 
-    // DONT REMOVE
+    // DON'T REMOVE
     // const questionsLinks = await page.locator('a[href^="/questions/"]');
     // expect(await questionsLinks.allTextContents()).toEqual(
     //   editedQuestions.reverse()
     // );
   });
 
-  //--------Delete----------
-  test("Couldn't see the edited comment if allowed to delete", async ({
-    page,
-  }) => {
+  // -------- Delete ----------
+  // [3a] Delete the newly Created and Edited Comment
+  // [3b] Edit the newly Created and Edited Answer
+  // [3c] Edit the newly Created and Edited Question
+
+  test("Can Delete the Edited Comment", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
@@ -201,9 +209,7 @@ test.describe
     await expect(page.locator(`text=${editedDummy.comment}`)).not.toBeVisible();
   });
 
-  test("Couldn't see the edited answer if allowed to delete", async ({
-    page,
-  }) => {
+  test("Can Delete the Edited Answer", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
@@ -222,9 +228,7 @@ test.describe
     }
   });
 
-  test("Couldn't see the edited question if allowed to delete", async ({
-    page,
-  }) => {
+  test("Can Delete the Edited Question", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
     await questionElement
       .locator('svg[data-testid="DeleteOutlineIcon"]')
