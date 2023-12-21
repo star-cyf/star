@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { dummy, editedDummy } from "./utils/dummy";
+import { scrollDown } from "./utils/action";
 
 test.use({
   // viewport: { width: 1280, height: 1020 },
@@ -39,6 +40,10 @@ test.describe
     let questionElement = page.locator(
       `a[href^="/questions/"] >> text=${dummy.question}`
     );
+
+    // if cant find the question, will scrollDown
+    await scrollDown(page, questionElement);
+
     // check if the dummy.question is visible in 10s
     await questionElement.waitFor({ state: "visible", timeout: 10000 });
     await expect(questionElement).toBeVisible();
@@ -63,6 +68,9 @@ test.describe
 
   test("Can create a new Answer", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
+
+    await scrollDown(page, questionElement);
+
     await questionElement.locator(`a[href^="/questions/"]`).click();
     await page.locator("text=Add an Answer").click();
 
@@ -91,6 +99,7 @@ test.describe
 
   test("Can create a new Comment", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
+    await scrollDown(page, questionElement);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
     await page.locator("text=Add a Comment").click();
@@ -118,6 +127,7 @@ test.describe
 
   test("Can Edit the Created Comment", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
+    await scrollDown(page, questionElement);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
     const commentElement = page.locator(`[data-testid=${commentId}]`);
@@ -138,6 +148,7 @@ test.describe
 
   test("Can Edit the Created Answer", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
+    await scrollDown(page, questionElement);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
     const answerElement = page.locator(`[data-testid=${answerId}]`);
@@ -168,6 +179,7 @@ test.describe
 
   test("Can Edit the Created Question", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
+    await scrollDown(page, questionElement);
     await questionElement
       .locator('svg[data-testid="EditOutlinedIcon"]')
       .click();
@@ -196,6 +208,7 @@ test.describe
 
   test("Can Delete the Edited Comment", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
+    await scrollDown(page, questionElement);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
     const commentElement = page.locator(`[data-testid=${commentId}]`);
@@ -211,6 +224,7 @@ test.describe
 
   test("Can Delete the Edited Answer", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
+    await scrollDown(page, questionElement);
     await questionElement.locator(`a[href^="/questions/"]`).click();
 
     const answerElement = page.locator(`[data-testid=${answerId}]`);
@@ -230,6 +244,7 @@ test.describe
 
   test("Can Delete the Edited Question", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
+    await scrollDown(page, questionElement);
     await questionElement
       .locator('svg[data-testid="DeleteOutlineIcon"]')
       .click();
