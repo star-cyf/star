@@ -1,11 +1,13 @@
 import "dotenv/config";
-
 import { defineConfig, devices } from "@playwright/test";
+import { refreshStorageState } from "./src/utils/getStorageState";
 
 // See https://playwright.dev/docs/test-configuration
 export default defineConfig({
-  // path to the global setup files.
-  globalSetup: "./src/utils/login-google-star",
+  // path to the global setup files
+  globalSetup: (await refreshStorageState())
+    ? "./src/utils/login-google-star"
+    : undefined,
 
   // Look for test files in the "tests" directory, relative to this configuration file
   testDir: "./src",
@@ -26,7 +28,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   //  Reporter to use. See https://playwright.dev/docs/test-reporters
-  reporter: [["html", { outputFolder: "src/report" }]],
+  reporter: [["html", { outputFolder: "./src/reports" }]],
 
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions
   use: {
@@ -48,42 +50,5 @@ export default defineConfig({
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
     },
-
-    // {
-    //   name: "firefox",
-    //   use: { ...devices["Desktop Firefox"] },
-    // },
-
-    // {
-    //   name: "webkit",
-    //   use: { ...devices["Desktop Safari"] },
-    // },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
-
-  // Run your local dev server before starting the tests
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });

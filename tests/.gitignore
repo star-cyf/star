@@ -1,11 +1,10 @@
 node_modules
 
+results
+reports
+
 storage-state.json
 
-results
-report
-
-/blob-report/
 /playwright/.cache/
 
 .env*
