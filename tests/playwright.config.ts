@@ -1,16 +1,16 @@
 import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
-import { refreshStorageState } from "./src/utils/getStorageState";
+import { checkState } from "./src/utils/check";
+// import { refreshStorageState } from "./src/utils/getStorageState";
 
 // See https://playwright.dev/docs/test-configuration
 export default defineConfig({
   // path to the global setup files
-  globalSetup: (await refreshStorageState())
-    ? "./src/utils/login-google-star"
-    : undefined,
+  // if the state is ok, don't login(undefined) , if not ok, go to run login-google-star file
+  globalSetup: checkState() ? undefined : "./src/utils/login-google-star",
 
-  // Look for test files in the "tests" directory, relative to this configuration file
   testDir: "./src",
+  // Look for test files in the "tests" directory, relative to this configuration file
 
   // The output directory for files created during test execution
   outputDir: "./src/results",
@@ -37,10 +37,6 @@ export default defineConfig({
 
     // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
-
-    // Persist state between test runs
-    // Defines which browser context storage state gets shared between runs
-    // This allows you to persist things like cookies, local storage, session storage etc. between test runs
     storageState: "./src/utils/storage-state.json",
   },
 
