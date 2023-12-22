@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Box, Typography, Button, IconButton, Avatar } from "@mui/material";
 import PsychologyAltRoundedIcon from "@mui/icons-material/PsychologyAltRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
@@ -7,6 +7,7 @@ import SmsOutlinedIcon from "@mui/icons-material/SmsOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { AuthContext } from "../context/AuthContext";
+import queryClient from "../utils/queryClient";
 import AnswerForm from "./AnswerForm";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
@@ -34,8 +35,6 @@ const Answer = ({ answerData }: { answerData: AnswerData }) => {
 
   const questionId = answerData.questionId;
   const answerId = answerData.id;
-
-  const queryClient = useQueryClient();
 
   const deleteAnswerMutation = useMutation({
     mutationFn: () => deleteAnswer(questionId, answerId),

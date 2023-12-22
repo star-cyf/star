@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
+import queryClient from "../utils/queryClient";
 import SendIcon from "@mui/icons-material/Send";
 import postQuestion from "../api/postQuestion";
 import putQuestion from "../api/putQuestion";
@@ -44,8 +45,6 @@ const QuestionForm = (props: QuestionFormProps) => {
         event.target.value.trim().length < 500
     );
   };
-
-  const queryClient = useQueryClient();
 
   const questionMutation = useMutation({
     mutationFn: () =>

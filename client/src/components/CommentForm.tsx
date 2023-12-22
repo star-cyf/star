@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import SmsIcon from "@mui/icons-material/Sms";
 import SendIcon from "@mui/icons-material/Send";
+import queryClient from "../utils/queryClient";
 import postComment from "../api/postComment";
 import putComment from "../api/putComment";
 import {
@@ -45,8 +46,6 @@ const CommentForm = (props: CommentFormProps) => {
         event.target.value.trim().length < 500
     );
   };
-
-  const queryClient = useQueryClient();
 
   const commentMutation = useMutation({
     mutationFn: () =>

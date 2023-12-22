@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Box, Typography, IconButton, Avatar } from "@mui/material";
 import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { AuthContext } from "../context/AuthContext";
+import queryClient from "../utils/queryClient";
 import CommentForm from "./CommentForm";
 import deleteComment from "../api/deleteComment";
 import formatDate from "../utils/formatDate";
@@ -38,8 +39,6 @@ const Comment = ({
   const handleEdit = () => {
     setShowUpdateCommentForm(true);
   };
-
-  const queryClient = useQueryClient();
 
   const deleteCommentMutation = useMutation({
     mutationFn: () => deleteComment(questionId, answerId, commentId),

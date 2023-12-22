@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import {
 import RateReviewRoundedIcon from "@mui/icons-material/RateReviewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import SendIcon from "@mui/icons-material/Send";
+import queryClient from "../utils/queryClient";
 import postAnswer from "../api/postAnswer";
 import {
   consistentBorder,
@@ -66,8 +67,6 @@ const AnswerForm = (props: AnswerFormProps) => {
       };
     });
   };
-
-  const queryClient = useQueryClient();
 
   const answerMutation = useMutation({
     mutationFn: () =>
