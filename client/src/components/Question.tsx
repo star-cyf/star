@@ -45,8 +45,8 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
 
   const navigate = useNavigate();
 
-  const deleteQuestionMutation = useMutation({
-    mutationFn: () => deleteQuestion(questionId),
+  const { mutate } = useMutation({
+    mutationFn: deleteQuestion,
     onError: (error) => {
       console.log("deleteQuestionMutation onError");
       console.error(error);
@@ -60,7 +60,7 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
   });
 
   const handleDelete = async () => {
-    deleteQuestionMutation.mutate();
+    mutate({ questionId });
   };
 
   return (

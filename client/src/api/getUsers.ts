@@ -1,4 +1,4 @@
-const getAllUsers = async () => {
+const getUsers = async () => {
   const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/users`, {
     headers: {
       "Content-Type": "application/json",
@@ -15,4 +15,4 @@ const getAllUsers = async () => {
   return data;
 };
 
-export default getAllUsers;
+export default getUsers;

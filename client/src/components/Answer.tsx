@@ -36,8 +36,8 @@ const Answer = ({ answerData }: { answerData: AnswerData }) => {
   const questionId = answerData.questionId;
   const answerId = answerData.id;
 
-  const deleteAnswerMutation = useMutation({
-    mutationFn: () => deleteAnswer(questionId, answerId),
+  const { mutate } = useMutation({
+    mutationFn: deleteAnswer,
     onError: (error) => {
       console.log("deleteAnswerMutation onError");
       console.error(error);
@@ -48,7 +48,7 @@ const Answer = ({ answerData }: { answerData: AnswerData }) => {
   });
 
   const handleDelete = () => {
-    deleteAnswerMutation.mutate();
+    mutate({ questionId, answerId });
   };
 
   return (

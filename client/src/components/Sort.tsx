@@ -1,6 +1,6 @@
 import { FormControl, Select, MenuItem, InputLabel } from "@mui/material";
 import { consistentBgColor } from "../themes/ConsistentStyles";
-import { SortProps } from "../types/props";
+import { SortProps } from "../types/components";
 
 const Sort = ({ sort, setSort }: SortProps) => {
   return (

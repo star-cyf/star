@@ -1,11 +1,11 @@
-import { QuestionData, AnswerData, CommentData } from "../types/data";
+import { PutCommentProps } from "../types/api";
 
-const putComment = async (
-  questionId: QuestionData["id"],
-  answerId: AnswerData["id"],
-  commentId: CommentData["id"],
-  comment: CommentData["comment"]
-) => {
+const putComment = async ({
+  questionId,
+  answerId,
+  commentId,
+  comment,
+}: PutCommentProps) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL

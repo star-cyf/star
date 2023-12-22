@@ -1,9 +1,6 @@
-import { QuestionData } from "../types/data";
+import { GetQuestionByIdProps } from "../types/api";
 
-const getQuestionById = async (
-  questionId: QuestionData["id"],
-  sort: string
-) => {
+const getQuestionById = async ({ questionId, sort }: GetQuestionByIdProps) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL

@@ -1,10 +1,10 @@
-import { QuestionData, AnswerData, CommentData } from "../types/data";
+import { DeleteCommentProps } from "../types/api";
 
-const deleteComment = async (
-  questionId: QuestionData["id"],
-  answerId: AnswerData["id"],
-  commentId: CommentData["id"]
-) => {
+const deleteComment = async ({
+  questionId,
+  answerId,
+  commentId,
+}: DeleteCommentProps) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL

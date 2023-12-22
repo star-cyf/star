@@ -32,16 +32,12 @@ const Comment = ({
   const answerId = commentData.answerId;
   const commentId = commentData.id;
 
-  const handleDelete = () => {
-    deleteCommentMutation.mutate();
-  };
-
   const handleEdit = () => {
     setShowUpdateCommentForm(true);
   };
 
-  const deleteCommentMutation = useMutation({
-    mutationFn: () => deleteComment(questionId, answerId, commentId),
+  const { mutate } = useMutation({
+    mutationFn: deleteComment,
     onError: (error) => {
       console.log("deleteCommentMutation onError");
       console.error(error);
@@ -50,6 +46,10 @@ const Comment = ({
       queryClient.invalidateQueries({ queryKey: ["questions", questionId] });
     },
   });
+
+  const handleDelete = () => {
+    mutate({ questionId, answerId, commentId });
+  };
 
   return (
     <>

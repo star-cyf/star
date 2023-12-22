@@ -27,7 +27,7 @@ const QuestionPage = () => {
     data: questionData,
   } = useQuery({
     queryKey: ["questions", questionId, sort],
-    queryFn: () => getQuestionById(questionId, sort),
+    queryFn: () => getQuestionById({ questionId, sort }),
   });
 
   return (

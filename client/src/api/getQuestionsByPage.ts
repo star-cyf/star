@@ -1,12 +1,9 @@
-import { QueryKey } from "@tanstack/react-query";
+import { GetQuestionsByPage } from "../types/api";
 
 const getQuestionsByPage = async ({
   pageParam,
   queryKey,
-}: {
-  pageParam: number;
-  queryKey: QueryKey;
-}) => {
+}: GetQuestionsByPage) => {
   const limit = 5;
   const sort = queryKey[1];
 

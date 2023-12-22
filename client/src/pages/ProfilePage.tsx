@@ -6,7 +6,7 @@ import Loading from "../components/Loading";
 import Error from "../components/Error";
 import Sort from "../components/Sort";
 import Question from "../components/Question";
-import getAllQuestionsByUserId from "../api/getAllQuestionsByUserId";
+import getQuestionsByUserId from "../api/getQuestionsByUserId";
 import { QuestionData } from "../types/data";
 
 const ProfilePage = () => {
@@ -23,7 +23,7 @@ const ProfilePage = () => {
     data: userQuestionsData,
   } = useQuery({
     queryKey: ["questions", userId, sort],
-    queryFn: () => getAllQuestionsByUserId(userId!, sort), // non null assertion operator
+    queryFn: () => getQuestionsByUserId({ userId: userId!, sort }), // non null assertion operator
   });
 
   return (

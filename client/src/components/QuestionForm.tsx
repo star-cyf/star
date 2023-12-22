@@ -25,7 +25,7 @@ import {
   QuestionFormProps,
   AddQuestionFormProps,
   UpdateQuestionFormProps,
-} from "../types/props";
+} from "../types/components";
 
 const QuestionForm = (props: QuestionFormProps) => {
   const { sort, setShowAddQuestionForm } = props as AddQuestionFormProps;
@@ -46,9 +46,8 @@ const QuestionForm = (props: QuestionFormProps) => {
     );
   };
 
-  const questionMutation = useMutation({
-    mutationFn: () =>
-      questionId ? putQuestion(questionId, question) : postQuestion(question),
+  const { mutate, isPending, isError, error, isSuccess } = useMutation({
+    mutationFn: questionId ? putQuestion : postQuestion,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["questions", sort] });
       setQuestion("");
@@ -63,8 +62,6 @@ const QuestionForm = (props: QuestionFormProps) => {
     },
   });
 
-  const { isPending, isError, error, isSuccess } = questionMutation;
-
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (questionValidation === undefined) {
@@ -78,7 +75,15 @@ const QuestionForm = (props: QuestionFormProps) => {
       setShowUpdateQuestionForm(false);
       return;
     }
-    questionMutation.mutate();
+    // We need to use the mutate function but pass different props...
+    // Really I think we should have two handlers, and two mutates... combining is not always great...
+    if (questionId) {
+      // putQuestion
+      mutate({ questionId, question });
+    } else {
+      // postQuestion
+      mutate({ question });
+    }
   };
 
   return (

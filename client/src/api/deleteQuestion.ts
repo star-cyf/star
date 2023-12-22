@@ -1,6 +1,6 @@
-import { QuestionData } from "../types/data";
+import { DeleteQuestionProps } from "../types/api";
 
-const deleteQuestion = async (questionId: QuestionData["id"]) => {
+const deleteQuestion = async ({ questionId }: DeleteQuestionProps) => {
   const response = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}`,
     {

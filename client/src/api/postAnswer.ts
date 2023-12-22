@@ -1,14 +1,6 @@
-import { QuestionData, AnswerData } from "../types/data";
+import { PostAnswerProps } from "../types/api";
 
-const postAnswer = async (
-  questionId: QuestionData["id"],
-  answer: {
-    situation: AnswerData["situation"];
-    task: AnswerData["task"];
-    action: AnswerData["action"];
-    result: AnswerData["result"];
-  }
-) => {
+const postAnswer = async ({ questionId, answer }: PostAnswerProps) => {
   const response = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}/answers`,
     {

@@ -18,6 +18,7 @@ import {
 
 const Hero = () => {
   const { login } = useContext(AuthContext)!; // non null assertion operator
+
   return (
     <Box my={4} mx={2}>
       {/* Hero Main Card */}

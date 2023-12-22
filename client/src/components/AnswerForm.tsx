@@ -27,7 +27,7 @@ import {
   AddAnswerForm,
   UpdateAnswerForm,
   AnswerFormProps,
-} from "../types/props";
+} from "../types/components";
 
 const AnswerForm = (props: AnswerFormProps) => {
   const { questionId } = props as AnswerFormBase;
@@ -68,11 +68,8 @@ const AnswerForm = (props: AnswerFormProps) => {
     });
   };
 
-  const answerMutation = useMutation({
-    mutationFn: () =>
-      answerId
-        ? putAnswer(questionId, answerId, answer)
-        : postAnswer(questionId, answer),
+  const { mutate, isPending, isError, error, isSuccess } = useMutation({
+    mutationFn: answerId ? putAnswer : postAnswer,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["questions", questionId] });
       setAnswer({
@@ -96,8 +93,6 @@ const AnswerForm = (props: AnswerFormProps) => {
       }, 1000);
     },
   });
-
-  const { isPending, isError, error, isSuccess } = answerMutation;
 
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -127,7 +122,15 @@ const AnswerForm = (props: AnswerFormProps) => {
         return;
       }
     }
-    answerMutation.mutate();
+    // We need to use the mutate function but pass different props...
+    // I think we should have two handlers, and two mutates... combining is not always great...
+    if (answerId) {
+      // putAnswer
+      mutate({ questionId, answerId, answer });
+    } else {
+      // postAnswer
+      mutate({ questionId, answer });
+    }
   };
 
   return (
