@@ -48,20 +48,31 @@ export default defineConfig({
   // Configure projects for major browsers
   projects: [
     {
-      name: "Firefox Login (Google & STAR)",
+      name: "setup - Firefox Login (Google & STAR)",
       testDir: "./tests/auth",
       testMatch: validStorageState()
         ? undefined
         : "firefox-login-google-star.ts",
+      teardown: "teardown - Delete All Questions",
       use: {
         ...devices["Desktop Firefox"],
-        headless: false,
-        viewport: { width: 1200, height: 1000 },
+        // headless: false,
+        // viewport: { width: 1200, height: 1000 },
+      },
+    },
+    {
+      name: "teardown - Delete All Questions",
+      testDir: "./tests/utils",
+      testMatch: "teardown.ts",
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "./tests/auth/storage-state.json",
       },
     },
     {
       name: "Basic Testing",
-      dependencies: ["Firefox Login (Google & STAR)"],
+      dependencies: ["setup - Firefox Login (Google & STAR)"],
+      testMatch: "1-basic.spec.ts",
       use: {
         ...devices["Desktop Chrome"],
         // Persist state between test runs
@@ -70,5 +81,15 @@ export default defineConfig({
         storageState: "./tests/auth/storage-state.json",
       },
     },
+    // {
+    //   name: "Playground - Create Multiple Questions (without any verify & expact)",
+    //   dependencies: ["setup - Firefox Login (Google & STAR)"],
+    //   testMatch: "playground-create-questions.ts",
+    //   testDir: "./tests/utils",
+    //   use: {
+    //     ...devices["Desktop Chrome"],
+    //     storageState: "./tests/auth/storage-state.json",
+    //   },
+    // },
   ],
 });
