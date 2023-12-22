@@ -7,7 +7,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "start": "npm-run-all database:migration --parallel server client test",
+    "start": "npm-run-all --print-label database:migration --parallel server client test",
     "database:migration": "cross-env NODE_ENV=test npm --prefix ../server run database:migration",
     "server": "cross-env NODE_ENV=test npm --prefix ../server run dev",
     "client": "npm --prefix ../client run dev",
