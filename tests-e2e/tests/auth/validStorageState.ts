@@ -112,10 +112,8 @@ export const validStorageState = () => {
     console.log("storage-state.json FOUND ✅");
 
     const storageState = parseStorageStateJson(filePath);
-    console.log("storage-state.json PARSED ✅");
 
     const soonestExpiry = getSoonestExpiry(storageState);
-    console.log(`storage-state.json soonestExpiry: ${soonestExpiry} ✅`);
 
     const now = Number(Date.now().toString().substring(0, 10));
     console.log(
