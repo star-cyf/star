@@ -1,0 +1,11 @@
+node_modules
+
+test-reports
+test-results
+
+storage-state.json
+
+.env*
+!.env*.example
+
+.DS_Store

@@ -1,0 +1,28 @@
+{
+  "name": "star-tests",
+  "version": "1.0.0",
+  "description": "star-tests",
+  "main": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "concurrently --kill-others --success last \"npm run server\" \"npm run client\" \"sleep 10 && npm run test\"",
+    "client": "npm --prefix ../client run dev",
+    "server": "npm --prefix ../server run test:e2e",
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:interactive": "npx playwright test --ui",
+    "test:debug": "npx playwright test --debug"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.4",
+    "concurrently": "^8.2.2",
+    "dotenv": "^16.3.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+}
