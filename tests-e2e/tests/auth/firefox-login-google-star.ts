@@ -1,11 +1,8 @@
 import { test as setup } from "@playwright/test";
 
-// Get the user credentials from the .env
+// Get the Google User Credentials
 const userEmail = process.env.GOOGLE_EMAIL as string;
 const userPassword = process.env.GOOGLE_PASSWORD as string;
-
-console.log("userEmail:", userEmail);
-console.log("userPassword:", userPassword);
 
 setup("login", async ({ page }) => {
   // Open login page on tested site

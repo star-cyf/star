@@ -26,60 +26,106 @@ interface LocalStorageItem {
   value: string;
 }
 
-const readJsonFile = (filePath: string) => {
-  const file = readFileSync(filePath, "utf8");
-  // console.log("readJsonFile file:", file);
-  const data = JSON.parse(file);
-  // console.log("readJsonFile data:", file);
-  return data;
+const parseStorageStateJson = (filePath: string) => {
+  try {
+    const storageStateFile = readFileSync(filePath, "utf8");
+    const storageStateData = JSON.parse(storageStateFile);
+
+    const keys = Object.keys(storageStateData);
+    if (keys.length === 0) {
+      throw new Error("storage-state.json IS EMPTY ❌");
+    }
+
+    if (!keys.includes("cookies")) {
+      throw new Error("storage-state.json IS MISSING 'cookies' ❌");
+    }
+
+    if (!keys.includes("origins")) {
+      throw new Error("storage-state.json IS MISSING 'origins' ❌");
+    }
+
+    const authenticatedUser = storageStateData.origins.some(
+      (origin: Origin) => {
+        return origin.localStorage.find(
+          (localStorageItem: LocalStorageItem) => {
+            return localStorageItem.name === "authenticatedUser";
+          }
+        );
+      }
+    );
+
+    if (!authenticatedUser) {
+      throw new Error(
+        "storage-state.json IS MISSING 'localStorage' 'authenticatedUser' ❌"
+      );
+    }
+
+    return storageStateData;
+  } catch (error) {
+    throw error;
+  }
 };
 
-const getAllExpiries = (storageState: StorageState) => {
+const getSoonestExpiry = (storageState: StorageState) => {
   const expiresValues: number[] = [];
-  Object.keys(storageState).forEach((key) => {
-    if (key === "cookies") {
-      storageState[key].forEach((obj) => {
-        const cookieExpires = obj.expires;
-        expiresValues.push(Math.floor(cookieExpires));
-      });
-    } else if (key === "origins") {
-      storageState[key].forEach((obj) => {
-        obj.localStorage.forEach((obj) => {
-          if (obj.name === "authenticatedUser") {
-            const authenticatedUser = JSON.parse(obj.value);
-            expiresValues.push(
-              Math.floor(Number(authenticatedUser.expirationTime))
-            );
-          }
+
+  try {
+    Object.keys(storageState).forEach((key) => {
+      if (key === "cookies") {
+        storageState[key].forEach((cookie: Cookie) => {
+          const cookieExpires = cookie.expires;
+          expiresValues.push(Math.floor(cookieExpires));
         });
-      });
+      } else if (key === "origins") {
+        storageState[key].forEach((origin: Origin) => {
+          origin.localStorage.forEach((localStorageItem: LocalStorageItem) => {
+            if (localStorageItem.name === "authenticatedUser") {
+              const authenticatedUser = JSON.parse(localStorageItem.value);
+              expiresValues.push(
+                Math.floor(Number(authenticatedUser.expirationTime))
+              );
+            }
+          });
+        });
+      }
+    });
+
+    if (expiresValues.length === 0) {
+      throw new Error("getSoonestExpiry No Expiries ❌ ");
     }
-  });
-  return expiresValues;
+
+    const soonestExpiry = Math.min(...expiresValues);
+
+    return soonestExpiry;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const validStorageState = () => {
+  const filePath = "./tests/auth/storage-state.json";
   try {
-    if (!existsSync("./tests/auth/storage-state.json")) {
-      console.log("validStorageState 'storage-state.json' ❌ NOT FOUND");
+    if (!existsSync(filePath)) {
+      console.log("storage-state.json NOT FOUND ❌");
       return false;
     }
+    console.log("storage-state.json FOUND ✅");
+
+    const storageState = parseStorageStateJson(filePath);
+    console.log("storage-state.json PARSED ✅");
+
+    const soonestExpiry = getSoonestExpiry(storageState);
+    console.log(`storage-state.json soonestExpiry: ${soonestExpiry} ✅`);
+
+    const now = Number(Date.now().toString().substring(0, 10));
     console.log(
-      "validStorageState 'storage-state.json' FOUND ✅ attempting to read..."
+      `storage-state.json IS ${soonestExpiry > now ? "VALID ✅" : "EXPIRED ❌"}`
     );
-    const storageState = readJsonFile("./src/utils/storage-state.json");
-    // console.log("validStorageState storageState", storageState);
-    const allExpiries = getAllExpiries(storageState);
-    // console.log("validStorageState allExpiries", allExpiries);
-    const soonestExpiry = Math.min(...allExpiries) * 1000;
-    // console.log("validStorageState soonestExpire", soonestExpiry);
-    const now = new Date().getTime();
-    // console.log("validStorageState now", now);
-    const result = now > soonestExpiry;
-    // console.log("validStorageState result:", result);
-    return result;
+    return soonestExpiry > now;
   } catch (error) {
-    // console.error("validStorageState error:", error);
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
     return false;
   }
 };

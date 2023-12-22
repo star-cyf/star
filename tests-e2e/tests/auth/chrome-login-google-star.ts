@@ -1,4 +1,4 @@
-// Get the user credentials from the .env
+// Get the Google User Credentials
 const userEmail = process.env.GOOGLE_EMAIL as string;
 const userPassword = process.env.GOOGLE_PASSWORD as string;
 

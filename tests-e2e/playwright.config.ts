@@ -1,8 +1,6 @@
 import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
-
-// import { validStorageState } from "./src/utils/validStorageState";
-import { checkStorageState } from "./tests/auth/checkStorageState";
+import { validStorageState } from "./tests/auth/validStorageState";
 
 // See https://playwright.dev/docs/test-configuration
 export default defineConfig({
@@ -12,8 +10,8 @@ export default defineConfig({
   //   ? undefined
   //   : "./src/utils/chrome-login-google-star",
 
-  testDir: "./tests",
   // Look for test files in the "tests" directory, relative to this configuration file
+  testDir: "./tests",
 
   // The output directory for files created during test execution
   outputDir: "./test-results",
@@ -30,7 +28,7 @@ export default defineConfig({
   // Retry on CI only
   retries: process.env.CI ? 2 : 0,
 
-  // Opt out of parallel tests on CI.
+  // Opt out of parallel tests on CI
   workers: process.env.CI ? 1 : undefined,
 
   //  Reporter to use. See https://playwright.dev/docs/test-reporters
@@ -38,7 +36,7 @@ export default defineConfig({
 
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions
   use: {
-    //  Base URL to use in actions like `await page.goto('/')`. */
+    //  Base URL to use in actions like `await page.goto('/')`
     // baseURL: "http://localhost:3000",
 
     // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
@@ -52,13 +50,13 @@ export default defineConfig({
     {
       name: "Firefox Login (Google & STAR)",
       testDir: "./tests/auth",
-      testMatch: checkStorageState()
+      testMatch: validStorageState()
         ? undefined
         : "firefox-login-google-star.ts",
       use: {
         ...devices["Desktop Firefox"],
-        // headless: false,
-        // viewport: { width: 1200, height: 1000 },
+        headless: false,
+        viewport: { width: 1200, height: 1000 },
       },
     },
     {
