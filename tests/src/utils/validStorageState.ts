@@ -1,11 +1,8 @@
-import { readFile } from "fs/promises";
-import { PathLike } from "fs";
-
+import { existsSync, readFileSync } from "fs";
 interface StorageState {
   cookies: Cookie[];
   origins: Origin[];
 }
-
 interface Cookie {
   name: string;
   value: string;
@@ -16,31 +13,23 @@ interface Cookie {
   secure: boolean;
   sameSite: string;
 }
-
 interface Origin {
   origin: string;
   localStorage: LocalStorageItem[];
 }
-
 interface LocalStorageItem {
   name: string;
   value: string;
 }
-
-const readJsonFile = async (filePath: PathLike) => {
-  try {
-    const file = await readFile(filePath, "utf8");
-    const data = JSON.parse(file);
-    return data;
-  } catch (error) {
-    console.error("readJsonFile error:", error);
-    throw error;
-  }
+const readJsonFile = (filePath: string) => {
+  const file = readFileSync(filePath, "utf8");
+  console.log("readJsonFile file:", file);
+  const data = JSON.parse(file);
+  console.log("readJsonFile data:", file);
+  return data;
 };
-
 const getAllExpiries = (storageState: StorageState) => {
   const expiresValues: number[] = [];
-
   Object.keys(storageState).forEach((key) => {
     if (key === "cookies") {
       storageState[key].forEach((obj) => {
@@ -60,25 +49,30 @@ const getAllExpiries = (storageState: StorageState) => {
       });
     }
   });
-
   return expiresValues;
 };
-
-export const refreshStorageState = async () => {
+export const validStorageState = () => {
   try {
-    const storageState = await readJsonFile("./src/utils/storage-state.json");
-    // console.log("storageState", storageState);
+    if (!existsSync("./src/utils/storage-state.json")) {
+      console.log("❌ validStorageState 'storage-state.json' NOT FOUND");
+      return false;
+    }
+    console.log(
+      "✅ validStorageState 'storage-state.json' FOUND attempting to read"
+    );
+    const storageState = readJsonFile("./src/utils/storage-state.json");
+    console.log("validStorageState storageState", storageState);
     const allExpiries = getAllExpiries(storageState);
-    // console.log("allExpiries", allExpiries);
+    console.log("validStorageState allExpiries", allExpiries);
     const soonestExpiry = Math.min(...allExpiries) * 1000;
-    // console.log("soonestExpire", soonestExpiry);
+    console.log("validStorageState soonestExpire", soonestExpiry);
     const now = new Date().getTime();
-    // console.log("now", now);
+    console.log("validStorageState now", now);
     const result = now > soonestExpiry;
-    // console.log("result", result);
+    console.log("validStorageState result:", result);
     return result;
   } catch (error) {
-    console.error("refreshStorageState error:", error);
+    console.error("validStorageState error:", error);
     return false;
   }
 };

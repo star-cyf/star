@@ -203,8 +203,8 @@ test.describe
 
   // -------- Delete ----------
   // [3a] Delete the newly Created and Edited Comment
-  // [3b] Edit the newly Created and Edited Answer
-  // [3c] Edit the newly Created and Edited Question
+  // [3b] Delete the newly Created and Edited Answer
+  // [3c] Delete the newly Created and Edited Question
 
   test("Can Delete the Edited Comment", async ({ page }) => {
     const questionElement = page.locator(`[data-testid=${questionId}]`);
