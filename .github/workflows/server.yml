@@ -37,7 +37,7 @@ jobs:
       - name: Format Code
         run: npm run prettier
       - name: Lint Code
-        run: npm run lint:fix
+        run: npm run lint
   test:
     needs: lint
     runs-on: ubuntu-latest
