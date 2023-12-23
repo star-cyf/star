@@ -89,7 +89,7 @@ jobs:
       - name: Format Code
         run: npm run prettier
       - name: Lint Code
-        run: npm run lint:fix
+        run: npm run lint
       - name: Database Migration
         run: NODE_ENV=TEST npm run database:migration
       - name: Test Code
@@ -114,7 +114,7 @@ jobs:
 #      - name: Format Code
 #        run: npm run prettier
 #      - name: Lint Code
-#        run: npm run lint:fix
+#        run: npm run lint
 #      - name: Build Server
 #        id: build-server
 #        run: npm run build
