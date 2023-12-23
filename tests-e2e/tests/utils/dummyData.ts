@@ -1,11 +1,13 @@
-interface DummyData {
+export type DummyData = {
   random: string;
   question: string;
   answer: {
     [key: string]: string;
   };
   comment: string;
-}
+};
+
+export type AnswerType = Omit<DummyData["answer"], "answer">;
 
 const random = "#" + Math.random().toString(16).slice(2, 8);
 

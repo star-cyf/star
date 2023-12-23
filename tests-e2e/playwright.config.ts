@@ -72,7 +72,8 @@ export default defineConfig({
     {
       name: "Basic Testing",
       dependencies: ["setup - Firefox Login (Google & STAR)"],
-      testMatch: "1-basic.spec.ts",
+      testDir: "./tests/",
+      // testMatch: "3-question.spec.ts",
       use: {
         ...devices["Desktop Chrome"],
         // Persist state between test runs
