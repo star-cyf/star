@@ -5,6 +5,7 @@ const userPassword = process.env.GOOGLE_PASSWORD as string;
 // playwright-extra is a drop-in replacement for playwright,
 // it augments the installed playwright with plugin functionality
 import { chromium } from "playwright-extra";
+import { test as setup } from "@playwright/test";
 
 // Load the stealth plugin and use defaults (all tricks to hide playwright usage)
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
@@ -12,11 +13,10 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 // Add the plugin to playwright (any number of plugins can be added)
 chromium.use(StealthPlugin());
 
-async function storeGoogleStarCookies(): Promise<void> {
+setup("login", async ({}) => {
   // Google may be using anti-headless measures,
   // so headless requests are being flagged as bots.
   // https://stackoverflow.com/a/75489051
-
   const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
 
@@ -52,6 +52,4 @@ async function storeGoogleStarCookies(): Promise<void> {
     .context()
     .storageState({ path: "./tests/auth/storage-state.json" });
   await browser.close();
-}
-
-export default storeGoogleStarCookies;
+});

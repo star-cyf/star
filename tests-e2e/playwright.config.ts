@@ -47,19 +47,32 @@ export default defineConfig({
 
   // Configure projects for major browsers
   projects: [
+    // Either Chrome or Firefox will work for successful login.
     {
-      name: "setup - Firefox Login (Google & STAR)",
+      name: "setup - Chrome Login (Google & STAR)",
       testDir: "./tests/auth",
       testMatch: validStorageState()
         ? undefined
-        : "firefox-login-google-star.ts",
+        : "chrome-login-google-star.ts",
       teardown: "teardown - Delete All Questions",
       use: {
-        ...devices["Desktop Firefox"],
-        // headless: false,
-        // viewport: { width: 1200, height: 1000 },
+        ...devices["Desktop Chrome"],
+        headless: false, // Chrome needs to be run headless.
       },
     },
+    //
+    // {
+    //   name: "setup - Firefox Login (Google & STAR)",
+    //   testDir: "./tests/auth",
+    //   testMatch: validStorageState()
+    //     ? undefined
+    //     : "firefox-login-google-star.ts",
+    //   teardown: "teardown - Delete All Questions",
+    //   use: {
+    //     ...devices["Desktop Firefox"],
+    //     // headless: false, // Firefox can be run without headless.
+    //   },
+    // },
     {
       name: "teardown - Delete All Questions",
       testDir: "./tests/utils",
@@ -71,7 +84,7 @@ export default defineConfig({
     },
     {
       name: "Basic Testing",
-      dependencies: ["setup - Firefox Login (Google & STAR)"],
+      dependencies: ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/",
       // testMatch: "3-question.spec.ts",
       use: {
@@ -83,7 +96,7 @@ export default defineConfig({
       },
     },
     // {
-    //   name: "Playground - Create Multiple Questions (without any verify & expact)",
+    //   name: "Playground - Create Multiple Questions (without any expact)",
     //   dependencies: ["setup - Firefox Login (Google & STAR)"],
     //   testMatch: "playground-create-questions.ts",
     //   testDir: "./tests/utils",
