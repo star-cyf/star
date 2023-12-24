@@ -57,7 +57,7 @@ export default defineConfig({
       teardown: "teardown - Delete All Questions",
       use: {
         ...devices["Desktop Chrome"],
-        headless: false, // Chrome needs to be run headless.
+        headless: false, // Chrome must disable headless.
       },
     },
     //
@@ -87,9 +87,9 @@ export default defineConfig({
       dependencies: ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/",
       // testMatch: "1-home.spec.ts",
+      fullyParallel: false,
       use: {
         ...devices["Desktop Chrome"],
-        headless: false,
         // Persist state between test runs
         // Defines which browser context storage state gets shared between runs
         // This allows you to persist things like cookies, local storage, session storage etc. between test runs
