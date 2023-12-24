@@ -86,9 +86,10 @@ export default defineConfig({
       name: "Basic Testing",
       dependencies: ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/",
-      // testMatch: "3-question.spec.ts",
+      // testMatch: "1-home.spec.ts",
       use: {
         ...devices["Desktop Chrome"],
+        headless: false,
         // Persist state between test runs
         // Defines which browser context storage state gets shared between runs
         // This allows you to persist things like cookies, local storage, session storage etc. between test runs
