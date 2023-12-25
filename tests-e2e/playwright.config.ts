@@ -87,7 +87,6 @@ export default defineConfig({
       dependencies: ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/",
       // testMatch: "1-home.spec.ts",
-      fullyParallel: false,
       use: {
         ...devices["Desktop Chrome"],
         // Persist state between test runs
@@ -96,6 +95,20 @@ export default defineConfig({
         storageState: "./tests/auth/storage-state.json",
       },
     },
+    // {
+    //   name: "Basic Testing",
+    //   // dependencies: ["setup - Chrome Login (Google & STAR)"],
+    //   testDir: "./tests/",
+    //   testMatch: "1-home.spec.ts",
+    //   use: {
+    //     ...devices["Desktop Chrome"],
+    //     // headless: false,
+    //     // Persist state between test runs
+    //     // Defines which browser context storage state gets shared between runs
+    //     // This allows you to persist things like cookies, local storage, session storage etc. between test runs
+    //     storageState: "./tests/auth/storage-state.json",
+    //   },
+    // },
     // {
     //   name: "Playground - Create Multiple Questions (without any expact)",
     //   dependencies: ["setup - Firefox Login (Google & STAR)"],

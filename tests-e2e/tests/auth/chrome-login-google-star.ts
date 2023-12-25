@@ -13,13 +13,12 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 // Add the plugin to playwright (any number of plugins can be added)
 chromium.use(StealthPlugin());
 
-setup("login", async ({}) => {
+setup("login", async () => {
   // Google may be using anti-headless measures,
   // so headless requests are being flagged as bots.
   // https://stackoverflow.com/a/75489051
   const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
-
   await page.goto(`https://accounts.google.com/`);
   await page.fill('input[type="email"]', userEmail);
   await page.locator("#identifierNext >> button").click({ delay: 300 });

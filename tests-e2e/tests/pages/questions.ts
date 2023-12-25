@@ -9,6 +9,7 @@ export class QuestionsPage {
   readonly addAQuestionButton: Locator;
   readonly questionTextarea: Locator;
   readonly addQuestionButton: Locator;
+  readonly questionSuccessfulMessage: Locator;
 
   readonly editQuestionButton: Locator;
 
@@ -17,6 +18,9 @@ export class QuestionsPage {
     this.addAQuestionButton = page.getByText("Add a question");
     this.questionTextarea = page.locator("#question");
     this.addQuestionButton = page.getByText("Add question");
+    this.questionSuccessfulMessage = page.getByText(
+      "✅ Your Question was successfully added! Thank you"
+    );
     this.editQuestionButton = page.getByText("Edit Question");
   }
 
@@ -44,6 +48,12 @@ export class QuestionsPage {
 
     // check if the questionLink is visible in 8s
     await questionLink.waitFor({ state: "visible", timeout: 8000 });
+
+    // check if the successful message is hidden in 8s
+    await this.questionSuccessfulMessage.waitFor({
+      state: "hidden",
+      timeout: 8000,
+    });
 
     // console.log(await questionLink.innerText()); // with <p>
     // console.log(await questionLink.textContent()); // without <p> === .toHaveText()
@@ -79,6 +89,11 @@ export class QuestionsPage {
     await this.page
       .getByText(editedQuestionText)
       .waitFor({ state: "visible", timeout: 8000 });
+    // check if the successful message is hidden in 8s
+    await this.questionSuccessfulMessage.waitFor({
+      state: "hidden",
+      timeout: 8000,
+    });
 
     await expect(this.page.getByText(editedQuestionText)).toBeVisible();
 

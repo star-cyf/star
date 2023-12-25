@@ -16,10 +16,12 @@ export class QuestionPage {
   readonly questionDiv: Locator;
   readonly addAnAnswerButton: Locator;
   readonly addAnswerButton: Locator;
+  readonly answerSuccessfulMessage: Locator;
 
   readonly addACommentButton: Locator;
   readonly commentTextarea: Locator;
   readonly addCommentButton: Locator;
+  readonly commentSuccessfulMessage: Locator;
 
   readonly editCommentButton: Locator;
   readonly editAnswerButton: Locator;
@@ -36,24 +38,40 @@ export class QuestionPage {
     this.questionLink = this.questionDiv.locator(`a[href^="/questions/"]`);
     this.addAnAnswerButton = page.getByText("Add an Answer");
     this.addAnswerButton = page.getByText("Add Answer");
+    this.answerSuccessfulMessage = page.getByText(
+      "✅ Your Answer was successfully added! Thank you"
+    );
 
     this.addACommentButton = page.getByText("Add a Comment");
     this.commentTextarea = page.locator("#comment");
     this.addCommentButton = page.getByText("Add Comment");
+    this.commentSuccessfulMessage = page.getByText(
+      "✅ Your Comment was successfully added! Thank you"
+    );
 
     this.editCommentButton = page.getByText("Edit Comment");
     this.editAnswerButton = page.getByText("Edit Answer");
     this.editQuestionButton = page.getByText("Edit Question");
   }
 
-  async clickTheQuestionToInsideOfQuestion() {
-    const action = new QuestionsPage(this.page);
-    await action.scrollDown(this.page, this.questionDiv);
-    await this.questionLink.click();
+  async clickTheQuestionToInsideOfQuestion(URL: string) {
+    const isQuestioId = Number(URL.split("/").at(-1));
+    if (!isQuestioId) {
+      // if this is same-page model, dont need to click the questionLink,
+      // if this is different-page model, need to click the questionLink
+      // So, can check the URL to see if there is a questionId at the end.
+      // If there is, then the page is at /qestions/id, and don't need this function.
+      // If there isn't, then we do need this function.
+      const action = new QuestionsPage(this.page);
+      await action.scrollDown(this.page, this.questionDiv);
+      await this.questionLink.click();
+    }
   }
 
   async createAnAnswer(answerObject: AnswerType) {
-    await this.clickTheQuestionToInsideOfQuestion();
+    await this.clickTheQuestionToInsideOfQuestion(this.page.url());
+    // http://localhost:3000/questions/
+
     await this.addAnAnswerButton.click();
 
     for (const key in answerObject) {
@@ -68,6 +86,11 @@ export class QuestionPage {
         .waitFor({ state: "visible", timeout: 8000 });
       await expect(this.page.getByText(answerObject[key])).toBeVisible();
     }
+    // check if the successful message is hidden in 8s
+    await this.answerSuccessfulMessage.waitFor({
+      state: "hidden",
+      timeout: 8000,
+    });
 
     let answerIdDiv = this.page.locator('[data-testid^="answerId-"]');
     const answerId = await answerIdDiv.getAttribute("data-testid");
@@ -82,7 +105,8 @@ export class QuestionPage {
   }
 
   async createAComment(commentText: string) {
-    await this.clickTheQuestionToInsideOfQuestion();
+    await this.clickTheQuestionToInsideOfQuestion(this.page.url());
+    // http://localhost:3000/questions/96
 
     await this.addACommentButton.click();
     await this.commentTextarea.fill(commentText);
@@ -92,6 +116,13 @@ export class QuestionPage {
     await this.page
       .getByText(commentText)
       .waitFor({ state: "visible", timeout: 8000 });
+
+    // check if the successful message is hidden in 8s
+    await this.commentSuccessfulMessage.waitFor({
+      state: "hidden",
+      timeout: 8000,
+    });
+
     await expect(this.page.getByText(commentText)).toBeVisible();
 
     let commentIdDiv = this.page.locator('[data-testid^="commentId-"]');
@@ -105,7 +136,8 @@ export class QuestionPage {
   }
 
   async editAComment(commentId: string, editedCommentText: string) {
-    await this.clickTheQuestionToInsideOfQuestion();
+    await this.clickTheQuestionToInsideOfQuestion(this.page.url());
+    // http://localhost:3000/questions/96
 
     const commentDiv = this.page.locator(`[data-testid=${commentId}]`);
     await commentDiv.locator('svg[data-testid="EditOutlinedIcon"]').click();
@@ -118,6 +150,12 @@ export class QuestionPage {
       .locator(`text=${editedCommentText}`)
       .waitFor({ state: "visible", timeout: 8000 });
 
+    // check if the successful message is hidden in 8s
+    await this.commentSuccessfulMessage.waitFor({
+      state: "hidden",
+      timeout: 8000,
+    });
+
     await expect(this.page.locator(`text=${editedCommentText}`)).toBeVisible();
 
     // check if the editedCommentText in the commentIdDiv
@@ -125,7 +163,8 @@ export class QuestionPage {
   }
 
   async editAnAnswer(answerId: string, editedAnswer: AnswerType) {
-    await this.clickTheQuestionToInsideOfQuestion();
+    await this.clickTheQuestionToInsideOfQuestion(this.page.url());
+    // http://localhost:3000/questions/96
 
     const answerDiv = this.page.locator(`[data-testid=${answerId}]`);
     await answerDiv
@@ -146,6 +185,11 @@ export class QuestionPage {
         this.page.locator(`text=${editedAnswer[key]}`)
       ).toBeVisible();
     }
+    // check if the successful message is hidden in 8s
+    await this.answerSuccessfulMessage.waitFor({
+      state: "hidden",
+      timeout: 8000,
+    });
 
     // valid if there are editedAnswers in the answerId element
     for (const key in editedAnswer) {
@@ -153,14 +197,16 @@ export class QuestionPage {
     }
   }
   async editAQuestion(questionId: string, editedQuestionText: string) {
-    await this.clickTheQuestionToInsideOfQuestion();
+    await this.clickTheQuestionToInsideOfQuestion(this.page.url());
+    // http://localhost:3000/questions/96
 
     const action = new QuestionsPage(this.page);
     await action.editAQuestion(questionId, editedQuestionText);
   }
 
   async deleteAComment(commentId: string, editedCommentText: string) {
-    await this.clickTheQuestionToInsideOfQuestion();
+    await this.clickTheQuestionToInsideOfQuestion(this.page.url());
+    // http://localhost:3000/questions/96
 
     const commentDiv = this.page.locator(`[data-testid=${commentId}]`);
     await commentDiv.locator('svg[data-testid="DeleteOutlineIcon"]').click();
@@ -178,7 +224,8 @@ export class QuestionPage {
   }
 
   async deleteAnAnswer(answerId: string, editedAnswer: AnswerType) {
-    await this.clickTheQuestionToInsideOfQuestion();
+    await this.clickTheQuestionToInsideOfQuestion(this.page.url());
+    // http://localhost:3000/questions/96
 
     const answerDiv = this.page.locator(`[data-testid=${answerId}]`);
     await answerDiv
@@ -198,7 +245,8 @@ export class QuestionPage {
   }
 
   async deleteAQuestion(questionId: string, editedQuestionText: string) {
-    await this.clickTheQuestionToInsideOfQuestion();
+    await this.clickTheQuestionToInsideOfQuestion(this.page.url());
+    // http://localhost:3000/questions/96
 
     const action = new QuestionsPage(this.page);
     await action.deleteAQuestion(questionId, editedQuestionText);

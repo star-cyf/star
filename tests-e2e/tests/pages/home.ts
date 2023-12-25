@@ -24,6 +24,10 @@ export class HomePage {
     this.loginButton = page.getByRole("button", { name: "Login" });
     this.logoutButton = page.getByRole("button", { name: "Logout" });
   }
+
+  async checkIfHasTitle() {
+    await expect(this.page).toHaveTitle(/STAR/);
+  }
   async clickHomeButton() {
     await expect(this.homeButton).toBeVisible();
     await this.homeButton.click();
