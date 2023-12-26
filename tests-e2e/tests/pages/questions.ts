@@ -31,7 +31,7 @@ export class QuestionsPage {
     }
   }
 
-  async createAQuestion(questionText: string) {
+  async createAQuestion(questionText: string, i = 0) {
     // click the button Add a Question
     await this.addAQuestionButton.click();
 
@@ -41,34 +41,52 @@ export class QuestionsPage {
     // click the button Add Question
     await this.addQuestionButton.click();
 
-    const questionLink = this.page.getByText(questionText);
-
-    // if cant find the questionLink, will scrollDown
-    await this.scrollDown(this.page, questionLink);
-
-    // check if the questionLink is visible in 8s
-    await questionLink.waitFor({ state: "visible", timeout: 8000 });
-
     // check if the successful message is hidden in 8s
     await this.questionSuccessfulMessage.waitFor({
       state: "hidden",
       timeout: 8000,
     });
+    const questionLink = this.page.getByText(questionText);
+    await questionLink.waitFor({
+      state: "visible",
+      timeout: 8000,
+    });
+
+    // if cant find the questionLink, will scrollDown
+    await this.scrollDown(this.page, questionLink);
+
+    // if comment out this code line, questionUrl will return null
+    await this.page.waitForTimeout(3000);
+
+    const questionUrl = await this.page
+      .getByText(questionText)
+      .getAttribute("href"); // '/questions/151'
+    console.log(`questionText: ${questionText}`);
+    console.log(`questionUrl: ${questionUrl}`);
+
+    const questionId = `questionId-${questionUrl?.split("/").at(-1)}`; // questionId-151
+    const questionDiv = this.page.getByTestId(questionId);
+
+    // if cant find the questionDiv, will scrollDown
+    if (this.page.url().split("/").at(-1) === "questions") {
+      await this.scrollDown(this.page, questionDiv);
+    }
+
+    // check if the questionDiv is visible in 8s
+    await questionDiv.waitFor({ state: "visible", timeout: 8000 });
+
+    // after creating question, expect to see the question link in the page
+    await expect(questionDiv).toBeVisible();
+
+    // expect the questionDiv 'includes' dummyData.question
+    await expect(questionDiv).toContainText(`${questionText}`);
+
+    return questionId;
 
     // console.log(await questionLink.innerText()); // with <p>
     // console.log(await questionLink.textContent()); // without <p> === .toHaveText()
     // await expect(questionLink).toHaveText(`${this.questionLink}`);
 
-    // after creating question, expect to see the question link in the page
-    await expect(questionLink).toBeVisible();
-
-    const questionUrl = await questionLink.getAttribute("href"); // '/questions/151'
-    const questionId = `questionId-${questionUrl?.split("/").at(-1)}`; // questionId-151
-    const questionDiv = this.page.getByTestId(questionId);
-
-    // expect the questionDiv 'includes' dummyData.question
-    await expect(questionDiv).toContainText(`${questionText}`);
-    return questionId;
     // DON'T REMOVE
     // const questionsLinks = await page.locator('a[href^="/questions/"]');
     // expect(await questionsLinks.allTextContents()).toEqual(questions.reverse());
@@ -126,5 +144,49 @@ export class QuestionsPage {
     // expect(await questionsLinks.allTextContents()).toEqual(
     //   editedQuestions.reverse()
     // );
+  }
+
+  // sort
+  async createQuestionEveryMinute(questionText: string) {
+    // click the button Add a Question
+    await this.addAQuestionButton.click();
+
+    // fill the dummyData.question in the textarea of #question
+    await this.questionTextarea.fill(questionText);
+
+    // click the button Add Question
+    await this.addQuestionButton.click();
+
+    const questionLink = this.page.getByText(questionText);
+
+    // if cant find the questionLink, will scrollDown
+    await this.scrollDown(this.page, questionLink);
+
+    // check if the questionLink is visible in 8s
+    await questionLink.waitFor({ state: "visible", timeout: 8000 });
+
+    // check if the successful message is hidden in 8s
+    await this.questionSuccessfulMessage.waitFor({
+      state: "hidden",
+      timeout: 8000,
+    });
+
+    // console.log(await questionLink.innerText()); // with <p>
+    // console.log(await questionLink.textContent()); // without <p> === .toHaveText()
+    // await expect(questionLink).toHaveText(`${this.questionLink}`);
+
+    // after creating question, expect to see the question link in the page
+    await expect(questionLink).toBeVisible();
+
+    const questionUrl = await questionLink.getAttribute("href"); // '/questions/151'
+    const questionId = `questionId-${questionUrl?.split("/").at(-1)}`; // questionId-151
+    const questionDiv = this.page.getByTestId(questionId);
+
+    // expect the questionDiv 'includes' dummyData.question
+    await expect(questionDiv).toContainText(`${questionText}`);
+    return questionId;
+    // DON'T REMOVE
+    // const questionsLinks = await page.locator('a[href^="/questions/"]');
+    // expect(await questionsLinks.allTextContents()).toEqual(questions.reverse());
   }
 }

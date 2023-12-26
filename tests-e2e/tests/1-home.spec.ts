@@ -6,7 +6,7 @@ import { HomePage } from "./pages/home";
 //     slowMo: 2000,
 //   },
 // });
-test.describe.configure({ mode: "parallel" });
+
 /**========================================================================
  * Same Page Model: Generate a window and run all tests.
  *========================================================================**/

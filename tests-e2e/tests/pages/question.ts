@@ -179,11 +179,9 @@ export class QuestionPage {
     // check if the editDummy.answer is visible in 8s
     for (const key in editedAnswer) {
       await this.page
-        .locator(`text=${editedAnswer[key]}`)
+        .getByText(editedAnswer[key])
         .waitFor({ state: "visible", timeout: 8000 });
-      await expect(
-        this.page.locator(`text=${editedAnswer[key]}`)
-      ).toBeVisible();
+      await expect(this.page.getByText(editedAnswer[key])).toBeVisible();
     }
     // check if the successful message is hidden in 8s
     await this.answerSuccessfulMessage.waitFor({

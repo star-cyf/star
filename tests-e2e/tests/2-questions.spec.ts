@@ -13,6 +13,7 @@ import { QuestionsPage } from "./pages/questions";
 test.describe.serial("Create, Edit, Delete: Question", () => {
   let page: Page;
   let questionsPage: QuestionsPage;
+
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     await page.goto("http://localhost:3000");
@@ -20,7 +21,7 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
     questionsPage = new QuestionsPage(page);
   });
 
-  let questionId: string;
+  let questionId: string[] = [];
 
   // -------- Create ----------
   // [1] Create a new Question
