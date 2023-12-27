@@ -14,7 +14,10 @@ test.describe.serial("Lonin with coookies", () => {
   let page: Page;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    await page.goto("http://localhost:3000");
+    await page.goto("/");
+  });
+  test.afterAll(async () => {
+    await page.close();
   });
 
   test("Has title", async () => {
@@ -46,6 +49,9 @@ test.describe.serial("Lonin without coookies", () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     await page.goto("http://localhost:3000");
+  });
+  test.afterAll(async () => {
+    await page.close();
   });
 
   test("Has title", async () => {

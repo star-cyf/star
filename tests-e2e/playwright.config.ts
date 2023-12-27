@@ -51,10 +51,8 @@ export default defineConfig({
     {
       name: "setup - Chrome Login (Google & STAR)",
       testDir: "./tests/auth",
-      testMatch: validStorageState()
-        ? undefined
-        : "chrome-login-google-star.ts",
-      teardown: "teardown - Delete All Questions",
+      testMatch: "chrome-login-google-star.ts",
+      // teardown: "teardown - Delete All Questions",
       use: {
         ...devices["Desktop Chrome"],
         headless: false, // Chrome must disable headless.
@@ -75,31 +73,44 @@ export default defineConfig({
     // },
     {
       name: "teardown - Delete All Questions",
+      dependencies: validStorageState()
+        ? undefined
+        : ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/utils",
       testMatch: "teardown.ts",
+
       use: {
         ...devices["Desktop Chrome"],
+
         storageState: "./tests/auth/storage-state.json",
       },
     },
     {
       name: "Basic Testing",
-      dependencies: ["setup - Chrome Login (Google & STAR)"],
+      dependencies: validStorageState()
+        ? undefined
+        : ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/",
-      // testMatch: "1-home.spec.ts",
+      // testMatch: "4-profile.spec.ts",
+      fullyParallel: false,
       use: {
         ...devices["Desktop Chrome"],
         // Persist state between test runs
         // Defines which browser context storage state gets shared between runs
         // This allows you to persist things like cookies, local storage, session storage etc. between test runs
+        headless: false,
+        baseURL: "http://localhost:3000",
+        // launchOptions: {
+        //   slowMo: 2000,
+        // },
         storageState: "./tests/auth/storage-state.json",
       },
     },
     // {
     //   name: "Basic Testing",
-    //   // dependencies: ["setup - Chrome Login (Google & STAR)"],
+    //   dependencies: ["setup - Chrome Login (Google & STAR)"],
     //   testDir: "./tests/",
-    //   testMatch: "1-home.spec.ts",
+    //   testMatch: "1-home-fixtures.spec.ts",
     //   use: {
     //     ...devices["Desktop Chrome"],
     //     // headless: false,
@@ -111,7 +122,9 @@ export default defineConfig({
     // },
     // {
     //   name: "Playground - Create Multiple Questions (without any expact)",
-    //   dependencies: ["setup - Firefox Login (Google & STAR)"],
+    //   dependencies: validStorageState()
+    //     ? undefined
+    //     : ["setup - Chrome Login (Google & STAR)"],
     //   testMatch: "playground-create-questions.ts",
     //   testDir: "./tests/utils",
     //   use: {

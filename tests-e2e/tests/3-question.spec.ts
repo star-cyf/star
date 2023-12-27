@@ -16,8 +16,12 @@ test.describe.serial("Create, Edit, Delete: Question, Answer, Comment", () => {
   let page: Page;
 
   test.beforeAll(async ({ browser }) => {
-    await page.goto("http://localhost:3000/questions");
     page = await browser.newPage();
+    await page.goto("/");
+    await page.locator('a[href="/questions"]').click();
+  });
+  test.afterAll(async () => {
+    await page.close();
   });
 
   let questionId: string;

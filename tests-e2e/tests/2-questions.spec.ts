@@ -22,17 +22,22 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    await page.goto("http://localhost:3000");
+    await page.goto("/");
     await page.locator('a[href="/questions"]').click();
     questionsPage = new QuestionsPage(page);
   });
+  test.afterAll(async () => {
+    await page.close();
+  });
 
   let questionId: string;
-  let obj: QuestionObjType;
 
   // -------- Create ----------
   // [1] Create a new Question
 
+  // test("Can create a new Question", async () => {
+  //   questionId = await questionsPage.createAQuestion(dummyData.question);
+  // });
   test("Can create a new Question", async () => {
     questionId = await questionsPage.createAQuestion(dummyData.question);
   });
@@ -91,16 +96,18 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
  * *                            SORT + CRUD
  *   checking the 'createdTime' and 'updatingTime' of sort feature is working
  *========================================================================**/
-test.describe.serial
-  .only("Create: 3 Questions (each 1 Question every minute)", () => {
+test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
   let page: Page;
   let questionsPage: QuestionsPage;
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    await page.goto("http://localhost:3000");
+    await page.goto("/");
     await page.locator('a[href="/questions"]').click();
     questionsPage = new QuestionsPage(page);
+  });
+  test.afterAll(async () => {
+    await page.close();
   });
 
   // -------- Create ----------
@@ -108,26 +115,28 @@ test.describe.serial
 
   const questionNum = 3;
   let obj: QuestionObjType;
-  let editedObj: QuestionObjType | undefined;
+  let editedObj: QuestionObjType;
+  let reversedObj: QuestionObjType;
 
-  test("Can create 3 new Question", async () => {
-    obj = await questionsPage.createMultiQuestion(
+  test("Can create 3 new Questions & can sort by createdTime", async () => {
+    ({ obj, reversedObj } = await questionsPage.createMultiQuestion(
       dummyData.question,
       questionNum
-    );
+    ));
+    await questionsPage.checkIfOrderByCreatedTime(reversedObj);
   });
 
   // -------- Edit ----------
   // [2] Edit the newly Created Question
 
-  test("Can Edit the Created Question", async () => {
+  test("Can Edit the 3 Created Questions & can sort by updatedTime", async () => {
     editedObj = await questionsPage.editMultiQuestion(obj);
   });
 
   // // -------- Delete ----------
   // // [3] Delete the newly Created and Edited Question
 
-  test("Can Delete the Edited Question", async () => {
+  test("Can Delete the 3 Edited Questions", async () => {
     await questionsPage.deleteMultiQuestion(editedObj!);
   });
 });
