@@ -1,5 +1,5 @@
 import { type Page, test, expect } from "@playwright/test";
-import { dummyData, editedDummyData } from "./utils/dummyData";
+import { QuestionObjType, dummyData, editedDummyData } from "./utils/dummyData";
 import { QuestionsPage } from "./pages/questions";
 import { ProfilePage } from "./pages/profile";
 
@@ -11,7 +11,7 @@ import { ProfilePage } from "./pages/profile";
 /**========================================================================
  * Same Page Model: Generate a window and run all tests.
  *========================================================================**/
-test.describe.skip("Create, Edit, Delete: Question", () => {
+test.describe.serial("Create, Edit, Delete: Question", () => {
   let page: Page;
   let questionsPage: QuestionsPage;
   let profilePage: ProfilePage;
@@ -51,11 +51,12 @@ test.describe.skip("Create, Edit, Delete: Question", () => {
   });
 });
 
-test.describe.serial
-  .only("Create a Question every minute. (Total 3 Questions)", () => {
+test.describe
+  .serial("Create a Question every minute. (Total 3 Questions)", () => {
   let page: Page;
   let questionsPage: QuestionsPage;
   let profilePage: ProfilePage;
+
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     await page.goto("http://localhost:3000");
@@ -64,42 +65,56 @@ test.describe.serial
   });
 
   // -------- Create ----------
-  // [1] Create a new Question
+  // [1] Create 3 new Questions
 
-  let questionIdList: string[] = [];
   let questionNum = 3;
+  let obj: QuestionObjType;
+  let newObj: QuestionObjType;
 
-  test.skip("Can create 3 new Question", async () => {
-    test.setTimeout(180000);
+  test("Can create 3 new Question", async () => {
+    // Change the default 30 seconds to 70s.
+    test.setTimeout(140000);
+
     await page.locator('a[href="/questions"]').click();
+    obj = questionsPage.createQuestionObj();
+    newObj = questionsPage.createQuestionObj();
+
     for (let i = 0; i < questionNum; i++) {
-      const questionId = await profilePage.createAQuestion(
-        `${dummyData.question} | It is ${i + 1} times loop`,
-        i
-      );
+      const text = `${dummyData.question} (${i + 1} times loop)`;
+      const id = await profilePage.createAQuestion(text, i);
 
       if (i < questionNum - 1) {
-        // loop 1 > 60.5s > loop 2 > 60.5s > loop 3
-
         await page.waitForTimeout(60500); // 60.5s
+        // change to loop 1 > 60.5s > loop 2 > 60.5s > loop 3
+        // from loop 1 > 60.5s > loop 2 > 60.5s > loop 3 > 60.5s
       }
 
-      questionIdList.push(questionId!);
+      const { created, updated } = await questionsPage.getQuestionTimestamps(
+        page,
+        id
+      );
+
+      questionsPage.updateQuestionObj(obj, id, text, created);
+      questionsPage.updateQuestionObj(newObj, id, text, created);
     }
+    console.log(obj);
 
     await page.locator('a[href="/profile"]').click();
+
     expect(await page.getByTestId("questionQuantity").innerText()).toBe(
-      questionIdList.length.toString()
+      obj.id.length.toString()
     );
-    let timeList: string[] = [];
-    for (const questionId of questionIdList) {
-      const time = await page
-        .getByTestId(questionId)
-        .getByText("created today, at*")
-        .textContent();
-      timeList.push(time!);
+
+    await page.getByLabel("Sort").click();
+    await page.getByRole("option", { name: "Recently Created" }).click();
+
+    for (const key in newObj) {
+      newObj[key as keyof typeof newObj] =
+        newObj[key as keyof typeof newObj].reverse();
     }
-    console.log(timeList);
+    console.log(newObj);
+
+    questionsPage.reverseQuestionObj(newObj);
   });
 
   // -------- Edit ----------
@@ -107,41 +122,7 @@ test.describe.serial
 
   test("Can Edit the Created Question", async () => {
     await page.locator('a[href="/profile"]').click();
-    let timeList: string[] = [];
-    let timeList2: string[] = [];
-    questionIdList = ["questionId-269", "questionId-270", "questionId-271"];
 
-    for (const questionId of questionIdList) {
-      const ti = await page
-        .getByTestId(questionId)
-        .getByText(/created today, at \d{2}:\d{2}[APMapm]+$/i)
-        .innerText();
-      timeList.push(ti);
-    }
-    let mergedArray;
-    mergedArray = questionIdList.map((questionId, i) => ({
-      questionId,
-      createdTime: timeList[i],
-      updatedTime: timeList[i],
-    }));
-    console.log(mergedArray);
-    await page.getByLabel("Sort").click();
-    await page.getByRole("option", { name: "Recently Created" }).click();
-    await page.pause();
-    const newArr = questionIdList.reverse();
-    for (const questionId of newArr) {
-      const ti = await page
-        .getByTestId(questionId)
-        .getByText(/created today, at \d{2}:\d{2}[APMapm]+$/i)
-        .innerText();
-      timeList2.push(ti);
-    }
-    mergedArray = newArr.map((questionId, i) => ({
-      questionId,
-      createdTime: timeList[i],
-      updatedTime: timeList[i],
-    }));
-    console.log(mergedArray);
     // await profilePage.editAQuestion(questionId!, editedDummyData.question);
   });
 

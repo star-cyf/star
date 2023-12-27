@@ -1,35 +1,36 @@
 export type DummyData = {
-  random: string;
   question: string;
-  answer: {
-    [key: string]: string;
-  };
+  // answer : { [key: string]: string; } = Record<string, string>
+  answer: Record<string, string>;
   comment: string;
 };
 
-export type AnswerType = Omit<DummyData["answer"], "answer">;
+export type AnswerType = DummyData["answer"];
 
 const random = "#" + Math.random().toString(16).slice(2, 8);
 
 export const dummyData: DummyData = {
-  random,
-  question: `This is a test Question ${random}`,
+  question: `${random} This is a test Question`,
   answer: {
-    situation: `This is a test Situation ${random}`,
-    task: `This is a test Task ${random}`,
-    action: `This is a test Action ${random}`,
-    result: `This is a test Result ${random}`,
+    situation: `${random} This is a test Situation`,
+    task: `${random} This is a test Task`,
+    action: `${random} This is a test Action`,
+    result: `${random} This is a test Result`,
   },
-  comment: `This is a test Comment ${random}`,
+  comment: `${random} This is a test Comment`,
 };
 
-export const editedDummyData: Omit<DummyData, "random"> = {
-  question: `This is a test Question, edited ${dummyData.random}`,
+export const editedDummyData: DummyData = {
+  question: `${dummyData.question}, edited`,
   answer: {
-    situation: `This is a test Situation, edited ${dummyData.random}`,
-    task: `This is a test Task, edited ${dummyData.random}`,
-    action: `This is a test Action, edited ${dummyData.random}`,
-    result: `This is a test Result, edited ${dummyData.random}`,
+    situation: `${dummyData.answer.situation}, edited`,
+    task: `${dummyData.answer.task}, edited`,
+    action: `${dummyData.answer.action}, edited`,
+    result: `${dummyData.answer.result}, edited`,
   },
-  comment: `This is a test Comment, edited ${dummyData.random}`,
+  comment: `${dummyData.answer.comment}, edited`,
+};
+export type QuestionObjType = {
+  id: string[];
+  text: string[];
 };
