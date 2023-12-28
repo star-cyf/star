@@ -52,7 +52,6 @@ export default defineConfig({
       name: "setup - Chrome Login (Google & STAR)",
       testDir: "./tests/auth",
       testMatch: "chrome-login-google-star.ts",
-      // teardown: "teardown - Delete All Questions",
       use: {
         ...devices["Desktop Chrome"],
         headless: false, // Chrome must disable headless.
@@ -62,10 +61,7 @@ export default defineConfig({
     // {
     //   name: "setup - Firefox Login (Google & STAR)",
     //   testDir: "./tests/auth",
-    //   testMatch: validStorageState()
-    //     ? undefined
-    //     : "firefox-login-google-star.ts",
-    //   teardown: "teardown - Delete All Questions",
+    //   testMatch: "firefox-login-google-star.ts",
     //   use: {
     //     ...devices["Desktop Firefox"],
     //     // headless: false, // Firefox can be run without headless.
@@ -73,15 +69,10 @@ export default defineConfig({
     // },
     {
       name: "teardown - Delete All Questions",
-      dependencies: validStorageState()
-        ? undefined
-        : ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/utils",
       testMatch: "teardown.ts",
-
       use: {
         ...devices["Desktop Chrome"],
-
         storageState: "./tests/auth/storage-state.json",
       },
     },
@@ -91,7 +82,8 @@ export default defineConfig({
         ? undefined
         : ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/",
-      // testMatch: "4-profile.spec.ts",
+      // testMatch: "2-questions.spec.ts",
+      teardown: "teardown - Delete All Questions",
       fullyParallel: false,
       use: {
         ...devices["Desktop Chrome"],
@@ -106,20 +98,6 @@ export default defineConfig({
         storageState: "./tests/auth/storage-state.json",
       },
     },
-    // {
-    //   name: "Basic Testing",
-    //   dependencies: ["setup - Chrome Login (Google & STAR)"],
-    //   testDir: "./tests/",
-    //   testMatch: "1-home-fixtures.spec.ts",
-    //   use: {
-    //     ...devices["Desktop Chrome"],
-    //     // headless: false,
-    //     // Persist state between test runs
-    //     // Defines which browser context storage state gets shared between runs
-    //     // This allows you to persist things like cookies, local storage, session storage etc. between test runs
-    //     storageState: "./tests/auth/storage-state.json",
-    //   },
-    // },
     // {
     //   name: "Playground - Create Multiple Questions (without any expact)",
     //   dependencies: validStorageState()

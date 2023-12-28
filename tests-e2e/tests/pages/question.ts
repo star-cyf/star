@@ -136,18 +136,19 @@ export class QuestionPage {
   }
 
   async editAComment(commentId: string, editedCommentText: string) {
+    console.log(editedCommentText);
     await this.clickTheQuestionToInsideOfQuestion(this.page.url());
     // http://localhost:3000/questions/96
 
-    const commentDiv = this.page.locator(`[data-testid=${commentId}]`);
+    const commentDiv = this.page.getByTestId(commentId);
     await commentDiv.locator('svg[data-testid="EditOutlinedIcon"]').click();
 
-    await this.commentTextarea.fill(`${editedCommentText}`);
+    await this.commentTextarea.fill(editedCommentText);
     await this.editCommentButton.click();
 
     // check if the editDummy.comment is visible in 8s
     await this.page
-      .locator(`text=${editedCommentText}`)
+      .getByText(editedCommentText)
       .waitFor({ state: "visible", timeout: 8000 });
 
     // check if the successful message is hidden in 8s
@@ -156,7 +157,7 @@ export class QuestionPage {
       timeout: 8000,
     });
 
-    await expect(this.page.locator(`text=${editedCommentText}`)).toBeVisible();
+    await expect(this.page.getByText(editedCommentText)).toBeVisible();
 
     // check if the editedCommentText in the commentIdDiv
     await expect(commentDiv).toContainText(`${editedCommentText}`);
@@ -166,7 +167,7 @@ export class QuestionPage {
     await this.clickTheQuestionToInsideOfQuestion(this.page.url());
     // http://localhost:3000/questions/96
 
-    const answerDiv = this.page.locator(`[data-testid=${answerId}]`);
+    const answerDiv = this.page.getByTestId(answerId);
     await answerDiv
       .locator(`button[data-testid="EditOutlinedIcon-${answerId}"]`)
       .click();
@@ -206,17 +207,15 @@ export class QuestionPage {
     await this.clickTheQuestionToInsideOfQuestion(this.page.url());
     // http://localhost:3000/questions/96
 
-    const commentDiv = this.page.locator(`[data-testid=${commentId}]`);
+    const commentDiv = this.page.getByTestId(commentId);
     await commentDiv.locator('svg[data-testid="DeleteOutlineIcon"]').click();
 
     // check if the editDummy.comment is visible in 8s
     await this.page
-      .locator(`text=${editedCommentText}`)
+      .getByText(editedCommentText)
       .waitFor({ state: "hidden", timeout: 8000 });
 
-    await expect(
-      this.page.locator(`text=${editedCommentText}`)
-    ).not.toBeVisible();
+    await expect(this.page.getByText(editedCommentText)).not.toBeVisible();
 
     await expect(commentDiv).not.toBeVisible();
   }
@@ -225,18 +224,16 @@ export class QuestionPage {
     await this.clickTheQuestionToInsideOfQuestion(this.page.url());
     // http://localhost:3000/questions/96
 
-    const answerDiv = this.page.locator(`[data-testid=${answerId}]`);
+    const answerDiv = this.page.getByTestId(answerId);
     await answerDiv
       .locator(`button[data-testid="DeleteOutlineIcon-${answerId}"]`)
       .click();
 
     for (const key in editedAnswer) {
       await this.page
-        .locator(`text=${editedAnswer[key]}`)
+        .getByText(editedAnswer[key])
         .waitFor({ state: "hidden", timeout: 8000 });
-      await expect(
-        this.page.locator(`text=${editedAnswer[key]}`)
-      ).not.toBeVisible();
+      await expect(this.page.getByText(editedAnswer[key])).not.toBeVisible();
     }
 
     await expect(answerDiv).not.toBeVisible();

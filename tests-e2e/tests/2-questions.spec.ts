@@ -165,16 +165,15 @@ test.describe.serial("Create, Delete, Search: 5 Questions", () => {
   const questionNum = 5;
   let obj: QuestionObjType;
 
-  test("Can create 3 new Questions & can sort by createdTime", async () => {
+  test("Can create 5 new Questions & can sort by createdTime", async () => {
     obj = await questionsPage.createMultiQuestionWithSearch(questionNum);
-
     await questionsPage.checkWithSearch(obj);
   });
 
   // -------- Delete ----------
-  // [3] Delete the newly Created and Edited Question
+  // [3] Delete the newly Created and Edited Questions
 
-  test("Can Delete the 3 Edited Questions", async () => {
+  test("Can Delete the 5 Edited Questions", async () => {
     await questionsPage.deleteMultiQuestion(obj);
   });
 });

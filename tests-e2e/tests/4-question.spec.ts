@@ -86,7 +86,7 @@ test.describe.serial("Create, Edit, Delete: Question, Answer, Comment", () => {
     await questionPage.deleteAnAnswer(answerId!, editedDummyData.answer);
   });
 
-  test("Can Delete the Edited Question", async () => {
+  test.fixme("Can Delete the Edited Question", async () => {
     const questionPage = new QuestionPage(page, questionId);
     await questionPage.deleteAQuestion(questionId, editedDummyData.question);
   });

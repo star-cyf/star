@@ -7,7 +7,7 @@ import { QuestionObjType } from "../utils/dummyData";
 export class QuestionsPage {
   readonly page: Page;
 
-  //crud
+  // crud
   readonly addAQuestionButton: Locator;
   readonly questionTextarea: Locator;
   readonly addQuestionButton: Locator;
@@ -15,7 +15,7 @@ export class QuestionsPage {
 
   readonly editQuestionButton: Locator;
 
-  //sort
+  // sort
   readonly sortSelect: Locator;
   readonly createdOption: Locator;
   readonly updatedOption: Locator;
@@ -25,6 +25,8 @@ export class QuestionsPage {
 
   constructor(page: Page) {
     this.page = page;
+
+    // crud
     this.addAQuestionButton = page.getByText("Add a question");
     this.questionTextarea = page.locator("#question");
     this.addQuestionButton = page.getByText("Add question");
@@ -43,6 +45,7 @@ export class QuestionsPage {
   }
 
   async scrollDown(page: Page, locator: Locator) {
+    // has to add 'page.evaluate' instead of 'this.page.evaluate', otherwise got undefined
     while (!(await locator.isVisible())) {
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
       // await page.mouse.wheel(0, 10000);

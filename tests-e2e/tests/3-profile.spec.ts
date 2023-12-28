@@ -33,7 +33,7 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
   let questionId: string;
 
   // -------- Create ----------
-  // [1] Create a new Question
+  // [1] Create 3 new Question
 
   test("Can create a new Question", async () => {
     await page.locator('a[href="/questions"]').click();
@@ -41,7 +41,7 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
   });
 
   // -------- Edit ----------
-  // [2] Edit the newly Created Question
+  // [2] Edit the 3 newly Created Questions
 
   test("Can Edit the Created Question", async () => {
     await page.locator('a[href="/profile"]').click();
@@ -49,7 +49,7 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
   });
 
   // -------- Delete ----------
-  // [3] Delete the newly Created and Edited Question
+  // [3] Delete the 3 newly Created and Edited Questions
 
   test("Can Delete the Edited Question", async () => {
     await profilePage.deleteAQuestion(questionId, editedDummyData.question);
@@ -89,14 +89,14 @@ test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
   });
 
   // -------- Edit ----------
-  // [2] Edit the newly Created Question
+  // [2] Edit the 3 newly Created Questions
 
   test("Can Edit the 3 Created Questions & can sort by updatedTime", async () => {
     editedObj = await profilePage.editMultiQuestion(obj);
   });
 
   // -------- Delete ----------
-  // [3] Delete the newly Created and Edited Question
+  // [3] Delete the 3 newly Created and Edited Questions
 
   test("Can Delete the 3 Edited Questions", async () => {
     await profilePage.deleteMultiQuestion(editedObj!);

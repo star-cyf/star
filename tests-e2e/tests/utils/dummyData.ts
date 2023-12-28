@@ -28,7 +28,7 @@ export const editedDummyData: DummyData = {
     action: `${dummyData.answer.action}, edited`,
     result: `${dummyData.answer.result}, edited`,
   },
-  comment: `${dummyData.answer.comment}, edited`,
+  comment: `${dummyData.comment}, edited`,
 };
 export type QuestionObjType = {
   id: string[];
