@@ -35,9 +35,6 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
   // -------- Create ----------
   // [1] Create a new Question
 
-  // test("Can create a new Question", async () => {
-  //   questionId = await profilePage.createAQuestion(dummyData.question);
-  // });
   test("Can create a new Question", async () => {
     await page.locator('a[href="/questions"]').click();
     questionId = await profilePage.createAQuestion(dummyData.question);
@@ -95,12 +92,11 @@ test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
   // [2] Edit the newly Created Question
 
   test("Can Edit the 3 Created Questions & can sort by updatedTime", async () => {
-    await page.locator('a[href="/profile"]').click();
     editedObj = await profilePage.editMultiQuestion(obj);
   });
 
-  // // -------- Delete ----------
-  // // [3] Delete the newly Created and Edited Question
+  // -------- Delete ----------
+  // [3] Delete the newly Created and Edited Question
 
   test("Can Delete the 3 Edited Questions", async () => {
     await profilePage.deleteMultiQuestion(editedObj!);

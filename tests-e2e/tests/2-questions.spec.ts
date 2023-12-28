@@ -133,10 +133,48 @@ test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
     editedObj = await questionsPage.editMultiQuestion(obj);
   });
 
-  // // -------- Delete ----------
-  // // [3] Delete the newly Created and Edited Question
+  // -------- Delete ----------
+  // [3] Delete the newly Created and Edited Question
 
   test("Can Delete the 3 Edited Questions", async () => {
     await questionsPage.deleteMultiQuestion(editedObj!);
+  });
+});
+
+/**========================================================================
+ * *                            SEARCH
+ *   checking the search feature is working
+ *========================================================================**/
+test.describe.serial("Create, Delete, Search: 5 Questions", () => {
+  let page: Page;
+  let questionsPage: QuestionsPage;
+
+  test.beforeAll(async ({ browser }) => {
+    page = await browser.newPage();
+    await page.goto("/");
+    await page.locator('a[href="/questions"]').click();
+    questionsPage = new QuestionsPage(page);
+  });
+  test.afterAll(async () => {
+    await page.close();
+  });
+
+  // -------- Create ----------
+  // [1] Create 3 new Questions
+
+  const questionNum = 5;
+  let obj: QuestionObjType;
+
+  test("Can create 3 new Questions & can sort by createdTime", async () => {
+    obj = await questionsPage.createMultiQuestionWithSearch(questionNum);
+
+    await questionsPage.checkWithSearch(obj);
+  });
+
+  // -------- Delete ----------
+  // [3] Delete the newly Created and Edited Question
+
+  test("Can Delete the 3 Edited Questions", async () => {
+    await questionsPage.deleteMultiQuestion(obj);
   });
 });

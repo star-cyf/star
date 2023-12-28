@@ -20,6 +20,9 @@ export class QuestionsPage {
   readonly createdOption: Locator;
   readonly updatedOption: Locator;
 
+  // search
+  readonly searchField: Locator;
+
   constructor(page: Page) {
     this.page = page;
     this.addAQuestionButton = page.getByText("Add a question");
@@ -30,10 +33,13 @@ export class QuestionsPage {
     );
     this.editQuestionButton = page.getByText("Edit Question");
 
-    // this.sortSelect = page.getByTestId("ArrowDropDownIcon");
+    // sort
     this.sortSelect = page.getByLabel("Sort");
     this.createdOption = page.getByRole("option", { name: "Recently Created" });
     this.updatedOption = page.getByRole("option", { name: "Recently Updated" });
+
+    // search
+    this.searchField = page.getByPlaceholder("Search Questions...");
   }
 
   async scrollDown(page: Page, locator: Locator) {
@@ -215,6 +221,21 @@ export class QuestionsPage {
         questionObj[key as keyof typeof questionObj].reverse();
     }
   }
+  async generateGrabObj() {
+    const grabObj: QuestionObjType = this.createQuestionObj();
+
+    // Note: If there are others questions, this testing will be failed
+    const allQuestionDivs = await this.page.getByTestId(/questionId-\d/).all();
+
+    for (let i = 0; i < allQuestionDivs.length; i++) {
+      const questionDiv = this.page.getByTestId(/questionId-\d/).nth(i);
+      const id = await questionDiv.getAttribute("data-testid");
+      const text = await questionDiv.locator("a").textContent();
+
+      this.pushQuestionObj(grabObj, id!, text!);
+    }
+    return grabObj;
+  }
   async checkIfOrderByCreatedTime(updatedObj: QuestionObjType) {
     // console.log(`----------------`);
     // console.log(`checkIfOrderByCreatedTime`);
@@ -228,18 +249,8 @@ export class QuestionsPage {
       await this.scrollDown(this.page, questionIdDiv);
     }
 
-    const grabObj: QuestionObjType = this.createQuestionObj();
+    const grabObj = await this.generateGrabObj();
 
-    // Note: If there are others questions, this testing will be failed
-    const allQuestionDivs = await this.page.getByTestId(/questionId-\d/).all();
-
-    for (let i = 0; i < allQuestionDivs.length; i++) {
-      const questionDiv = this.page.getByTestId(/questionId-\d/).nth(i);
-      const id = await questionDiv.getAttribute("data-testid");
-      const text = await questionDiv.locator("a").textContent();
-
-      this.pushQuestionObj(grabObj, id!, text!);
-    }
     // console.log(grabObj);
     // console.log(updatedObj);
     expect(grabObj).toEqual(updatedObj);
@@ -260,18 +271,8 @@ export class QuestionsPage {
       await this.scrollDown(this.page, questionIdDiv);
     }
 
-    const grabObj: QuestionObjType = this.createQuestionObj();
+    const grabObj = await this.generateGrabObj();
 
-    // Note: If there are others questions, this testing will be failed
-    const allQuestionDivs = await this.page.getByTestId(/questionId-\d/).all();
-
-    for (let i = 0; i < allQuestionDivs.length; i++) {
-      const questionDiv = this.page.getByTestId(/questionId-\d/).nth(i);
-      const id = await questionDiv.getAttribute("data-testid");
-      const text = await questionDiv.locator("a").textContent();
-
-      this.pushQuestionObj(grabObj, id!, text!);
-    }
     // console.log(`-------------`);
     // console.log(grabObj);
     // console.log(updatedObj);
@@ -280,5 +281,36 @@ export class QuestionsPage {
     // because updated = new to old so have to use reverse the updatedObj
     this.reverseQuestionObj(updatedObj);
     expect(grabObj).toEqual(updatedObj);
+  }
+
+  async createMultiQuestionWithSearch(questionNum: number) {
+    const obj = this.createQuestionObj();
+
+    for (let i = 0; i < questionNum; i++) {
+      const random = "#" + Math.random().toString(16).slice(2, 8);
+      const text = `${random} This is a test Question (${i + 1} times loop)`;
+      const id = await this.createAQuestion(text);
+      this.pushQuestionObj(obj, id, text);
+    }
+
+    return obj;
+  }
+  async checkWithSearch(questionObj: QuestionObjType) {
+    for (let i = 0; i < 5; i++) {
+      const searchText = (i + 1).toString();
+      await this.searchField.fill(searchText);
+      await this.page.waitForTimeout(2000);
+      const grabObj = await this.generateGrabObj();
+      const filteredArr = questionObj.text.filter((text) =>
+        text.includes(searchText)
+      );
+      // console.log(`filteredArr`);
+      // console.log(filteredArr);
+      // console.log(`grabObj`);
+      // console.log(grabObj.text);
+      expect(filteredArr).toEqual(grabObj.text);
+    }
+    await this.searchField.fill("");
+    await this.page.waitForTimeout(2000);
   }
 }
