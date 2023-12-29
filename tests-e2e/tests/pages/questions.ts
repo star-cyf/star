@@ -62,6 +62,11 @@ export class QuestionsPage {
     // click the button Add Question
     await this.addQuestionButton.click();
 
+    await this.questionTextarea.waitFor({
+      state: "hidden",
+      timeout: 8000,
+    });
+
     // check if the successful message is hidden in 8s
     await this.questionSuccessfulMessage.waitFor({
       state: "hidden",
@@ -302,6 +307,7 @@ export class QuestionsPage {
     for (let i = 0; i < 5; i++) {
       const searchText = (i + 1).toString();
       await this.searchField.fill(searchText);
+      // wait for the 'loading...' of search
       await this.page.waitForTimeout(2000);
       const grabObj = await this.generateGrabObj();
       const filteredArr = questionObj.text.filter((text) =>

@@ -32,7 +32,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   //  Reporter to use. See https://playwright.dev/docs/test-reporters
-  reporter: [["html", { outputFolder: "./test-reports" }]],
+  reporter: [["list"], ["html", { outputFolder: "./test-reports" }]],
 
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions
   use: {
@@ -96,6 +96,14 @@ export default defineConfig({
         //   slowMo: 2000,
         // },
         storageState: "./tests/auth/storage-state.json",
+        screenshot: "only-on-failure",
+        video: "retain-on-failure",
+        trace: "retain-on-failure",
+        contextOptions: {
+          recordVideo: {
+            dir: "./test-videos",
+          },
+        },
       },
     },
     // {

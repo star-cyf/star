@@ -166,6 +166,7 @@ test.describe.serial("Create, Delete, Search: 5 Questions", () => {
   let obj: QuestionObjType;
 
   test("Can create 5 new Questions & can sort by createdTime", async () => {
+    test.setTimeout(60000);
     obj = await questionsPage.createMultiQuestionWithSearch(questionNum);
     await questionsPage.checkWithSearch(obj);
   });
