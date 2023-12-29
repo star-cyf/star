@@ -10,7 +10,7 @@ import { HomePage } from "./pages/home";
 /**========================================================================
  * Same Page Model: Generate a window and run all tests.
  *========================================================================**/
-test.describe.serial("Lonin with coookies", () => {
+test.describe.serial("Login with coookies", () => {
   let page: Page;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
@@ -43,7 +43,7 @@ test.describe.serial("Lonin with coookies", () => {
   });
 });
 
-test.describe.serial("Lonin without coookies", () => {
+test.describe.serial("Login without coookies", () => {
   let page: Page;
   test.use({ storageState: { cookies: [], origins: [] } });
   test.beforeAll(async ({ browser }) => {
@@ -79,7 +79,7 @@ test.describe.serial("Lonin without coookies", () => {
 /**========================================================================
  * Different Windows Model: Generate multiple windows and run each test separately.
  *========================================================================**/
-// test.describe("Lonin with coookies", () => {
+// test.describe("Login with coookies", () => {
 //   test.beforeEach(async ({ page }) => {
 //     await page.goto("http://localhost:3000");
 //   });
@@ -107,7 +107,7 @@ test.describe.serial("Lonin without coookies", () => {
 //   });
 // });
 
-// test.describe("Lonin without coookies", () => {
+// test.describe("Login without coookies", () => {
 //   test.use({ storageState: { cookies: [], origins: [] } });
 //   test.beforeEach(async ({ page }) => {
 //     await page.goto("http://localhost:3000");

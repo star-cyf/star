@@ -29,7 +29,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
 
   // Opt out of parallel tests on CI
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
 
   //  Reporter to use. See https://playwright.dev/docs/test-reporters
   reporter: [
@@ -43,7 +43,8 @@ export default defineConfig({
     // baseURL: "http://localhost:3000",
 
     // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
+    screenshot: "only-on-failure",
 
     // storageState: "./src/utils/storage-state.json",
   },
@@ -89,25 +90,17 @@ export default defineConfig({
       // testMatch: "2-questions.spec.ts",
       teardown: "teardown - Delete All Questions",
       fullyParallel: false,
+
       use: {
         ...devices["Desktop Chrome"],
         // Persist state between test runs
         // Defines which browser context storage state gets shared between runs
         // This allows you to persist things like cookies, local storage, session storage etc. between test runs
-        headless: false,
         baseURL: "http://localhost:3000",
         // launchOptions: {
         //   slowMo: 2000,
         // },
         storageState: "./tests/auth/storage-state.json",
-        screenshot: "only-on-failure",
-        video: "retain-on-failure",
-        trace: "retain-on-failure",
-        contextOptions: {
-          recordVideo: {
-            dir: "./test-videos",
-          },
-        },
       },
     },
     // {
