@@ -2,7 +2,7 @@ import { getAllRoles, createRole } from "../helpers/roles";
 import { getAllTags, createTag } from "../helpers/tags";
 
 const seedRoles = async () => {
-  console.log("Seeding: Attempting to Seed Roles to the Database");
+  // console.log("Seeding: Attempting to Seed Roles to the Database");
 
   try {
     const existingRolesQuery = await getAllRoles();
@@ -15,7 +15,7 @@ const seedRoles = async () => {
         // console.log(`Seeding: Adding New Role: ${newRoleEntry}`);
         await createRole(newRoleEntry);
       });
-      console.log("Seeding: Completed Seeding Roles to the Database");
+      // console.log("Seeding: Completed Seeding Roles to the Database");
       return;
     }
 
@@ -31,7 +31,7 @@ const seedRoles = async () => {
       }
     });
 
-    console.log("1️⃣ Seeding: Completed Seeding Roles to the Database");
+    // console.log("1️⃣ Seeding: Completed Seeding Roles to the Database");
   } catch (error) {
     console.error("❌ Seeding: Error Seeding Roles to the Database", error);
   }
@@ -104,7 +104,7 @@ const seedTags = async () => {
         // console.log(`Seeding: Adding New Tag: ${newTagEntry}`);
         await createTag(newTagEntry);
       });
-      console.log("Seeding: Completed Seeding Tags to the Database");
+      // console.log("Seeding: Completed Seeding Tags to the Database");
       return;
     }
 
@@ -118,7 +118,7 @@ const seedTags = async () => {
       }
     });
 
-    console.log("2️⃣ Seeding: Completed Seeding Tags to the Database");
+    // console.log("2️⃣ Seeding: Completed Seeding Tags to the Database");
   } catch (error) {
     console.error("❌ Seeding: Error Seeding Tags to the Database", error);
   }
