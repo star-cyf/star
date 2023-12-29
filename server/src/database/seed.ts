@@ -38,7 +38,7 @@ const seedRoles = async () => {
 };
 
 const seedTags = async () => {
-  console.log("Seeding: Attempting to Seed Tags to the Database");
+  // console.log("Seeding: Attempting to Seed Tags to the Database");
 
   try {
     const existingTagsQuery = await getAllTags();
