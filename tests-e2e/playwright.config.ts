@@ -52,7 +52,9 @@ export default defineConfig({
       name: "setup - Chrome Login (Google & STAR)",
       testDir: "./tests/auth",
       // ⚠️ WE NEED SOME CONDITION LOGIC TO STOP THIS FROM RUNNING IF WE ALREADY HAVE A VALID storage-state.json
-      testMatch: "chrome-login-google-star.ts",
+      testMatch: validStorageState()
+        ? undefined
+        : "chrome-login-google-star.ts",
       use: {
         ...devices["Desktop Chrome"],
         headless: false, // Chrome must disable headless.
@@ -79,9 +81,7 @@ export default defineConfig({
     },
     {
       name: "Basic Testing",
-      dependencies: validStorageState()
-        ? undefined
-        : ["setup - Chrome Login (Google & STAR)"],
+      dependencies: ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/",
       // testMatch: "2-questions.spec.ts",
       teardown: "teardown - Delete All Questions",
