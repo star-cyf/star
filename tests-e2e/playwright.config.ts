@@ -32,7 +32,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   //  Reporter to use. See https://playwright.dev/docs/test-reporters
-  reporter: [["list"], ["html", { outputFolder: "./test-reports" }]],
+  reporter: process.env.CI ? "dot" : "list",
 
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions
   use: {
@@ -51,6 +51,7 @@ export default defineConfig({
     {
       name: "setup - Chrome Login (Google & STAR)",
       testDir: "./tests/auth",
+      // ⚠️ WE NEED SOME CONDITION LOGIC TO STOP THIS FROM RUNNING IF WE ALREADY HAVE A VALID storage-state.json
       testMatch: "chrome-login-google-star.ts",
       use: {
         ...devices["Desktop Chrome"],
