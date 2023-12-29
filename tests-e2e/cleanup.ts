@@ -5,17 +5,13 @@ try {
   console.log("🧹 Cleanup: Attempting...");
 
   const operatingSystem = os.platform();
-  // console.log("🧹 Cleanup: Operating System:", operatingSystem);
 
+  console.log("⏳ Cleanup: Stopping Client & Server...");
   if (operatingSystem === "win32") {
-    console.log("⏳ Cleanup: Stopping Client...");
-    console.log("⏳ Cleanup: Stopping Server...");
     execSync('taskkill /F /IM "node.exe"');
   } else {
-    console.log("⏳ Cleanup: Stopping Client...");
-    execSync("pkill -f 'npm --prefix ../client run dev'");
-    console.log("⏳ Cleanup: Stopping Server...");
-    execSync("pkill -f 'npm --prefix ../server run dev'");
+    execSync("lsof -ti :3000 | xargs kill");
+    execSync("lsof -ti :4000 | xargs kill");
   }
 
   console.log("✅ Cleanup: Complete");
