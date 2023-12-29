@@ -47,19 +47,28 @@ const ProfilePage = () => {
         </Box>
         <Box>
           <Typography variant={"body2"}>Questions:</Typography>
-          <Typography fontWeight={"bold"} textAlign={"center"}>
+          <Typography
+            fontWeight={"bold"}
+            textAlign={"center"}
+            data-testid="questionQuantity">
             {userQuestionsData?.length}
           </Typography>
         </Box>
         <Box>
           <Typography variant={"body2"}>Answers:</Typography>
-          <Typography fontWeight={"bold"} textAlign={"center"}>
+          <Typography
+            fontWeight={"bold"}
+            textAlign={"center"}
+            data-testid="answerQuantity">
             {0}
           </Typography>
         </Box>
         <Box>
           <Typography variant={"body2"}>Comments:</Typography>
-          <Typography fontWeight={"bold"} textAlign={"center"}>
+          <Typography
+            fontWeight={"bold"}
+            textAlign={"center"}
+            data-testid="commentQuantity">
             {0}
           </Typography>
         </Box>

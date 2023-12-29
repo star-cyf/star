@@ -53,7 +53,7 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
       console.error(error);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["questions", questionId] });
+      queryClient.invalidateQueries({ queryKey: ["questions"] });
       if (currentPage === "individualQuestionPage") {
         navigate("/questions");
       }

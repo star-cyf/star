@@ -51,7 +51,7 @@ const QuestionForm = (props: QuestionFormProps) => {
     mutationFn: () =>
       questionId ? putQuestion(questionId, question) : postQuestion(question),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["questions", sort] });
+      queryClient.invalidateQueries({ queryKey: ["questions"] });
       setQuestion("");
       setQuestionValidation(undefined);
       setTimeout(() => {
