@@ -1,0 +1,69 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    environment: test
+    env:
+      NODE_ENV: ${{ vars.NODE_ENV }}
+      SERVER_PORT: ${{ vars.SERVER_PORT }}
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_PORT: ${{ vars.DATABASE_PORT }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ vars.DATABASE_NAME }}
+      GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      GOOGLE_EMAIL: ${{ secrets.GOOGLE_EMAIL }}
+      GOOGLE_PASSWORD: ${{ secrets.GOOGLE_PASSWORD }}
+      GOOGLE_REDIRECT_URI: ${{ vars.GOOGLE_REDIRECT_URI }}
+      CLIENT_URL: ${{ vars.CLIENT_URL }}
+      VITE_SERVER_URL: http://${{ secrets.DATABASE_HOST }}:${{ vars.SERVER_PORT }}
+      VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: ${{ env.DATABASE_USER }}
+          POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+          POSTGRES_DB: ${{ env.DATABASE_NAME }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install client dependencies
+        working-directory: ./client
+        run: npm ci
+      - name: Install server dependencies
+        working-directory: ./server
+        run: npm ci
+      - name: Install testing dependencies
+        working-directory: ./tests-e2e
+        run: npm ci
+      - name: Install Playwright Browsers
+        working-directory: ./tests-e2e
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright tests
+        working-directory: ./tests-e2e
+        # run: npx playwright test
+        run: xvfb-run npm start
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: |
+            ./tests-e2e/test-results/
+            ./tests-e2e/test-reports/
+          retention-days: 1
