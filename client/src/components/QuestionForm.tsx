@@ -27,7 +27,7 @@ import {
 } from "../types/props";
 
 const QuestionForm = (props: QuestionFormProps) => {
-  const { sort, setShowAddQuestionForm } = props as AddQuestionFormProps;
+  const { setShowAddQuestionForm } = props as AddQuestionFormProps; // sort
   const { questionId, originalQuestion, setShowUpdateQuestionForm } =
     props as UpdateQuestionFormProps;
 

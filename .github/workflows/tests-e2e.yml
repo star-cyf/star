@@ -1,32 +1,38 @@
 name: Playwright Tests
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
+  workflow_dispatch:
+
 jobs:
   test:
-    timeout-minutes: 60
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     environment: test
     env:
       NODE_ENV: ${{ vars.NODE_ENV }}
-      SERVER_PORT: ${{ vars.SERVER_PORT }}
+      # database
       DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
       DATABASE_PORT: ${{ vars.DATABASE_PORT }}
       DATABASE_USER: ${{ secrets.DATABASE_USER }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_NAME: ${{ vars.DATABASE_NAME }}
+      # server
+      SERVER_PORT: ${{ vars.SERVER_PORT }}
       GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      # client
+      VITE_SERVER_URL: ${{ vars.VITE_SERVER_URL }}
+      VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+      # tests-e2e
       GOOGLE_EMAIL: ${{ secrets.GOOGLE_EMAIL }}
       GOOGLE_PASSWORD: ${{ secrets.GOOGLE_PASSWORD }}
-      GOOGLE_REDIRECT_URI: ${{ vars.GOOGLE_REDIRECT_URI }}
-      CLIENT_URL: ${{ vars.CLIENT_URL }}
-      VITE_SERVER_URL: http://${{ secrets.DATABASE_HOST }}:${{ vars.SERVER_PORT }}
-      VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
-
     services:
       postgres:
         image: postgres:latest
@@ -43,19 +49,21 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v4
-      - name: Install client dependencies
+      - name: Check Environment
+        run: env
+      - name: Install Client Dependencies
         working-directory: ./client
         run: npm ci
-      - name: Install server dependencies
+      - name: Install Server Dependencies
         working-directory: ./server
         run: npm ci
-      - name: Install testing dependencies
+      - name: Install End to End Testing Dependencies
         working-directory: ./tests-e2e
         run: npm ci
       - name: Install Playwright Browsers
         working-directory: ./tests-e2e
         run: npx playwright install --with-deps chromium
-      - name: Run Playwright tests
+      - name: Run Playwright Tests
         working-directory: ./tests-e2e
         # run: npx playwright test
         run: xvfb-run npm start
