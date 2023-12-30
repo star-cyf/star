@@ -20,9 +20,6 @@ defaults:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    environment: development
-    env:
-      NODE_ENV: ${{ vars.NODE_ENV }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -44,12 +41,14 @@ jobs:
     environment: test
     env:
       NODE_ENV: ${{ vars.NODE_ENV }}
-      SERVER_PORT: ${{ vars.SERVER_PORT }}
+      # database
       DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
       DATABASE_PORT: ${{ vars.DATABASE_PORT }}
       DATABASE_USER: ${{ secrets.DATABASE_USER }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_NAME: ${{ vars.DATABASE_NAME }}
+      # server
+      SERVER_PORT: ${{ vars.SERVER_PORT }}
       GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -68,6 +67,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
+      - name: Check Environment # for Debugging
+        run: env
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Cache Dependencies
@@ -76,14 +77,6 @@ jobs:
         with:
           path: ~/.npm
           key: server-node-modules-${{ hashFiles('./server/package-lock.json') }}
-      - name: Create .env
-        run: |
-          touch .env
-          echo DATABASE_HOST=${{ secrets.DATABASE_HOST }} >> .env.test    
-          echo DATABASE_PORT=${{ vars.DATABASE_PORT }} >> .env.test    
-          echo DATABASE_USER=${{ secrets.DATABASE_USER }} >> .env.test    
-          echo DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} >> .env.test    
-          echo DATABASE_NAME=${{ secrets.DATABASE_NAME }} >> .env.test
       - name: Install Dependencies
         run: npm ci
       - name: Format Code
@@ -91,49 +84,60 @@ jobs:
       - name: Lint Code
         run: npm run lint
       - name: Database Migration
-        run: NODE_ENV=TEST npm run database:migration
+        run: npm run database:migration
       - name: Test Code
         run: npm run test
-#  build:
-#    needs: test
-#    runs-on: ubuntu-latest
-#    environment: production
-#    env:
-#      NODE_ENV: ${{ vars.NODE_ENV }}
-#    steps:
-#      - name: Checkout Code
-#        uses: actions/checkout@v4
-#      - name: Cache Dependencies
-#        id: cache
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.npm
-#          key: server-node-modules-${{ hashFiles('./server/package-lock.json') }}
-#      - name: Install Dependencies
-#        run: npm ci
-#      - name: Format Code
-#        run: npm run prettier
-#      - name: Lint Code
-#        run: npm run lint
-#      - name: Build Server
-#        id: build-server
-#        run: npm run build
-#      - name: Upload Artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: server-build-folder
-#          path: ./server/build
-#  deploy:
-#    if: ${{ github.event_name != 'pull_request' }}
-#    needs: build
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Download Artifact
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: server-build-folder
-#          path: ./server/build
-#      - name: Show Folder Contents
-#        run: ls -R build
-#      - name: Deploy
-#        run: echo "Deploying..."
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    # environment: production
+    env:
+      NODE_ENV: ${{ vars.NODE_ENV }}
+      # database
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_PORT: ${{ vars.DATABASE_PORT }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ vars.DATABASE_NAME }}
+      # server
+      SERVER_PORT: ${{ vars.SERVER_PORT }}
+      GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Cache Dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: server-node-modules-${{ hashFiles('./server/package-lock.json') }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Format Code
+        run: npm run prettier
+      - name: Lint Code
+        run: npm run lint
+      - name: Build Server
+        id: build-server
+        run: npm run build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: server-build-folder
+          path: ./server/build
+  deploy:
+    if: ${{ github.event_name != 'pull_request' }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: server-build-folder
+          path: ./server/build
+      - name: Show Folder Contents
+        run: ls -R build
+      - name: Deploy
+        run: echo "Deploying..."
