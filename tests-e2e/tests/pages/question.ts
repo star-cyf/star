@@ -55,11 +55,11 @@ export class QuestionPage {
   async clickTheQuestionToInsideOfQuestion(URL: string) {
     const isQuestionId = Number(URL.split("/").at(-1));
     if (!isQuestionId) {
-      // if this is same-page model, don't need to click the questionLink,
-      // if this is different-page model, need to click the questionLink
-      // So, can check the URL to see if there is a questionId at the end.
-      // If there is, then the page is at /questions/id, and don't need this function.
-      // If there isn't, then we do need this function.
+      // if this is same-page model, we don't need to click the questionLink,
+      // if this is different-page model, we need to click the questionLink
+      // so, we can check the URL to see if there is a questionId at the end.
+      // if there is, then the page is at /questions/id, and we don't need this function.
+      // if there isn't, then we do need this function.
       const action = new QuestionsPage(this.page);
       await action.scrollDown(this.page, this.questionDiv);
       await this.questionLink.click();
@@ -89,7 +89,7 @@ export class QuestionPage {
     let answerIdDiv = this.page.locator('[data-testid^="answerId-"]');
     const answerId = await answerIdDiv.getAttribute("data-testid");
     answerIdDiv = this.page.getByTestId(answerId!);
-    // valid if there are star answers in the answerId element
+    // valid if there are STAR Answers in the answerId element
     for (const key in answerObject) {
       await expect(answerIdDiv).toContainText(`${answerObject[key]}`);
     }
@@ -121,7 +121,6 @@ export class QuestionPage {
   }
 
   async editAComment(commentId: string, editedCommentText: string) {
-    // console.log(editedCommentText);
     await this.clickTheQuestionToInsideOfQuestion(this.page.url());
     // http://localhost:3000/questions/96
     const commentDiv = this.page.getByTestId(commentId);
@@ -138,7 +137,7 @@ export class QuestionPage {
       timeout: 8000,
     });
     await expect(this.page.getByText(editedCommentText)).toBeVisible();
-    // check if the editedCommentText in the commentIdDiv
+    // check if the editedCommentText is in the commentIdDiv
     await expect(commentDiv).toContainText(`${editedCommentText}`);
   }
 

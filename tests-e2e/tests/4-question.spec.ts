@@ -10,9 +10,14 @@ import { QuestionsPage } from "./pages/questions";
 //   },
 // });
 
-/**========================================================================
- * Same Page Model: Generate a window and run all tests.
- *========================================================================**/
+// ------------------------------------------------------------------
+// Same Page Model: Generate a window and run all the tests
+// ------------------------------------------------------------------
+
+// ------------------------------------------------------------------
+// CRUD
+// Check that creating, reading, updating, deleting Questions, Answers, Comments works correctly
+// ------------------------------------------------------------------
 test.describe.serial("Create, Edit, Delete: Question, Answer, Comment", () => {
   let page: Page;
 
@@ -37,7 +42,7 @@ test.describe.serial("Create, Edit, Delete: Question, Answer, Comment", () => {
 
   // Because the questionId can only be generated during the test run,
   // it is not possible to simply place the page object model in the beforeAll section,
-  // as is done in the questions.spec.ts file.
+  // as is done in the questions.spec.ts file
   test("Can create a new Question", async () => {
     const questionsPage = new QuestionsPage(page);
     questionId = await questionsPage.createAQuestion(dummyData.question);
@@ -57,7 +62,6 @@ test.describe.serial("Create, Edit, Delete: Question, Answer, Comment", () => {
   // [2a] Edit the newly Created Comment
   // [2b] Edit the newly Created Answer
   // [2c] Edit the newly Created Question
-
   test("Can Edit the Created Comment", async () => {
     const questionPage = new QuestionPage(page, questionId);
     await questionPage.editAComment(commentId!, editedDummyData.comment);
@@ -77,7 +81,6 @@ test.describe.serial("Create, Edit, Delete: Question, Answer, Comment", () => {
   // [3a] Delete the newly Created and Edited Comment
   // [3b] Delete the newly Created and Edited Answer
   // [3c] Delete the newly Created and Edited Question
-
   test("Can Delete the Edited Comment", async () => {
     const questionPage = new QuestionPage(page, questionId);
     await questionPage.deleteAComment(commentId!, editedDummyData.comment);

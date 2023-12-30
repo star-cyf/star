@@ -3,10 +3,10 @@
 import { chromium } from "playwright-extra";
 import { test as setup } from "@playwright/test";
 
-// Load the stealth plugin and use defaults (all tricks to hide playwright usage)
+// Load the Stealth plugin and use defaults (hide playwright usage)
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
-// Add the plugin to playwright (any number of plugins can be added)
+// Add the Stealth plugin to playwright
 chromium.use(StealthPlugin());
 
 // Get the Google User Credentials
@@ -15,7 +15,7 @@ const userPassword = process.env.GOOGLE_PASSWORD as string;
 
 setup("login", async () => {
   // Google may be using anti-headless measures,
-  // so headless requests are being flagged as bots.
+  // so headless requests are being flagged as bots
   // https://stackoverflow.com/a/75489051
   const browser = await chromium.launch({ headless: false });
   const page = await browser.newPage();
@@ -27,14 +27,16 @@ setup("login", async () => {
   await page.waitForURL(`https://myaccount.google.com/?pli=1`);
 
   // After being redirected,
-  // it takes a longer time to load because a lot of cookies need to be stored.
+  // it takes a longer time to load because a lot of cookies need to be stored
   await page.waitForTimeout(5000);
 
-  // Open login page on tested site
+  // Navigate to the STAR Application
   await page.goto(`http://localhost:3000`);
+
+  // Click the Login button
   await page.locator("text=Login").click({ delay: 300 });
 
-  // Need to wait for the small window to load completely before we can click it.
+  // Wait for the Google Sign In popup to load completely before clicking it
   await page.waitForTimeout(4000);
 
   // Click the Continue As User button
@@ -43,10 +45,10 @@ setup("login", async () => {
     .locator("#continue-as")
     .click({ delay: 300 });
 
-  // Wait for redirect back to the site after authentication
+  // Wait for the redirect to /profile after successfully logging in
   await page.waitForURL(`http://localhost:3000/profile`);
 
-  // Save signed in state
+  // Save the Cookies & LocalStorage etc in storageState
   await page
     .context()
     .storageState({ path: "./tests/auth/storage-state.json" });

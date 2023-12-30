@@ -12,14 +12,14 @@ import { ProfilePage } from "./pages/profile";
 //   },
 // });
 
-/**========================================================================
- * *                                CRUD
- *   check the feature of creating,
- *   reading, updating, deleting of questions is working
- *========================================================================**/
-/**========================================================================
- * Same Page Model: Generate a window and run all tests.
- *========================================================================**/
+// ------------------------------------------------------------------
+// Same Page Model: Generate a window and run all the tests
+// ------------------------------------------------------------------
+
+// ------------------------------------------------------------------
+// CRUD
+// Check that creating, reading, updating, deleting Questions works correctly
+// ------------------------------------------------------------------
 test.describe.serial("Create, Edit, Delete: Question", () => {
   let page: Page;
   let profilePage: ProfilePage;
@@ -55,10 +55,10 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
   });
 });
 
-/**========================================================================
- * *                            SORT + CRUD
- *   checking the 'createdTime' and 'updatingTime' of sort feature is working
- *========================================================================**/
+// ------------------------------------------------------------------
+// SORT + CRUD
+// Check the Sort feature works correctly with `created` and `updated`
+// ------------------------------------------------------------------
 test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
   let page: Page;
   let profilePage: ProfilePage;

@@ -1,18 +1,20 @@
 import { test as setup } from "@playwright/test";
 
-// Get the Google User Credentials
+// Ggt the Google User Credentials
 const userEmail = process.env.GOOGLE_EMAIL as string;
 const userPassword = process.env.GOOGLE_PASSWORD as string;
 
 setup("login", async ({ page }) => {
-  // Open login page on tested site
+  // Navigate to the STAR Application
   await page.goto(`http://localhost:3000`);
+
+  // Click the Login button
   await page.locator("text=Login").click({ delay: 300 });
 
-  // Need to wait for the small window to load completely before we can click it.
+  // Wait for the Google Sign In popup to load completely before clicking it
   await page.waitForTimeout(4000);
 
-  // Click the Continue User button
+  // Click the Continue As User button
   await page
     .frameLocator("#credential_picker_container > iframe")
     .locator("#continue")
@@ -24,12 +26,11 @@ setup("login", async ({ page }) => {
   await popupPage.fill('#password >> input[type="password"]', userPassword);
   await popupPage.locator("button >> nth=1").click({ delay: 300 });
 
-  // Wait for redirect back to the site after authentication and store the cookies
+  // Wait for the redirect to /profile after successfully logging in
   await page.waitForURL(`http://localhost:3000/profile`);
 
-  // Save signed in state
+  // Save the Cookies & LocalStorage in storageState
   await page
     .context()
     .storageState({ path: "./tests/auth/storage-state.json" });
-  // await browser.close();
 });

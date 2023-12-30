@@ -43,7 +43,7 @@ export class QuestionsPage {
   }
 
   async scrollDown(page: Page, locator: Locator) {
-    // has to add 'page.evaluate' instead of 'this.page.evaluate', otherwise got undefined
+    // had to add 'page.evaluate' instead of 'this.page.evaluate' otherwise it returns undefined
     while (!(await locator.isVisible())) {
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     }
@@ -66,22 +66,23 @@ export class QuestionsPage {
       timeout: 8000,
     });
     const questionLink = this.page.getByText(questionText);
-    // if cant find the text of questionLink, will scrollDown
+    // if we can't find the text of questionLink, we will scrollDown
     await this.scrollDown(this.page, questionLink);
     await questionLink.waitFor({
       state: "visible",
       timeout: 8000,
     });
-    // if comment out this code line, questionUrl will return null
+    // this is needed, otherwise questionURL returns null
     await this.page.waitForTimeout(300);
     const questionUrl = await this.page
       .getByText(questionText)
-      .getAttribute("href"); // '/questions/151'
+      .getAttribute("href");
+    // '/questions/151'
     const questionId = `questionId-${questionUrl?.split("/").at(-1)}`; // questionId-151
     const questionDiv = this.page.getByTestId(questionId);
-    // after creating question, expect to see the question link in the page
+    // after creating a question, we expect to see the question link in the page
     await expect(questionDiv).toBeVisible();
-    // expect the questionDiv 'includes' dummyData.question
+    // expect the questionDiv 'includes' the dummyData.question
     await expect(questionDiv).toContainText(`${questionText}`);
     return questionId;
   }
@@ -102,7 +103,7 @@ export class QuestionsPage {
 
   async editAQuestion(questionId: string, editedQuestionText: string) {
     const questionDiv = this.page.locator(`[data-testid=${questionId}]`);
-    // if cant find the questionDiv, will scrollDown
+    // if we cant find the questionDiv, we scrollDown
     await this.scrollDown(this.page, questionDiv);
     await questionDiv.locator('svg[data-testid="EditOutlinedIcon"]').click();
     await this.questionTextarea.fill(editedQuestionText);
@@ -148,7 +149,7 @@ export class QuestionsPage {
 
   async deleteAQuestion(questionId: string, editedQuestionText: string) {
     const questionDiv = this.page.locator(`[data-testid=${questionId}]`);
-    // if cant find the questionDiv, will scrollDown
+    // if we cant find the questionDiv, we scrollDown
     await this.scrollDown(this.page, questionDiv);
     await questionDiv.locator('svg[data-testid="DeleteOutlineIcon"]').click();
     await this.page
@@ -200,7 +201,7 @@ export class QuestionsPage {
 
   async generateGrabObj() {
     const grabObj: QuestionObjType = this.createQuestionObj();
-    // Note: If there are others questions, this testing will be failed
+    // Note: If there are others questions, this test will fail
     const allQuestionDivs = await this.page.getByTestId(/questionId-\d/).all();
     for (let i = 0; i < allQuestionDivs.length; i++) {
       const questionDiv = this.page.getByTestId(/questionId-\d/).nth(i);
@@ -231,7 +232,7 @@ export class QuestionsPage {
       await this.scrollDown(this.page, questionIdDiv);
     }
     const grabObj = await this.generateGrabObj();
-    // because updated = new to old so have to use reverse the updatedObj
+    // because updated = new to old so have to reverse the updatedObj
     this.reverseQuestionObj(updatedObj);
     expect(grabObj).toEqual(updatedObj);
   }
@@ -251,7 +252,7 @@ export class QuestionsPage {
     for (let i = 0; i < 5; i++) {
       const searchText = (i + 1).toString();
       await this.searchField.fill(searchText);
-      // wait for the 'loading...' of search
+      // wait for the 'loading...' of the search results
       await this.page.waitForTimeout(2000);
       const grabObj = await this.generateGrabObj();
       const filteredArr = questionObj.text.filter((text) =>
