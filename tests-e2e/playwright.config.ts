@@ -34,7 +34,8 @@ export default defineConfig({
     ["html", { outputFolder: "./test-reports", open: "never" }],
   ],
 
-  // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions
+  // Shared settings for all the projects below.
+  // may See https://playwright.dev/docs/api/class-testoptions
   use: {
     //  Base URL to use in actions like `await page.goto('/')`
     // baseURL: "http://localhost:3000",
@@ -43,7 +44,7 @@ export default defineConfig({
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
 
-    // storageState: "./src/utils/storage-state.json",
+    // storageState: "",
   },
 
   // Configure projects for major browsers
@@ -58,7 +59,7 @@ export default defineConfig({
         : "chrome-login-google-star.ts",
       use: {
         ...devices["Desktop Chrome"],
-        headless: false, // Chrome must disable headless.
+        headless: false, // Chrome must run headed to be able to login
       },
     },
     //
@@ -84,33 +85,13 @@ export default defineConfig({
       name: "Basic Testing",
       dependencies: ["setup - Chrome Login (Google & STAR)"],
       testDir: "./tests/",
-      // testMatch: "2-questions.spec.ts",
       teardown: "teardown - Delete All Questions",
       fullyParallel: false,
-
       use: {
         ...devices["Desktop Chrome"],
-        // Persist state between test runs
-        // Defines which browser context storage state gets shared between runs
-        // This allows you to persist things like cookies, local storage, session storage etc. between test runs
         baseURL: "http://localhost:3000",
-        // launchOptions: {
-        //   slowMo: 2000,
-        // },
         storageState: "./tests/auth/storage-state.json",
       },
     },
-    // {
-    //   name: "Playground - Create Multiple Questions (without any expect)",
-    //   dependencies: validStorageState()
-    //     ? undefined
-    //     : ["setup - Chrome Login (Google & STAR)"],
-    //   testMatch: "playground-create-questions.ts",
-    //   testDir: "./tests/utils",
-    //   use: {
-    //     ...devices["Desktop Chrome"],
-    //     storageState: "./tests/auth/storage-state.json",
-    //   },
-    // },
   ],
 });

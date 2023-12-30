@@ -1,6 +1,4 @@
-//it is equal client/src/pages/QuestionsPage.tsx
-//in other word, only can see the page of Questions
-//localhost:3000/questions/
+// For Tests on: client/src/pages/QuestionsPage.tsx
 import { expect, type Locator, type Page } from "@playwright/test";
 import { QuestionObjType } from "../utils/dummy-data";
 
@@ -55,66 +53,49 @@ export class QuestionsPage {
   async createAQuestion(questionText: string) {
     // click the button Add a Question
     await this.addAQuestionButton.click();
-
     // fill the dummyData.question in the textarea of #question
     await this.questionTextarea.fill(questionText);
-
     // click the button Add Question
     await this.addQuestionButton.click();
-
     await this.questionTextarea.waitFor({
       state: "hidden",
       timeout: 8000,
     });
-
     // check if the successful message is hidden in 8s
     await this.questionSuccessfulMessage.waitFor({
       state: "hidden",
       timeout: 8000,
     });
     const questionLink = this.page.getByText(questionText);
-
     // if cant find the text of questionLink, will scrollDown
     await this.scrollDown(this.page, questionLink);
-
     await questionLink.waitFor({
       state: "visible",
       timeout: 8000,
     });
-
     // if comment out this code line, questionUrl will return null
     await this.page.waitForTimeout(300);
-
     const questionUrl = await this.page
       .getByText(questionText)
       .getAttribute("href"); // '/questions/151'
-    // console.log(`questionText: ${questionText}`);
-    // console.log(`questionUrl: ${questionUrl}`);
-
     const questionId = `questionId-${questionUrl?.split("/").at(-1)}`; // questionId-151
     const questionDiv = this.page.getByTestId(questionId);
-
     // after creating question, expect to see the question link in the page
     await expect(questionDiv).toBeVisible();
-
     // expect the questionDiv 'includes' dummyData.question
     await expect(questionDiv).toContainText(`${questionText}`);
-
     return questionId;
   }
 
   async createMultiQuestion(questionText: string, questionNum: number) {
     const obj = this.createQuestionObj();
     const reversedObj = this.createQuestionObj();
-
     for (let i = 0; i < questionNum; i++) {
       const text = `${questionText} (${i + 1} times loop)`;
       const id = await this.createAQuestion(text);
-
       this.pushQuestionObj(obj, id, text);
       this.pushQuestionObj(reversedObj, id, text);
     }
-
     this.reverseQuestionObj(reversedObj);
     // await this.checkIfOrderByCreatedTime(reversedObj);
     return { obj, reversedObj };
@@ -122,14 +103,11 @@ export class QuestionsPage {
 
   async editAQuestion(questionId: string, editedQuestionText: string) {
     const questionDiv = this.page.locator(`[data-testid=${questionId}]`);
-
     // if cant find the questionDiv, will scrollDown
     await this.scrollDown(this.page, questionDiv);
     await questionDiv.locator('svg[data-testid="EditOutlinedIcon"]').click();
-
     await this.questionTextarea.fill(editedQuestionText);
     await this.editQuestionButton.click();
-
     // check if the editDummy.question is visible in 8s
     await this.page
       .getByText(editedQuestionText)
@@ -139,9 +117,7 @@ export class QuestionsPage {
       state: "hidden",
       timeout: 8000,
     });
-
     await expect(this.page.getByText(editedQuestionText)).toBeVisible();
-
     // check if the editedDummyData.question in the questionIdDiv
     await expect(questionDiv).toContainText(editedQuestionText);
   }
@@ -160,34 +136,24 @@ export class QuestionsPage {
           } times loop)`
       ),
     };
-    // console.log(`-----------`);
-    // console.log(`editObj`);
-    // console.log(editedObj);
-    // console.log(`-----------`);
-
     for (const id of editedObj.id) {
       const index: number = editedObj.id.indexOf(id);
       const editedId: string = editedObj.id[index];
       const editedText: string = editedObj.text[index];
       await this.editAQuestion(editedId, editedText);
     }
-
     await this.checkIfOrderByUpdatedTime(editedObj);
     return editedObj;
   }
 
   async deleteAQuestion(questionId: string, editedQuestionText: string) {
     const questionDiv = this.page.locator(`[data-testid=${questionId}]`);
-
     // if cant find the questionDiv, will scrollDown
     await this.scrollDown(this.page, questionDiv);
-
     await questionDiv.locator('svg[data-testid="DeleteOutlineIcon"]').click();
-
     await this.page
       .getByText(editedQuestionText)
       .waitFor({ state: "hidden", timeout: 8000 });
-
     await expect(this.page.getByText(editedQuestionText)).not.toBeVisible();
     await expect(questionDiv).not.toBeVisible();
   }
@@ -222,7 +188,6 @@ export class QuestionsPage {
   //     .getByTestId(questionId)
   //     .getByText(/created today, at \d{2}:\d{2}[APMapm]+$/i)
   //     .innerText();
-
   //   return createdTime;
   // }
 
@@ -235,15 +200,12 @@ export class QuestionsPage {
 
   async generateGrabObj() {
     const grabObj: QuestionObjType = this.createQuestionObj();
-
     // Note: If there are others questions, this testing will be failed
     const allQuestionDivs = await this.page.getByTestId(/questionId-\d/).all();
-
     for (let i = 0; i < allQuestionDivs.length; i++) {
       const questionDiv = this.page.getByTestId(/questionId-\d/).nth(i);
       const id = await questionDiv.getAttribute("data-testid");
       const text = await questionDiv.locator("a").textContent();
-
       this.pushQuestionObj(grabObj, id!, text!);
     }
     return grabObj;
@@ -256,14 +218,11 @@ export class QuestionsPage {
     // console.log(`----------------`);
     await this.sortSelect.click();
     await this.createdOption.click();
-
     for (const id of updatedObj.id) {
       const questionIdDiv = this.page.getByTestId(id);
       await this.scrollDown(this.page, questionIdDiv);
     }
-
     const grabObj = await this.generateGrabObj();
-
     // console.log(grabObj);
     // console.log(updatedObj);
     expect(grabObj).toEqual(updatedObj);
@@ -271,27 +230,13 @@ export class QuestionsPage {
 
   // sort
   async checkIfOrderByUpdatedTime(updatedObj: QuestionObjType) {
-    // console.log(`-------------`);
-    // console.log(`run checkIfOrderByUpdatedTime`);
-    // console.log(updatedObj);
-    // console.log(`-------------`);
-
     await this.sortSelect.click();
     await this.updatedOption.click();
-
     for (const id of updatedObj.id) {
       const questionIdDiv = this.page.getByTestId(id);
-      // console.log(questionIdDiv);
       await this.scrollDown(this.page, questionIdDiv);
     }
-
     const grabObj = await this.generateGrabObj();
-
-    // console.log(`-------------`);
-    // console.log(grabObj);
-    // console.log(updatedObj);
-    // console.log(`-------------`);
-
     // because updated = new to old so have to use reverse the updatedObj
     this.reverseQuestionObj(updatedObj);
     expect(grabObj).toEqual(updatedObj);
@@ -299,14 +244,12 @@ export class QuestionsPage {
 
   async createMultiQuestionWithSearch(questionNum: number) {
     const obj = this.createQuestionObj();
-
     for (let i = 0; i < questionNum; i++) {
       const random = "#" + Math.random().toString(16).slice(2, 8);
       const text = `${random} This is a test Question (${i + 1} times loop)`;
       const id = await this.createAQuestion(text);
       this.pushQuestionObj(obj, id, text);
     }
-
     return obj;
   }
 
@@ -320,10 +263,6 @@ export class QuestionsPage {
       const filteredArr = questionObj.text.filter((text) =>
         text.includes(searchText)
       );
-      // console.log(`filteredArr`);
-      // console.log(filteredArr);
-      // console.log(`grabObj`);
-      // console.log(grabObj.text);
       expect(filteredArr).toEqual(grabObj.text);
     }
     await this.searchField.fill("");

@@ -1,3 +1,4 @@
+// For Tests on: client/src/pages/ProfilePage.tsx
 import { Locator, type Page, expect } from "@playwright/test";
 import { QuestionsPage } from "./questions";
 import { QuestionObjType } from "../utils/dummy-data";
@@ -19,10 +20,8 @@ export class ProfilePage {
 
   async createAQuestion(questionText: string) {
     await this.questionsButton.click();
-
     const action = new QuestionsPage(this.page);
     this.questionId = await action.createAQuestion(questionText);
-
     await this.profileButton.click();
     expect(await this.profileQuestionCount.textContent()).toBe("1");
     return this.questionId;
@@ -39,6 +38,7 @@ export class ProfilePage {
     const action = new QuestionsPage(this.page);
     await action.deleteAQuestion(questionId, editedQuestionText);
   }
+
   async createMultiQuestion(questionText: string, questionNum: number) {
     await this.questionsButton.click();
     const action = new QuestionsPage(this.page);

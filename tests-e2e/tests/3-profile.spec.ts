@@ -30,31 +30,26 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
 
     profilePage = new ProfilePage(page);
   });
+
   test.afterAll(async () => {
     await page.close();
   });
 
   let questionId: string;
 
-  // -------- Create ----------
-  // [1] Create 3 new Question
-
+  // [1] Create 3 new Questions
   test("Can create a new Question", async () => {
     await page.locator('a[href="/questions"]').click();
     questionId = await profilePage.createAQuestion(dummyData.question);
   });
 
-  // -------- Edit ----------
   // [2] Edit the 3 newly Created Questions
-
   test("Can Edit the Created Question", async () => {
     await page.locator('a[href="/profile"]').click();
     await profilePage.editAQuestion(questionId, editedDummyData.question);
   });
 
-  // -------- Delete ----------
   // [3] Delete the 3 newly Created and Edited Questions
-
   test("Can Delete the Edited Question", async () => {
     await profilePage.deleteAQuestion(questionId, editedDummyData.question);
   });
@@ -74,13 +69,12 @@ test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
 
     profilePage = new ProfilePage(page);
   });
+
   test.afterAll(async () => {
     await page.close();
   });
 
-  // -------- Create ----------
   // [1] Create 3 new Questions
-
   const questionNum = 3;
   let obj: QuestionObjType;
   let editedObj: QuestionObjType;
@@ -92,16 +86,12 @@ test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
     );
   });
 
-  // -------- Edit ----------
   // [2] Edit the 3 newly Created Questions
-
   test("Can Edit the 3 Created Questions & can sort by updatedTime", async () => {
     editedObj = await profilePage.editMultiQuestion(obj);
   });
 
-  // -------- Delete ----------
   // [3] Delete the 3 newly Created and Edited Questions
-
   test("Can Delete the 3 Edited Questions", async () => {
     await profilePage.deleteMultiQuestion(editedObj!);
   });

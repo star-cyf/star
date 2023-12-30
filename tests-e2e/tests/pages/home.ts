@@ -1,6 +1,4 @@
-//it is equal client/src/pages/QuestionsPage.tsx
-//in other word, only can see the page of Questions
-//localhost:3000/questions/
+// For Tests on: client/src/pages/HomePage.tsx
 import { expect, type Locator, type Page } from "@playwright/test";
 
 export class HomePage {
@@ -28,11 +26,13 @@ export class HomePage {
   async checkIfHasTitle() {
     await expect(this.page).toHaveTitle(/STAR/);
   }
+
   async clickHomeButton() {
     await expect(this.homeButton).toBeVisible();
     await this.homeButton.click();
     await expect(this.page.getByText("Guarantee")).toBeVisible();
   }
+
   async clickAboutButton() {
     await expect(this.aboutButton).toBeVisible();
     await this.aboutButton.click();
@@ -40,21 +40,25 @@ export class HomePage {
       this.page.getByText("The STAR Method", { exact: true })
     ).toBeVisible();
   }
+
   async clickProfileButton() {
     await expect(this.profileButton).toBeVisible();
     await this.profileButton.click();
     await expect(this.page.getByText("Your Profile")).toBeVisible();
   }
+
   async clickQuestionsButton() {
     await expect(this.questionsButton).toBeVisible();
     await this.questionsButton.click();
     await expect(this.page.getByText("All Questions")).toBeVisible();
   }
+
   async clickUsersButton() {
     await expect(this.usersButton).toBeVisible();
     await this.usersButton.click();
     await expect(this.page.getByText("Users Page")).toBeVisible();
   }
+
   async clickLogoutButton() {
     await expect(this.logoutButton).toBeVisible();
     await this.logoutButton.click();

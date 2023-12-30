@@ -37,66 +37,21 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
 
   let questionId: string;
 
-  // -------- Create ----------
   // [1] Create a new Question
-
-  // test("Can create a new Question", async () => {
-  //   questionId = await questionsPage.createAQuestion(dummyData.question);
-  // });
   test("Can create a new Question", async () => {
     questionId = await questionsPage.createAQuestion(dummyData.question);
   });
 
-  // -------- Edit ----------
   // [2] Edit the newly Created Question
-
   test("Can Edit the Created Question", async () => {
     await questionsPage.editAQuestion(questionId, editedDummyData.question);
   });
 
-  // -------- Delete ----------
   // [3] Delete the newly Created and Edited Question
-
   test("Can Delete the Edited Question", async () => {
     await questionsPage.deleteAQuestion(questionId, editedDummyData.question);
   });
 });
-
-/**========================================================================
- * Different Windows Model: Generate multiple windows and run each test separately.
- *========================================================================**/
-// test.describe.serial("Create, Edit, Delete: Question", () => {
-//   test.beforeEach(async ({ page }) => {
-//     await page.goto("http://localhost:3000");
-//     await page.locator('a[href="/questions"]').click();
-//   });
-
-//   let questionId: string;
-
-//   // -------- Create ----------
-//   // [1] Create a new Question
-
-//   test("Can create a new Question", async ({ page }) => {
-//     const questionsPage = new QuestionsPage(page);
-//     questionId = await questionsPage.createAQuestion(dummyData.question);
-//   });
-
-//   // -------- Edit ----------
-//   // [2] Edit the newly Created Question
-
-//   test("Can Edit the Created Question", async ({ page }) => {
-//     const questionsPage = new QuestionsPage(page);
-//     await questionsPage.editAQuestion(questionId, editedDummyData.question);
-//   });
-
-//   // -------- Delete ----------
-//   // [3] Delete the newly Created and Edited Question
-
-//   test("Can Delete the Edited Question", async ({ page }) => {
-//     const questionsPage = new QuestionsPage(page);
-//     await questionsPage.deleteAQuestion(questionId, editedDummyData.question);
-//   });
-// });
 
 /**========================================================================
  * *                            SORT + CRUD
@@ -112,13 +67,12 @@ test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
     await page.locator('a[href="/questions"]').click();
     questionsPage = new QuestionsPage(page);
   });
+
   test.afterAll(async () => {
     await page.close();
   });
 
-  // -------- Create ----------
   // [1] Create 3 new Questions
-
   const questionNum = 3;
   let obj: QuestionObjType;
   let editedObj: QuestionObjType;
@@ -132,16 +86,12 @@ test.describe.serial("Create, Edit, Delete, Sort: 3 Questions", () => {
     await questionsPage.checkIfOrderByCreatedTime(reversedObj);
   });
 
-  // -------- Edit ----------
   // [2] Edit the newly Created Question
-
   test("Can Edit the 3 Created Questions & can sort by updatedTime", async () => {
     editedObj = await questionsPage.editMultiQuestion(obj);
   });
 
-  // -------- Delete ----------
   // [3] Delete the newly Created and Edited Question
-
   test("Can Delete the 3 Edited Questions", async () => {
     await questionsPage.deleteMultiQuestion(editedObj!);
   });
@@ -161,13 +111,12 @@ test.describe.serial("Create, Delete, Search: 5 Questions", () => {
     await page.locator('a[href="/questions"]').click();
     questionsPage = new QuestionsPage(page);
   });
+
   test.afterAll(async () => {
     await page.close();
   });
 
-  // -------- Create ----------
   // [1] Create 3 new Questions
-
   const questionNum = 5;
   let obj: QuestionObjType;
 
@@ -177,9 +126,7 @@ test.describe.serial("Create, Delete, Search: 5 Questions", () => {
     await questionsPage.checkWithSearch(obj);
   });
 
-  // -------- Delete ----------
-  // [3] Delete the newly Created and Edited Questions
-
+  // [3] Delete the Created Questions
   test("Can Delete the 5 Edited Questions", async () => {
     await questionsPage.deleteMultiQuestion(obj);
   });
