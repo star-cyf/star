@@ -27,7 +27,7 @@ import {
 } from "../types/props";
 
 const QuestionForm = (props: QuestionFormProps) => {
-  const { sort, setShowAddQuestionForm } = props as AddQuestionFormProps;
+  const { setShowAddQuestionForm } = props as AddQuestionFormProps; // sort
   const { questionId, originalQuestion, setShowUpdateQuestionForm } =
     props as UpdateQuestionFormProps;
 
@@ -51,7 +51,7 @@ const QuestionForm = (props: QuestionFormProps) => {
     mutationFn: () =>
       questionId ? putQuestion(questionId, question) : postQuestion(question),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["questions", sort] });
+      queryClient.invalidateQueries({ queryKey: ["questions"] });
       setQuestion("");
       setQuestionValidation(undefined);
       setTimeout(() => {
@@ -107,7 +107,7 @@ const QuestionForm = (props: QuestionFormProps) => {
             </Typography>
           </Box>
           <TextareaAutosize
-            id="situation"
+            id="question"
             aria-label="Add your Question"
             minRows={2}
             placeholder="Please carefully type out your Question"

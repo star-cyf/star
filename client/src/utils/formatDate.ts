@@ -2,11 +2,9 @@ const formatDate = (postgresqlTimestamp: string) => {
   const now = new Date();
   const date = new Date(postgresqlTimestamp);
 
-  const millisecondsDifference = now.getTime() - date.getTime();
-
-  const daysDifference = Math.floor(
-    millisecondsDifference / (24 * 60 * 60 * 1000)
-  );
+  const daysDifference =
+    Math.floor(now.getTime() / (24 * 60 * 60 * 1000)) -
+    Math.floor(date.getTime() / (24 * 60 * 60 * 1000));
 
   let partOne;
 

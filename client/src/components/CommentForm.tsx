@@ -110,7 +110,7 @@ const CommentForm = (props: CommentFormProps) => {
             </Typography>
           </Box>
           <TextareaAutosize
-            id="situation"
+            id="comment"
             aria-label="Add your Comment"
             minRows={2}
             placeholder="Please carefully type out your Comment"

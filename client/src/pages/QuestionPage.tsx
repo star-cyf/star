@@ -56,7 +56,7 @@ const QuestionPage = () => {
                 flexWrap={"wrap"}
                 alignItems={"center"}
                 gap={2}>
-                {questionData?.answers.length > 0 && (
+                {questionData?.answers?.length > 0 && (
                   <Box
                     display={"flex"}
                     flexDirection={{ xs: "column", sm: "row" }}
@@ -81,7 +81,7 @@ const QuestionPage = () => {
               </Box>
             </Box>
             <Box display={"grid"} gap={2}>
-              {questionData.answers.map((answerData: AnswerData) => {
+              {questionData?.answers.map((answerData: AnswerData) => {
                 return <Answer key={answerData.id} answerData={answerData} />;
               })}
             </Box>

@@ -53,7 +53,7 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
       console.error(error);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["questions", questionId] });
+      queryClient.invalidateQueries({ queryKey: ["questions"] });
       if (currentPage === "individualQuestionPage") {
         navigate("/questions");
       }
@@ -76,7 +76,8 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
           sx={{
             backdropFilter: consistentBackdropFilter,
           }}
-          className="individual-question">
+          className="individual-question"
+          data-testid={`questionId-${questionData?.id}`}>
           <Box
             display={"flex"}
             flexWrap={"wrap"}

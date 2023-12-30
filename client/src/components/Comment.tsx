@@ -64,7 +64,8 @@ const Comment = ({
         boxShadow={consistentBoxShadow}
         sx={{
           backdropFilter: consistentBackdropFilter,
-        }}>
+        }}
+        data-testid={`commentId-${commentData?.id}`}>
         <Box
           display={"flex"}
           flexWrap={"wrap"}

@@ -15,9 +15,11 @@ export default defineConfig({
     //     secure: false,
     //   },
     // },
+    host: true,
   },
   preview: {
     port: 3000,
+    host: true,
   },
   build: {
     outDir: "build",

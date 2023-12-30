@@ -1,0 +1,75 @@
+name: EndtoEndTests Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: test
+    env:
+      NODE_ENV: ${{ vars.NODE_ENV }}
+      # database
+      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      DATABASE_PORT: ${{ vars.DATABASE_PORT }}
+      DATABASE_USER: ${{ secrets.DATABASE_USER }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_NAME: ${{ vars.DATABASE_NAME }}
+      # server
+      SERVER_PORT: ${{ vars.SERVER_PORT }}
+      GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      # client
+      VITE_SERVER_URL: ${{ vars.VITE_SERVER_URL }}
+      VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+      # tests-e2e
+      GOOGLE_EMAIL: ${{ secrets.GOOGLE_EMAIL }}
+      GOOGLE_PASSWORD: ${{ secrets.GOOGLE_PASSWORD }}
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: ${{ env.DATABASE_USER }}
+          POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+          POSTGRES_DB: ${{ env.DATABASE_NAME }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Install Client Dependencies
+        working-directory: ./client
+        run: npm ci
+      - name: Install Server Dependencies
+        working-directory: ./server
+        run: npm ci
+      - name: Install EndtoEndTests Dependencies
+        working-directory: ./tests-e2e
+        run: npm ci
+      - name: Install Playwright Browsers
+        working-directory: ./tests-e2e
+        run: npx playwright install --with-deps chromium
+      - name: Run Playwright Tests
+        working-directory: ./tests-e2e
+        run: xvfb-run npm start
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: |
+            ./tests-e2e/test-results/
+            ./tests-e2e/test-reports/
+          retention-days: 1

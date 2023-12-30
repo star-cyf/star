@@ -1,6 +1,9 @@
 import { createLogger, transports, format } from "winston";
 
+const logLevel = process.env.NODE_ENV === "test" ? "error" : "info";
+
 export const logger = createLogger({
+  level: logLevel,
   transports: [new transports.Console()],
   format: format.combine(
     format.timestamp(),
