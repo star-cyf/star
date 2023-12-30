@@ -1,4 +1,4 @@
-import { Page, test } from "@playwright/test";
+import { test, type Page } from "@playwright/test";
 import { dummyData, editedDummyData } from "./utils/dummy-data";
 import { QuestionPage } from "./pages/question";
 import { QuestionsPage } from "./pages/questions";
@@ -6,9 +6,10 @@ import { QuestionsPage } from "./pages/questions";
 // test.use({
 //   headless: false,
 //   launchOptions: {
-//     slowMo: 1000,
+//     slowMo: 500,
 //   },
 // });
+
 /**========================================================================
  * Same Page Model: Generate a window and run all tests.
  *========================================================================**/

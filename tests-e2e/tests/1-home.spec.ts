@@ -3,14 +3,14 @@ import { HomePage } from "./pages/home";
 
 // test.use({
 //   launchOptions: {
-//     slowMo: 2000,
+//     slowMo: 500,
 //   },
 // });
 
 /**========================================================================
  * Same Page Model: Generate a window and run all tests.
  *========================================================================**/
-test.describe.serial("Login with coookies", () => {
+test.describe.serial("Login with cookies", () => {
   let page: Page;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
@@ -43,7 +43,7 @@ test.describe.serial("Login with coookies", () => {
   });
 });
 
-test.describe.serial("Login without coookies", () => {
+test.describe.serial("Login without cookies", () => {
   let page: Page;
   test.use({ storageState: { cookies: [], origins: [] } });
   test.beforeAll(async ({ browser }) => {
@@ -80,7 +80,7 @@ test.describe.serial("Login without coookies", () => {
 /**========================================================================
  * Different Windows Model: Generate multiple windows and run each test separately.
  *========================================================================**/
-// test.describe("Login with coookies", () => {
+// test.describe("Login with cookies", () => {
 //   test.beforeEach(async ({ page }) => {
 //     await page.goto("http://localhost:3000");
 //   });
@@ -108,7 +108,7 @@ test.describe.serial("Login without coookies", () => {
 //   });
 // });
 
-// test.describe("Login without coookies", () => {
+// test.describe("Login without cookies", () => {
 //   test.use({ storageState: { cookies: [], origins: [] } });
 //   test.beforeEach(async ({ page }) => {
 //     await page.goto("http://localhost:3000");

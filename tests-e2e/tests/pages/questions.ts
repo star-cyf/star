@@ -88,8 +88,8 @@ export class QuestionsPage {
     const questionUrl = await this.page
       .getByText(questionText)
       .getAttribute("href"); // '/questions/151'
-    console.log(`questionText: ${questionText}`);
-    console.log(`questionUrl: ${questionUrl}`);
+    // console.log(`questionText: ${questionText}`);
+    // console.log(`questionUrl: ${questionUrl}`);
 
     const questionId = `questionId-${questionUrl?.split("/").at(-1)}`; // questionId-151
     const questionDiv = this.page.getByTestId(questionId);

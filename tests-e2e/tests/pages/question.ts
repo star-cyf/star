@@ -55,8 +55,8 @@ export class QuestionPage {
   }
 
   async clickTheQuestionToInsideOfQuestion(URL: string) {
-    const isQuestioId = Number(URL.split("/").at(-1));
-    if (!isQuestioId) {
+    const isQuestionId = Number(URL.split("/").at(-1));
+    if (!isQuestionId) {
       // if this is same-page model, dont need to click the questionLink,
       // if this is different-page model, need to click the questionLink
       // So, can check the URL to see if there is a questionId at the end.
@@ -138,7 +138,8 @@ export class QuestionPage {
   }
 
   async editAComment(commentId: string, editedCommentText: string) {
-    console.log(editedCommentText);
+    // console.log(editedCommentText);
+
     await this.clickTheQuestionToInsideOfQuestion(this.page.url());
     // http://localhost:3000/questions/96
 

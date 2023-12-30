@@ -1,4 +1,4 @@
-import { type Page, test, expect } from "@playwright/test";
+import { test, type Page } from "@playwright/test";
 import {
   QuestionObjType,
   dummyData,
@@ -8,18 +8,19 @@ import { QuestionsPage } from "./pages/questions";
 
 // test.use({
 //   launchOptions: {
-//     slowMo: 400,
+//     slowMo: 500,
 //   },
 // });
 
 /**========================================================================
  * *                                CRUD
  *   check the feature of creating,
- *   reading, updating, deleteing of questions is working
+ *   reading, updating, deleting of questions is working
  *========================================================================**/
-/**-------------------------------------------------------
+
+/**========================================================================
  * Same Page Model: Generate a window and run all tests.
- *-------------------------------------------------------**/
+ *========================================================================**/
 test.describe.serial("Create, Edit, Delete: Question", () => {
   let page: Page;
   let questionsPage: QuestionsPage;

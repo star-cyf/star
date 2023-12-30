@@ -4,6 +4,7 @@ import { dummyData } from "./dummy-data";
 // Created this creating playground to test the teardown function
 // and make it easier to create Questions.
 const num = 15;
+
 for (let i = 0; i < num; i++) {
   play(`Creating: ${i} questions`, async ({ page }) => {
     await page.goto("http://localhost:3000");
