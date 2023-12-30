@@ -81,8 +81,6 @@ jobs:
         run: npm run prettier
       - name: Lint Code
         run: npm run lint
-      - name: Check Environment # for Debugging
-        run: env
       - name: Database Migration
         run: npm run database:migration
       - name: Test Code

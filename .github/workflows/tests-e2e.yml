@@ -1,4 +1,4 @@
-name: End to End Tests Workflow
+name: EndtoEndTests Workflow
 
 on:
   push:
@@ -50,15 +50,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-      - name: Check Environment # for Debugging
-        run: env
       - name: Install Client Dependencies
         working-directory: ./client
         run: npm ci
       - name: Install Server Dependencies
         working-directory: ./server
         run: npm ci
-      - name: Install End to End Test Dependencies
+      - name: Install EndtoEndTests Dependencies
         working-directory: ./tests-e2e
         run: npm ci
       - name: Install Playwright Browsers
@@ -66,7 +64,6 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run Playwright Tests
         working-directory: ./tests-e2e
-        # run: npx playwright test
         run: xvfb-run npm start
       - uses: actions/upload-artifact@v4
         if: always()
