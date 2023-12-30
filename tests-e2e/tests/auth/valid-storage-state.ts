@@ -27,79 +27,67 @@ interface LocalStorageItem {
 }
 
 const parseStorageStateJson = (filePath: string) => {
-  try {
-    const storageStateFile = readFileSync(filePath, "utf8");
-    const storageStateData = JSON.parse(storageStateFile);
+  const storageStateFile = readFileSync(filePath, "utf8");
+  const storageStateData = JSON.parse(storageStateFile);
 
-    const keys = Object.keys(storageStateData);
-    if (keys.length === 0) {
-      throw new Error("storage-state.json IS EMPTY ❌");
-    }
-
-    if (!keys.includes("cookies")) {
-      throw new Error("storage-state.json IS MISSING 'cookies' ❌");
-    }
-
-    if (!keys.includes("origins")) {
-      throw new Error("storage-state.json IS MISSING 'origins' ❌");
-    }
-
-    const authenticatedUser = storageStateData.origins.some(
-      (origin: Origin) => {
-        return origin.localStorage.find(
-          (localStorageItem: LocalStorageItem) => {
-            return localStorageItem.name === "authenticatedUser";
-          }
-        );
-      }
-    );
-
-    if (!authenticatedUser) {
-      throw new Error(
-        "storage-state.json IS MISSING 'localStorage' 'authenticatedUser' ❌"
-      );
-    }
-
-    return storageStateData;
-  } catch (error) {
-    throw error;
+  const keys = Object.keys(storageStateData);
+  if (keys.length === 0) {
+    throw new Error("storage-state.json IS EMPTY ❌");
   }
+
+  if (!keys.includes("cookies")) {
+    throw new Error("storage-state.json IS MISSING 'cookies' ❌");
+  }
+
+  if (!keys.includes("origins")) {
+    throw new Error("storage-state.json IS MISSING 'origins' ❌");
+  }
+
+  const authenticatedUser = storageStateData.origins.some((origin: Origin) => {
+    return origin.localStorage.find((localStorageItem: LocalStorageItem) => {
+      return localStorageItem.name === "authenticatedUser";
+    });
+  });
+
+  if (!authenticatedUser) {
+    throw new Error(
+      "storage-state.json IS MISSING 'localStorage' 'authenticatedUser' ❌"
+    );
+  }
+
+  return storageStateData;
 };
 
 const getSoonestExpiry = (storageState: StorageState) => {
   const expiresValues: number[] = [];
 
-  try {
-    Object.keys(storageState).forEach((key) => {
-      if (key === "cookies") {
-        storageState[key].forEach((cookie: Cookie) => {
-          const cookieExpires = cookie.expires;
-          expiresValues.push(Math.floor(cookieExpires));
+  Object.keys(storageState).forEach((key) => {
+    if (key === "cookies") {
+      storageState[key].forEach((cookie: Cookie) => {
+        const cookieExpires = cookie.expires;
+        expiresValues.push(Math.floor(cookieExpires));
+      });
+    } else if (key === "origins") {
+      storageState[key].forEach((origin: Origin) => {
+        origin.localStorage.forEach((localStorageItem: LocalStorageItem) => {
+          if (localStorageItem.name === "authenticatedUser") {
+            const authenticatedUser = JSON.parse(localStorageItem.value);
+            expiresValues.push(
+              Math.floor(Number(authenticatedUser.expirationTime))
+            );
+          }
         });
-      } else if (key === "origins") {
-        storageState[key].forEach((origin: Origin) => {
-          origin.localStorage.forEach((localStorageItem: LocalStorageItem) => {
-            if (localStorageItem.name === "authenticatedUser") {
-              const authenticatedUser = JSON.parse(localStorageItem.value);
-              expiresValues.push(
-                Math.floor(Number(authenticatedUser.expirationTime))
-              );
-            }
-          });
-        });
-      }
-    });
-
-    if (expiresValues.length === 0) {
-      throw new Error("getSoonestExpiry No Expiries ❌ ");
+      });
     }
+  });
 
-    const soonestExpiry = Math.min(...expiresValues);
-
-    return soonestExpiry;
-  } catch (error) {
-    throw error;
+  if (expiresValues.length === 0) {
+    throw new Error("getSoonestExpiry No Expiries ❌ ");
   }
+
+  const soonestExpiry = Math.min(...expiresValues);
+
+  return soonestExpiry;
 };
 
 export const validStorageState = () => {
