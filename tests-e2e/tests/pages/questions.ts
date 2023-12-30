@@ -46,7 +46,6 @@ export class QuestionsPage {
     // has to add 'page.evaluate' instead of 'this.page.evaluate', otherwise got undefined
     while (!(await locator.isVisible())) {
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-      // await page.mouse.wheel(0, 10000);
     }
   }
 
@@ -121,6 +120,7 @@ export class QuestionsPage {
     // check if the editedDummyData.question in the questionIdDiv
     await expect(questionDiv).toContainText(editedQuestionText);
   }
+
   async editMultiQuestion(originalObj: QuestionObjType) {
     // Only intentionally swap the first element with the second element,
     // the second element with the third element,
@@ -212,10 +212,6 @@ export class QuestionsPage {
   }
 
   async checkIfOrderByCreatedTime(updatedObj: QuestionObjType) {
-    // console.log(`----------------`);
-    // console.log(`checkIfOrderByCreatedTime`);
-    // console.log(updatedObj);
-    // console.log(`----------------`);
     await this.sortSelect.click();
     await this.createdOption.click();
     for (const id of updatedObj.id) {
@@ -223,8 +219,6 @@ export class QuestionsPage {
       await this.scrollDown(this.page, questionIdDiv);
     }
     const grabObj = await this.generateGrabObj();
-    // console.log(grabObj);
-    // console.log(updatedObj);
     expect(grabObj).toEqual(updatedObj);
   }
 

@@ -78,6 +78,7 @@ export default defineConfig({
       testMatch: "teardown.ts",
       use: {
         ...devices["Desktop Chrome"],
+        baseURL: "http://localhost:3000",
         storageState: "./tests/auth/storage-state.json",
       },
     },

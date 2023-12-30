@@ -1,7 +1,3 @@
-// Get the Google User Credentials
-const userEmail = process.env.GOOGLE_EMAIL as string;
-const userPassword = process.env.GOOGLE_PASSWORD as string;
-
 // playwright-extra is a drop-in replacement for playwright,
 // it augments the installed playwright with plugin functionality
 import { chromium } from "playwright-extra";
@@ -12,6 +8,10 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
 // Add the plugin to playwright (any number of plugins can be added)
 chromium.use(StealthPlugin());
+
+// Get the Google User Credentials
+const userEmail = process.env.GOOGLE_EMAIL as string;
+const userPassword = process.env.GOOGLE_PASSWORD as string;
 
 setup("login", async () => {
   // Google may be using anti-headless measures,

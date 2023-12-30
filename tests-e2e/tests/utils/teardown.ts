@@ -1,7 +1,7 @@
 import { test } from "@playwright/test";
 
 test("Delete All Questions", async ({ page }) => {
-  await page.goto("http://localhost:3000");
+  await page.goto("/");
   await page.locator('a[href="/questions"]').click();
   let deleteButton = page.locator('svg[data-testid="DeleteOutlineIcon"]');
   while ((await deleteButton.all()).length) {
