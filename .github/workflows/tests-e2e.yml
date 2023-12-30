@@ -11,8 +11,8 @@ on:
 
 jobs:
   test:
-    timeout-minutes: 15
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment: test
     env:
       NODE_ENV: ${{ vars.NODE_ENV }}
@@ -48,10 +48,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - name: Check Environment # for Debugging
-        run: env
       - name: Checkout Code
         uses: actions/checkout@v4
+      - name: Check Environment # for Debugging
+        run: env
       - name: Install Client Dependencies
         working-directory: ./client
         run: npm ci
