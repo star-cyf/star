@@ -1,6 +1,6 @@
 import { Locator, type Page, expect } from "@playwright/test";
 import { QuestionsPage } from "./questions";
-import { QuestionObjType } from "../utils/dummyData";
+import { QuestionObjType } from "../utils/dummy-data";
 
 export class ProfilePage {
   readonly page: Page;

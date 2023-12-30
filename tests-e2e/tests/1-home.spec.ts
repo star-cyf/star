@@ -76,6 +76,7 @@ test.describe.serial("Login without coookies", () => {
     await expect(new HomePage(page).logoutButton).not.toBeVisible();
   });
 });
+
 /**========================================================================
  * Different Windows Model: Generate multiple windows and run each test separately.
  *========================================================================**/

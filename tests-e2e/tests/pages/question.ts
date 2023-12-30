@@ -2,7 +2,7 @@
 //in other word, can see the page of question, answer, comment
 //localhost:3000/questions/id
 import { expect, type Locator, type Page } from "@playwright/test";
-import { type AnswerType } from "../utils/dummyData";
+import { type AnswerType } from "../utils/dummy-data";
 import { QuestionsPage } from "./questions";
 
 export class QuestionPage {
@@ -77,6 +77,7 @@ export class QuestionPage {
     for (const key in answerObject) {
       await this.page.locator(`#${key}`).fill(`${answerObject[key]}`);
     }
+
     await this.addAnswerButton.click();
 
     // check if the answerObject is visible in 8s
@@ -86,6 +87,7 @@ export class QuestionPage {
         .waitFor({ state: "visible", timeout: 8000 });
       await expect(this.page.getByText(answerObject[key])).toBeVisible();
     }
+
     // check if the successful message is hidden in 8s
     await this.answerSuccessfulMessage.waitFor({
       state: "hidden",

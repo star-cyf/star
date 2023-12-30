@@ -1,5 +1,5 @@
 import { Page, test } from "@playwright/test";
-import { dummyData, editedDummyData } from "./utils/dummyData";
+import { dummyData, editedDummyData } from "./utils/dummy-data";
 import { QuestionPage } from "./pages/question";
 import { QuestionsPage } from "./pages/questions";
 

@@ -2,7 +2,7 @@
 //in other word, only can see the page of Questions
 //localhost:3000/questions/
 import { expect, type Locator, type Page } from "@playwright/test";
-import { QuestionObjType } from "../utils/dummyData";
+import { QuestionObjType } from "../utils/dummy-data";
 
 export class QuestionsPage {
   readonly page: Page;
@@ -207,6 +207,7 @@ export class QuestionsPage {
       text: [],
     };
   }
+
   pushQuestionObj(
     questionObj: QuestionObjType,
     questionId: string,
@@ -215,6 +216,7 @@ export class QuestionsPage {
     questionObj.id.push(questionId);
     questionObj.text.push(questionText);
   }
+
   // async getQuestionTimestamps(page: Page, questionId: string) {
   //   const createdTime = await page
   //     .getByTestId(questionId)
@@ -223,12 +225,14 @@ export class QuestionsPage {
 
   //   return createdTime;
   // }
+
   reverseQuestionObj(questionObj: QuestionObjType) {
     for (const key in questionObj) {
       questionObj[key as keyof typeof questionObj] =
         questionObj[key as keyof typeof questionObj].reverse();
     }
   }
+
   async generateGrabObj() {
     const grabObj: QuestionObjType = this.createQuestionObj();
 
@@ -244,6 +248,7 @@ export class QuestionsPage {
     }
     return grabObj;
   }
+
   async checkIfOrderByCreatedTime(updatedObj: QuestionObjType) {
     // console.log(`----------------`);
     // console.log(`checkIfOrderByCreatedTime`);
@@ -263,6 +268,7 @@ export class QuestionsPage {
     // console.log(updatedObj);
     expect(grabObj).toEqual(updatedObj);
   }
+
   // sort
   async checkIfOrderByUpdatedTime(updatedObj: QuestionObjType) {
     // console.log(`-------------`);
@@ -303,6 +309,7 @@ export class QuestionsPage {
 
     return obj;
   }
+
   async checkWithSearch(questionObj: QuestionObjType) {
     for (let i = 0; i < 5; i++) {
       const searchText = (i + 1).toString();

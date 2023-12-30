@@ -1,14 +1,11 @@
 import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
-import { validStorageState } from "./tests/auth/validStorageState";
+import { validStorageState } from "./tests/auth/valid-storage-state";
 
 // See https://playwright.dev/docs/test-configuration
 export default defineConfig({
   // path to the global setup files
-  // if the state is ok, don't login(undefined) , if not ok, go to run login-google-star file
-  // globalSetup: validStorageState()
-  //   ? undefined
-  //   : "./src/utils/chrome-login-google-star",
+  // globalSetup: "",
 
   // Look for test files in the "tests" directory, relative to this configuration file
   testDir: "./tests",
@@ -104,7 +101,7 @@ export default defineConfig({
       },
     },
     // {
-    //   name: "Playground - Create Multiple Questions (without any expact)",
+    //   name: "Playground - Create Multiple Questions (without any expect)",
     //   dependencies: validStorageState()
     //     ? undefined
     //     : ["setup - Chrome Login (Google & STAR)"],

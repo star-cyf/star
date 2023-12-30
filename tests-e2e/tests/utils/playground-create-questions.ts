@@ -1,5 +1,5 @@
 import { test as play } from "@playwright/test";
-import { dummyData } from "./dummyData";
+import { dummyData } from "./dummy-data";
 
 // Created this creating playground to test the teardown function
 // and make it easier to create Questions.

@@ -1,5 +1,9 @@
 import { type Page, test, expect } from "@playwright/test";
-import { QuestionObjType, dummyData, editedDummyData } from "./utils/dummyData";
+import {
+  QuestionObjType,
+  dummyData,
+  editedDummyData,
+} from "./utils/dummy-data";
 import { QuestionsPage } from "./pages/questions";
 
 // test.use({
@@ -56,6 +60,7 @@ test.describe.serial("Create, Edit, Delete: Question", () => {
     await questionsPage.deleteAQuestion(questionId, editedDummyData.question);
   });
 });
+
 /**========================================================================
  * Different Windows Model: Generate multiple windows and run each test separately.
  *========================================================================**/

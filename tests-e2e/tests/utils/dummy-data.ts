@@ -1,11 +1,15 @@
 export type DummyData = {
   question: string;
-  // answer : { [key: string]: string; } = Record<string, string>
   answer: Record<string, string>;
   comment: string;
 };
 
 export type AnswerType = DummyData["answer"];
+
+export type QuestionObjType = {
+  id: string[];
+  text: string[];
+};
 
 const random = "#" + Math.random().toString(16).slice(2, 8);
 
@@ -29,8 +33,4 @@ export const editedDummyData: DummyData = {
     result: `${dummyData.answer.result}, edited`,
   },
   comment: `${dummyData.comment}, edited`,
-};
-export type QuestionObjType = {
-  id: string[];
-  text: string[];
 };

@@ -8,6 +8,7 @@ test("Delete All Questions", async ({ page }) => {
   console.log(
     `---deleteButton length: ${(await deleteButton.all()).length}---`
   );
+
   while ((await deleteButton.all()).length) {
     for (let i = 0; i < (await deleteButton.all()).length; i++) {
       await deleteButton.first().click();

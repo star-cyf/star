@@ -1,5 +1,9 @@
 import { type Page, test, expect } from "@playwright/test";
-import { QuestionObjType, dummyData, editedDummyData } from "./utils/dummyData";
+import {
+  QuestionObjType,
+  dummyData,
+  editedDummyData,
+} from "./utils/dummy-data";
 import { ProfilePage } from "./pages/profile";
 
 // test.use({
