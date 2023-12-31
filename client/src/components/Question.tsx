@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
 import { Box, Typography, Link, IconButton, Avatar } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
@@ -7,6 +7,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { AuthContext } from "../context/AuthContext";
+import queryClient from "../utils/queryClient";
 import QuestionForm from "./QuestionForm";
 import deleteQuestion from "../api/deleteQuestion";
 import formatDate from "../utils/formatDate";
@@ -42,12 +43,10 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
 
   const questionId = questionData.id;
 
-  const queryClient = useQueryClient();
-
   const navigate = useNavigate();
 
-  const deleteQuestionMutation = useMutation({
-    mutationFn: () => deleteQuestion(questionId),
+  const { mutate } = useMutation({
+    mutationFn: deleteQuestion,
     onError: (error) => {
       console.log("deleteQuestionMutation onError");
       console.error(error);
@@ -61,7 +60,7 @@ const Question = ({ questionData }: { questionData: QuestionData }) => {
   });
 
   const handleDelete = async () => {
-    deleteQuestionMutation.mutate();
+    mutate({ questionId });
   };
 
   return (

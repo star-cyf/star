@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 import User from "../components/User";
-import getAllUsers from "../api/getAllUsers";
+import getUsers from "../api/getUsers";
 import {
   consistentBorder,
   consistentBorderRadius,
@@ -21,7 +21,7 @@ const UsersPage = () => {
     data: usersData,
   } = useQuery({
     queryKey: ["users"],
-    queryFn: getAllUsers,
+    queryFn: getUsers,
   });
 
   return (

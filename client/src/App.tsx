@@ -1,4 +1,5 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import queryClient from "./utils/queryClient";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -14,14 +15,6 @@ import UsersPage from "./pages/UsersPage";
 import QuestionsPage from "./pages/QuestionsPage";
 import QuestionPage from "./pages/QuestionPage";
 import NotFoundPage from "./pages/NotFoundPage";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-});
 
 const router = createBrowserRouter(
   createRoutesFromElements(

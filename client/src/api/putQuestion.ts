@@ -1,9 +1,6 @@
-import { QuestionData } from "../types/data";
+import { PutQuestionProps } from "../types/api";
 
-const putQuestion = async (
-  questionId: QuestionData["id"],
-  question: QuestionData["question"]
-) => {
+const putQuestion = async ({ questionId, question }: PutQuestionProps) => {
   const response = await fetch(
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}`,
     {

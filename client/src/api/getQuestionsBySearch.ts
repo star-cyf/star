@@ -1,12 +1,9 @@
-import { QueryKey } from "@tanstack/react-query";
+import { GetQuestionsBySearchProps } from "../types/api";
 
 const getQuestionsBySearch = async ({
   pageParam,
   queryKey,
-}: {
-  pageParam: number;
-  queryKey: QueryKey;
-}) => {
+}: GetQuestionsBySearchProps) => {
   const sort = queryKey[1];
   const searchTerm = queryKey[2];
   const limit = 5;

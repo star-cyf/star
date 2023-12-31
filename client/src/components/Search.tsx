@@ -4,7 +4,7 @@ import {
   consistentBgColor,
   consistentBorder,
 } from "../themes/ConsistentStyles";
-import { SearchProps } from "../types/props";
+import { SearchProps } from "../types/components";
 
 const Search = ({ setDebouncedSearchTerm }: SearchProps) => {
   const [searchTerm, setSearchTerm] = useState("");

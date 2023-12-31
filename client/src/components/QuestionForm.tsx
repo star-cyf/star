@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
+import queryClient from "../utils/queryClient";
 import SendIcon from "@mui/icons-material/Send";
 import postQuestion from "../api/postQuestion";
 import putQuestion from "../api/putQuestion";
@@ -24,7 +25,7 @@ import {
   QuestionFormProps,
   AddQuestionFormProps,
   UpdateQuestionFormProps,
-} from "../types/props";
+} from "../types/components";
 
 const QuestionForm = (props: QuestionFormProps) => {
   const { setShowAddQuestionForm } = props as AddQuestionFormProps; // sort
@@ -45,11 +46,8 @@ const QuestionForm = (props: QuestionFormProps) => {
     );
   };
 
-  const queryClient = useQueryClient();
-
-  const questionMutation = useMutation({
-    mutationFn: () =>
-      questionId ? putQuestion(questionId, question) : postQuestion(question),
+  const { mutate, isPending, isError, error, isSuccess } = useMutation({
+    mutationFn: questionId ? putQuestion : postQuestion,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["questions"] });
       setQuestion("");
@@ -64,8 +62,6 @@ const QuestionForm = (props: QuestionFormProps) => {
     },
   });
 
-  const { isPending, isError, error, isSuccess } = questionMutation;
-
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (questionValidation === undefined) {
@@ -79,7 +75,15 @@ const QuestionForm = (props: QuestionFormProps) => {
       setShowUpdateQuestionForm(false);
       return;
     }
-    questionMutation.mutate();
+    // We need to use the mutate function but pass different props...
+    // Really I think we should have two handlers, and two mutates... combining is not always great...
+    if (questionId) {
+      // putQuestion
+      mutate({ questionId, question });
+    } else {
+      // postQuestion
+      mutate({ question });
+    }
   };
 
   return (

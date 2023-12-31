@@ -1,9 +1,9 @@
-import { UserData } from "../types/data";
+import { GetQuestionsByUserIdProps } from "../types/api";
 
-const getAllQuestionsByUserId = async (
-  userId: UserData["id"],
-  sort: string
-) => {
+const getQuestionsByUserId = async ({
+  userId,
+  sort,
+}: GetQuestionsByUserIdProps) => {
   const response = await fetch(
     `${
       import.meta.env.VITE_SERVER_URL
@@ -26,4 +26,4 @@ const getAllQuestionsByUserId = async (
   return data;
 };
 
-export default getAllQuestionsByUserId;
+export default getQuestionsByUserId;

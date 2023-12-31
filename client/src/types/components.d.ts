@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, ReactNode } from "react";
 
 // ----------------------------------------------------------------
 // Question Form
@@ -80,4 +80,16 @@ export type SearchProps = {
 export type SortProps = {
   sort: string;
   setSort: Dispatch<SetStateAction<string>>;
+};
+
+// ----------------------------------------------------------------
+// Protected
+export type ProtectedProps = {
+  children: ReactNode;
+};
+
+// ----------------------------------------------------------------
+// Error
+export type ErrorProps = {
+  message: string;
 };

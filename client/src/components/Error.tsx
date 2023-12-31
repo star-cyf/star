@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
+import { ErrorProps } from "../types/components";
 
-const Error = ({ message }: { message: string }) => {
+const Error = ({ message }: ErrorProps) => {
   return (
     <Box>
       <Typography>Error</Typography>

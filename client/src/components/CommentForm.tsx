@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import SmsIcon from "@mui/icons-material/Sms";
 import SendIcon from "@mui/icons-material/Send";
+import queryClient from "../utils/queryClient";
 import postComment from "../api/postComment";
 import putComment from "../api/putComment";
 import {
@@ -25,7 +26,7 @@ import {
   AddCommentForm,
   UpdateCommentForm,
   CommentFormProps,
-} from "../types/props";
+} from "../types/components";
 
 const CommentForm = (props: CommentFormProps) => {
   const { questionId, answerId } = props as CommentFormBase;
@@ -46,13 +47,8 @@ const CommentForm = (props: CommentFormProps) => {
     );
   };
 
-  const queryClient = useQueryClient();
-
-  const commentMutation = useMutation({
-    mutationFn: () =>
-      commentId
-        ? putComment(questionId, answerId, commentId, comment)
-        : postComment(questionId, answerId, comment),
+  const { mutate, isPending, isError, error, isSuccess } = useMutation({
+    mutationFn: commentId ? putComment : postComment,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["questions", questionId],
@@ -69,8 +65,6 @@ const CommentForm = (props: CommentFormProps) => {
     },
   });
 
-  const { isPending, isError, error, isSuccess } = commentMutation;
-
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (commentValidation === undefined) {
@@ -83,7 +77,15 @@ const CommentForm = (props: CommentFormProps) => {
       setShowUpdateCommentForm(false);
       return;
     }
-    commentMutation.mutate();
+    // We need to use the mutate function but pass different props...
+    // I think we should have two handlers, and two mutates... combining is not always great...
+    if (commentId) {
+      // putComment
+      mutate({ questionId, answerId, commentId, comment });
+    } else {
+      // postComment
+      mutate({ questionId, answerId, comment });
+    }
   };
 
   return (
