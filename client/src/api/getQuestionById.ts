@@ -10,11 +10,11 @@ const getQuestionById = async (
     }/api/questions/${questionId}?sort=${sort}`,
     // }/api/questions/${questionId}`,
     {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // { credentials: "include" }
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
     }
   );
   // console.log("fetchQuestionData response:", response);

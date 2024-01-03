@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Box, Button } from "@mui/material";
+import ServerStatus from "./ServerStatus";
 import LoginLogoutButton from "./LoginLogoutButton";
 import { AuthContext } from "../context/AuthContext";
 
@@ -18,6 +19,13 @@ const Navigation = () => {
         to={"/about"}
         variant="contained">
         About
+      </Button>
+      <Button
+        size={"small"}
+        component={NavLink}
+        to={"/auth"}
+        variant="contained">
+        Auth
       </Button>
       {authenticatedUser && (
         <>
@@ -44,7 +52,14 @@ const Navigation = () => {
           </Button>
         </>
       )}
-      <LoginLogoutButton />
+      <Box
+        display={"flex"}
+        flexWrap={"wrap"}
+        gap={1}
+        marginLeft={{ xs: "inherit", sm: "auto" }}>
+        <ServerStatus />
+        <LoginLogoutButton />
+      </Box>
     </Box>
   );
 };

@@ -5,11 +5,11 @@ const deleteQuestion = async (questionId: QuestionData["id"]) => {
     `${import.meta.env.VITE_SERVER_URL}/api/questions/${questionId}`,
     {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // credentials: "include",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
     }
   );
   // console.log("deleteQuestion response", response);

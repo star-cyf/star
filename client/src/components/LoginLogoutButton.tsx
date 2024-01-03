@@ -8,7 +8,7 @@ const LoginLogoutButton = () => {
   const { authenticatedUser, login, logout } = useContext(AuthContext)!; // non null assertion operator
 
   return (
-    <Box marginLeft={{ xs: "inherit", sm: "auto" }}>
+    <Box>
       {authenticatedUser ? (
         <Button
           size={"small"}

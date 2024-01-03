@@ -11,11 +11,11 @@ const deleteComment = async (
     }/api/questions/${questionId}/answers/${answerId}/comments/${commentId}`,
     {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // credentials: "include",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
     }
   );
   // console.log("deleteComment response", response);

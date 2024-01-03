@@ -1,5 +1,6 @@
 import { OAuth2Client } from "google-auth-library";
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
+import UAParser from "ua-parser-js";
 import { Request, Response } from "express";
 import { CustomJWTPayload } from "../types/types";
 import { createUser, getUserByGoogleId } from "../helpers/users";
@@ -103,29 +104,25 @@ export const idTokenHandler = async (req: Request, res: Response) => {
       return res.status(500).json({ error: "Error signing a new customJWT" });
     }
 
-    // [1] HTTP ONLY COOKIE VERSION
-    // res.cookie("customJWT", customJWT, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: "none",
-    //   maxAge: 3600000
-    // });
+    const userAgentParser = new UAParser(req.get("User-Agent"));
+    const userAgent = userAgentParser.getResult();
+    logger.info({ message: "idTokenHandler userAgent", value: userAgent });
 
-    // logger.info({
-    //   message: `idTokenHandler res.getHeaders()["set-cookie"]`,
-    //   value: res.getHeaders()["set-cookie"]
-    // });
-
-    logger.info({
-      message: "idTokenHandler User-Agent",
-      value: req.get("User-Agent")
+    res.cookie("customJWT", customJWT, {
+      path: "/",
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 3600000,
+      expires: new Date(Date.now() + 3600000)
     });
 
-    // [1] HTTP ONLY COOKIE VERSION
-    // res.sendStatus(200);
+    logger.info({
+      message: `idTokenHandler res.getHeaders()["set-cookie"]`,
+      value: res.getHeaders()["set-cookie"]
+    });
 
-    // [2] AUTH HEADER JWT VERSION
-    res.status(200).json(customJWT);
+    res.end();
   } catch (error) {
     logger.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -445,48 +442,48 @@ export const authorizationCodeRedirectHandler = async (
 
 export const userHandler = async (req: Request, res: Response) => {
   // [1] HTTP ONLY COOKIE VERSION
-  // const cookies = req.cookies;
-  // logger.info({
-  //   message: "userHandler cookies",
-  //   value: cookies
-  // });
+  const cookies = req.cookies;
+  logger.info({
+    message: "userHandler cookies",
+    value: cookies
+  });
 
-  // const customJWT = cookies.customJWT;
-  // logger.info({
-  //   message: "userHandler customJWT",
-  //   value: customJWT
-  // });
+  const customJWT = cookies.customJWT;
+  logger.info({
+    message: "userHandler customJWT",
+    value: customJWT
+  });
 
   // [2] AUTH HEADER JWT VERSION
-  const authorizationHeader = req.headers["authorization"];
-  logger.info({
-    message: "userHandler authorizationHeader",
-    value: authorizationHeader
-  });
+  // const authorizationHeader = req.headers["authorization"];
+  // logger.info({
+  //   message: "userHandler authorizationHeader",
+  //   value: authorizationHeader
+  // });
 
-  if (!authorizationHeader || typeof authorizationHeader !== "string") {
-    return res
-      .status(401)
-      .json({ error: "Authorization Header Missing or Invalid" });
-  }
+  // if (!authorizationHeader || typeof authorizationHeader !== "string") {
+  //   return res
+  //     .status(401)
+  //     .json({ error: "Authorization Header Missing or Invalid" });
+  // }
 
-  const jwtTokenParts = authorizationHeader.split(" ");
-  logger.info({
-    message: "userHandler jwtTokenParts",
-    value: jwtTokenParts
-  });
+  // const jwtTokenParts = authorizationHeader.split(" ");
+  // logger.info({
+  //   message: "userHandler jwtTokenParts",
+  //   value: jwtTokenParts
+  // });
 
-  if (
-    jwtTokenParts.length !== 2 ||
-    jwtTokenParts[0].toLowerCase() !== "bearer"
-  ) {
-    return res
-      .status(401)
-      .json({ error: "Invalid Authorization Header format" });
-  }
+  // if (
+  //   jwtTokenParts.length !== 2 ||
+  //   jwtTokenParts[0].toLowerCase() !== "bearer"
+  // ) {
+  //   return res
+  //     .status(401)
+  //     .json({ error: "Invalid Authorization Header format" });
+  // }
 
-  const customJWT = jwtTokenParts[1];
-  logger.info({ message: "userHandler customJWT", value: customJWT });
+  // const customJWT = jwtTokenParts[1];
+  // logger.info({ message: "userHandler customJWT", value: customJWT });
 
   if (!customJWT || typeof customJWT === "undefined") {
     return res.status(401).json({ error: "Unauthorized - Invalid JWT" });

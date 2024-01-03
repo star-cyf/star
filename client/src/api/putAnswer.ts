@@ -16,11 +16,11 @@ const putAnswer = async (
     }/api/questions/${questionId}/answers/${answerId}`,
     {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // credentials: "include",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
       body: JSON.stringify(answer),
     }
   );

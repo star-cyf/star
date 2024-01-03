@@ -9,11 +9,11 @@ const getAllQuestionsByUserId = async (
       import.meta.env.VITE_SERVER_URL
     }/api/questions/user/${userId}?sort=${sort}`,
     {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // { credentials: "include" }
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
     }
   );
 

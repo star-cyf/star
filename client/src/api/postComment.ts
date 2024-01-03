@@ -11,11 +11,11 @@ const postComment = async (
     }/api/questions/${questionId}/answers/${answerId}/comments`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // credentials: "include",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
       body: JSON.stringify({ comment }),
     }
   );

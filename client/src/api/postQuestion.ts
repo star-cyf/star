@@ -5,11 +5,11 @@ const postQuestion = async (question: QuestionData["question"]) => {
     `${import.meta.env.VITE_SERVER_URL}/api/questions`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // credentials: "include",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
       body: JSON.stringify({ question }),
     }
   );

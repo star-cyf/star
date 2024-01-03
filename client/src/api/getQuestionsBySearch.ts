@@ -16,11 +16,11 @@ const getQuestionsBySearch = async ({
       import.meta.env.VITE_SERVER_URL
     }/api/questions/search?page=${pageParam}&limit=${limit}&term=${searchTerm}&sort=${sort}`,
     {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
-      },
-      // { credentials: "include" }
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${localStorage.getItem("customJWT")}`,
+      // },
+      credentials: "include",
     }
   );
   // console.log("getQuestionBySearch response:", response);
